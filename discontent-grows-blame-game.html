@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discontent grows, blame is the game, it's strengthened with lies and simplistic ... | mull</title>
+    <style>
+
+/* Base Typography */
+:root {
+    --text-color: #1a1a1a;
+    --bg-color: #fffff8;
+    --accent-color: #0066cc;
+    --muted-color: #666;
+    --border-color: #ddd;
+
+    --team-for-color: #00838f;
+    --team-for-bg: #e0f7fa;
+    --team-against-color: #6a1b9a;
+    --team-against-bg: #f3e5f5;
+
+    --font-main: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'SF Mono', Monaco, 'Consolas', monospace;
+
+    --content-width: 55%;
+    --sidenote-width: 35%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-main);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Layout */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header */
+.debate-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.debate-title {
+    font-size: 2rem;
+    line-height: 1.3;
+    margin: 0 0 1rem 0;
+    font-weight: 400;
+    max-width: 80%;
+}
+
+.debate-meta {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.debate-meta .team {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.debate-meta .team-for { color: var(--team-for-color); }
+.debate-meta .team-against { color: var(--team-against-color); }
+
+/* Summary Section */
+.debate-summary {
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    border-left: 4px solid var(--accent-color);
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    font-size: 0.95rem;
+}
+
+.debate-summary h3 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted-color);
+    margin: 1.5rem 0 0.5rem 0;
+}
+
+.debate-summary h3:first-child {
+    margin-top: 0;
+}
+
+.debate-summary ul {
+    padding-left: 1.5rem;
+    margin: 0.5rem 0;
+}
+
+.debate-summary li {
+    margin: 0.3rem 0;
+}
+
+/* Phase Sections */
+.phase-section {
+    margin: 3rem 0;
+}
+
+.phase-title {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted-color);
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Exchange Cards */
+.exchange {
+    position: relative;
+    margin: 2rem 0;
+    padding: 0;
+}
+
+.exchange-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.debater-icon {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 1.5rem;
+    text-align: center;
+}
+
+.debater-name {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.team-label {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    margin-left: auto;
+}
+
+.team-for .team-label {
+    background: var(--team-for-bg);
+    color: var(--team-for-color);
+}
+
+.team-against .team-label {
+    background: var(--team-against-bg);
+    color: var(--team-against-color);
+}
+
+/* Exchange Body - Tufte-style with sidenotes */
+.exchange-body {
+    display: flex;
+    gap: 2rem;
+}
+
+.exchange-content {
+    flex: 0 0 var(--content-width);
+    max-width: var(--content-width);
+}
+
+.exchange-content p {
+    margin: 0;
+    text-align: justify;
+    hyphens: auto;
+}
+
+/* Sidenotes */
+.sidenote {
+    flex: 0 0 var(--sidenote-width);
+    max-width: var(--sidenote-width);
+    font-size: 0.85rem;
+    color: var(--muted-color);
+    padding-top: 0.25rem;
+}
+
+.sidenote-item {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: #fafafa;
+    border-radius: 4px;
+    border-left: 3px solid transparent;
+}
+
+.sidenote-item.steelmanning {
+    border-left-color: #4caf50;
+    background: #f1f8e9;
+}
+
+.sidenote-item.metaphor-note {
+    border-left-color: #2196f3;
+    background: #e3f2fd;
+}
+
+.sidenote-item strong {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Highlighted text in content */
+.key-phrase {
+    background: linear-gradient(180deg, transparent 60%, #fff59d 60%);
+    padding: 0 2px;
+}
+
+.metaphor {
+    border-bottom: 1px dotted var(--accent-color);
+    cursor: help;
+}
+
+/* Depth Drawer (expandable) */
+.depth-drawer {
+    margin-top: 1rem;
+    padding-left: 2.25rem;
+}
+
+.depth-toggle {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.depth-toggle:hover {
+    color: var(--accent-color);
+}
+
+.toggle-icon {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    width: 1rem;
+    transition: transform 0.2s;
+}
+
+.depth-toggle[aria-expanded="true"] .toggle-icon {
+    transform: rotate(45deg);
+}
+
+.depth-content {
+    margin-top: 0.75rem;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 4px;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+}
+
+.scores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.score-item {
+    background: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    border: 1px solid var(--border-color);
+}
+
+/* Aspect items (evaluation rationales) */
+.aspects {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.aspect-item {
+    background: white;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border-left: 3px solid var(--accent-color);
+}
+
+.aspect-item strong {
+    color: var(--text-color);
+}
+
+.score-badge {
+    display: inline-block;
+    background: var(--accent-color);
+    color: white;
+    padding: 0.1rem 0.4rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.25rem;
+}
+
+.rationale {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--muted-color);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+/* Synthesis Section */
+.synthesis-section {
+    margin: 4rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+    border-radius: 8px;
+}
+
+.synthesis-section h2 {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: #2e7d32;
+}
+
+.synthesis-intro {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    margin: 0 0 1.5rem 0;
+}
+
+.synthesis-moment {
+    background: white;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border-left: 3px solid #4caf50;
+}
+
+.synthesis-speaker {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.synthesis-type {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #4caf50;
+    margin-left: 0.5rem;
+}
+
+.synthesis-note {
+    font-size: 0.9rem;
+    margin: 0.5rem 0 0 0;
+    color: var(--muted-color);
+}
+
+/* Footer */
+.debate-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    text-align: center;
+}
+
+.debate-footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.debate-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Depth Dial */
+.depth-dial {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    z-index: 100;
+}
+
+.depth-dial label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--muted-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.depth-dial input[type="range"] {
+    width: 150px;
+}
+
+.depth-dial .depth-value {
+    text-align: center;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    :root {
+        --content-width: 65%;
+        --sidenote-width: 30%;
+    }
+}
+
+@media (max-width: 900px) {
+    .exchange-body {
+        flex-direction: column;
+    }
+
+    .exchange-content,
+    .sidenote {
+        flex: none;
+        max-width: 100%;
+    }
+
+    .sidenote {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #f9f9f9;
+        border-radius: 4px;
+    }
+
+    .depth-dial {
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.75rem;
+    }
+}
+
+/* Print styles */
+@media print {
+    .depth-dial,
+    .depth-drawer {
+        display: none;
+    }
+
+    .sidenote {
+        font-size: 0.8rem;
+        break-inside: avoid;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="debate-header">
+            <h1 class="debate-title">Discontent grows, blame is the game, it's strengthened with lies and simplistic answers. Once it was the jews, now it is the migrants. It's a contagion. It's hard to know if it's fueled by malcious intent from external actors. Take Sweden, a peaceful country that took many refugees from Syria and beyond. Then came a gang violence crisis that the police was unprepared for, and now it's all the immigrants fault? How do we get to the bottom of this, and is it ever a group of that is to blame?</h1>
+            <div class="debate-meta">
+                <span class="date">January 18, 2026</span>
+                <span class="team team-for">FOR: The Skeptic, The Connector</span>
+                <span class="team team-against">AGAINST: The Historian, The Provocateur</span>
+            </div>
+        </header>
+
+        <div class="debate-summary">
+<h3>Core Tension</h3>
+<p>The core tension in this debate is whether <strong>social cohesion is a finite resource bound to specific shared norms</strong> or <strong>a dynamic system that can and should adapt to any demographic change through better institutions</strong>.</p><p>The FOR side (Skeptic/Connector) argues that blaming migrants is a recurring historical pattern—a psychological defense mechanism that mistakes symptoms for causes, like blaming the last car on a collapsing bridge rather than the corroded steel underneath. They see "collective blame" as a contagion that lets failing institutions hide their incompetence behind convenient scapegoats.</p><p>The AGAINST side (Historian/Provocateur) counters that high-trust societies were built on specific, contingent social contracts that have finite elasticity—not infinite capacity for absorption. They argue that dismissing public concern as mere "contagion" gaslights people experiencing real breakdowns in safety and order, and that demanding societies prove their tolerance by refusing to acknowledge limits is effectively demanding "cultural suicide."</p><p><strong>What this debate illuminates:</strong> It forces us to confront whether the liberal assumption—that social systems can be engineered to accommodate unlimited diversity through proper administration—is a universal truth or itself an untested experiment. The deeper question is: <em>When a society fractures, is the pathology in its immune response (scapegoating) or in the ideology that insisted the body could absorb anything without consequence?</em> Neither side fully wins because both contain uncomfortable truths: collective blame has historically been catastrophically wrong, yet social contracts may indeed have breaking points that no bureaucracy can paper over.</p>
+<h3>Recurring Metaphors</h3><ul>
+<li><strong>The Collapsing Bridge</strong> — This is the debate's central metaphor, appearing three times with escalating sophistication. It reframes causation: was the bridge ever designed for this load, or did we simply neglect maintenance? The Provocateur brilliantly inverts it by asking whether we're demanding 'infinite elasticity' from infrastructure that has material limits. The metaphor exposes the core disagreement—is social capacity a design flaw (fixable) or a physical constraint (finite)?</li>
+<li><strong>The Autoimmune Response</strong> — This medical metaphor cuts both ways with surgical precision. It allows us to see xenophobia as a potentially self-destructive overreaction—the host killing itself while fighting a perceived threat. But the Provocateur counters devastatingly: if we label all immune responses as 'disease,' we're demanding society undergo a 'lobotomy of its survival instincts.' The metaphor illuminates whether protective instincts can ever be legitimate, or whether naming them always pathologizes reasonable concern.</li>
+<li><strong>The Tinderbox Forest</strong> — This ecology metaphor introduces time and institutional failure. The fire suppression represents decades of policies that prevented small adaptive burns (integration challenges, honest public debate) until accumulated dry fuel guaranteed catastrophe. It suggests the spark (migrants) is almost irrelevant—any spark would have ignited the same fire. But it also implies the forest managers (elites, institutions) bear primary responsibility for the conditions, not the lightning.</li>
+<li><strong>The Lobotomized Tolerance</strong> — The Provocateur's most visceral image. A lobotomy doesn't heal—it destroys the capacity to respond at all. This reframes progressive tolerance not as enlightenment but as enforced cognitive damage, where a society is surgically prevented from recognizing threats. It's deliberately inflammatory, but illuminates the AGAINST position's deepest fear: that the demand for infinite openness isn't noble but nihilistic, benefiting 'elite architects of collapse' while ordinary citizens absorb the consequences.</li>
+</ul>
+<h3>Unresolved Crux</h3>
+<p><strong>Type: Factual/Empirical disagreement about the nature of social systems</strong></p><p>The crux is whether social cohesion is a <strong>dynamic system capable of indefinite adaptation</strong> (FOR) or a <strong>finite resource contingent on specific shared norms</strong> (AGAINST). The FOR side would change their mind if shown empirical evidence that certain social orders genuinely cannot absorb rapid demographic change regardless of institutional quality—that high-trust societies have hard material limits, not just design flaws. The AGAINST side would change their mind if shown that every historical instance of "social breakdown from immigration" was actually traceable to specific, fixable institutional failures—that the "finite capacity" argument has always been a post-hoc rationalization for xenophobia rather than a real constraint.</p><p>This is ultimately an empirical question disguised as a values debate: <em>Is the Swedish social contract an engineering problem (upgrade the bridge) or a conservation problem (the ecosystem cannot support this population)?</em></p>
+<h3>Common Ground</h3>
+<p>Both sides agree that <strong>social cohesion is real, fragile, and currently under genuine strain</strong>—neither dismisses public anxiety as pure fabrication or mere bigotry. They share a deep suspicion of <strong>simplistic narratives</strong>: the FOR side warns against scapegoating that masks institutional failure, while the AGAINST side warns against ideological rigidity that dismisses legitimate concerns as "contagion." Crucially, both accept that <strong>institutions have failed</strong>—they only disagree about whether the failure is one of design (fixable through better adaptation) or of fundamental capacity (a limit that cannot be engineered away). Both sides also implicitly agree that <strong>historical patterns of scapegoating are real dangers</strong>; the AGAINST side simply argues this case might be different, not that the pattern doesn't exist.</p>
+</div>
+
+        <main class="debate-content">
+            
+            <section class="phase-section opening-section">
+                <h2 class="phase-title">Opening Statements</h2>
+                <div class="exchanges">
+        <article class="exchange team-for" id="ex-cf6bdb8c">
+            <header class="exchange-header">
+                <span class="debater-icon" style="color: #ff9800">?</span>
+                <span class="debater-name">The Skeptic</span>
+                <span class="team-label">FOR</span>
+            </header>
+            <div class="exchange-body">
+                <div class="exchange-content">
+                    <p>By what logical mechanism do we transition from observing complex societal shifts to assigning collective guilt to a single demographic, such as migrants in Sweden? If we rely on such simplistic answers, are we not prioritizing the comfort of a <span class="key-phrase">scapegoat</span> over the rigor of a systemic analysis? To truly get to the bottom of this, must we not first define the threshold at which a group identity becomes a valid cause for national discontent, rather than a convenient variable in a political narrative?</p>
+                </div>
+                
+            </div>
+            
+        </article>
+        
+
+        <article class="exchange team-against" id="ex-ed494795">
+            <header class="exchange-header">
+                <span class="debater-icon" style="color: #9c27b0">@</span>
+                <span class="debater-name">The Historian</span>
+                <span class="team-label">AGAINST</span>
+            </header>
+            <div class="exchange-body">
+                <div class="exchange-content">
+                    <p>You rightly point out that societies often succumb to the allure of a single <span class="key-phrase">scapegoat</span>, mirroring historical patterns where complex systemic failures are reduced to the presence of an "other." However, by framing current discontent as merely a "<span class="key-phrase">contagion</span>" or a "lie," do we risk dismissing the specific, contingent frictions that arise when a long-standing <span class="key-phrase">social contract</span> is rapidly and fundamentally renegotiated? We might wonder if the current tension is not just a repeat of the past, but a unique consequence of choosing certain institutional paths over others, where the strain on social trust is a tangible reality rather than a malicious fabrication.</p>
+                </div>
+                
+            </div>
+            
+        </article>
+        </div>
+            </section>
+            
+            
+            <section class="phase-section round-section" data-round="1">
+                <h2 class="phase-title">Round 1</h2>
+                <div class="exchanges">
+        <article class="exchange team-for" id="ex-11d7f3d7">
+            <header class="exchange-header">
+                <span class="debater-icon" style="color: #00bcd4">~</span>
+                <span class="debater-name">The Connector</span>
+                <span class="team-label">FOR</span>
+            </header>
+            <div class="exchange-body">
+                <div class="exchange-content">
+                    <p>You argue that social friction is a tangible reality born from the rapid stretching of a <span class="key-phrase">social contract</span>, rather than a mere psychological projection. This reminds me of how, when an old bridge begins to buckle under new traffic, we often blame the weight of the newest cars rather than the aging steel or the original design. I wonder if, by identifying a specific group as the "cause," we are simply repeating a historical pattern of mistaking the site of the inflammation for the source of the systemic disease?</p>
+                </div>
+                
+            </div>
+            
+        </article>
+        
+
+        <article class="exchange team-against" id="ex-871ceb5f">
+            <header class="exchange-header">
+                <span class="debater-icon" style="color: #f44336">!</span>
+                <span class="debater-name">The Provocateur</span>
+                <span class="team-label">AGAINST</span>
+            </header>
+            <div class="exchange-body">
+                <div class="exchange-content">
+                    <p>You argue that targeting a demographic is merely identifying the symptom of a structural failure, much like <span class="metaphor" data-note="0">blaming the last car on a collapsing bridge rather than the engineers who failed to reinforce it</span>. However, if we refuse to acknowledge that specific cultural imports or volume-driven pressures are the primary stressors, are we not engaging in a different kind of simplistic lie—one that insists the capacity for social cohesion is infinite regardless of the "cargo"? By dismissing these frictions as a mere "<span class="key-phrase">contagion</span>" of lies, do you not risk gaslighting a population experiencing a literal breakdown of their social order just to protect a theoretical ideal?</p>
+                </div>
+                
+            </div>
+            
+        </article>
+        </div>
+            </section>
+            
+            <section class="phase-section round-section" data-round="2">
+                <h2 class="phase-title">Round 2</h2>
+                <div class="exchanges">
+        <article class="exchange team-for" id="ex-d6c2cb3b">
+            <header class="exchange-header">
+                <span class="debater-icon" style="color: #ff9800">?</span>
+                <span class="debater-name">The Skeptic</span>
+                <span class="team-label">FOR</span>
+            </header>
+            <div class="exchange-body">
+                <div class="exchange-content">
+                    <p>You suggest that dismissing the tangible strain of rapid demographic change as a "<span class="key-phrase">contagion</span>" of lies risks gaslighting a population experiencing a literal decline in social cohesion and safety. However, by what objective criteria do we isolate the "cargo" as the primary stressor rather than the rigidity of the institutions failing to accommodate it? Does attributing systemic failure to a specific group not rely on the unproven assumption that social infrastructure is a fixed, immutable entity rather than a dynamic system responsible for its own stability?</p>
+                </div>
+                
+            </div>
+            
+        </article>
+        
+
+        <article class="exchange team-against" id="ex-dc9a9eec">
+            <header class="exchange-header">
+                <span class="debater-icon" style="color: #9c27b0">@</span>
+                <span class="debater-name">The Historian</span>
+                <span class="team-label">AGAINST</span>
+            </header>
+            <div class="exchange-body">
+                <div class="exchange-content">
+                    <p>You argue that a system’s failure to adapt to new inputs is a failure of the system’s own design, suggesting that social infrastructure should be dynamic enough to maintain stability regardless of demographic shifts. Yet, we might wonder if high-trust <span class="key-phrase">social contract</span>s were ever intended to be infinitely elastic, or if their historical success was actually contingent on specific shared norms that are now being fundamentally challenged. By dismissing this friction as a "<span class="key-phrase">contagion</span>" of lies, do we not risk ignoring the possibility that certain social orders have finite capacities for change before they lose the very qualities that once made them peaceful?</p>
+                </div>
+                
+            </div>
+            
+        </article>
+        </div>
+            </section>
+            
+            <section class="phase-section round-section" data-round="3">
+                <h2 class="phase-title">Round 3</h2>
+                <div class="exchanges">
+        <article class="exchange team-for" id="ex-14d6c153">
+            <header class="exchange-header">
+                <span class="debater-icon" style="color: #00bcd4">~</span>
+                <span class="debater-name">The Connector</span>
+                <span class="team-label">FOR</span>
+            </header>
+            <div class="exchange-body">
+                <div class="exchange-content">
+                    <p>You suggest that a high-trust society functions like a specialized ecosystem where the delicate balance depends on specific shared norms that cannot be stretched indefinitely without breaking the system itself. This reminds me of how <span class="metaphor" data-note="0">an immune system might react to a new substance</span>; the body may attack so violently that it damages the host, leading one to ask if the "cargo" is the poison or if the systemic overreaction is the true pathology. I wonder if, by focusing on the "<span class="key-phrase">finite capacity</span>" of the culture, we are simply observing a recurring pattern where we blame the arrival of the new for the internal fragility of the old?</p>
+                </div>
+                <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (4.0/5)</strong><br>The speaker acknowledges the opposing view's core concern—that there is a 'finite capacity' to culture—before recontextualizing it.</div></div>
+            </div>
+            
+        </article>
+        
+
+        <article class="exchange team-against" id="ex-86380d99">
+            <header class="exchange-header">
+                <span class="debater-icon" style="color: #f44336">!</span>
+                <span class="debater-name">The Provocateur</span>
+                <span class="team-label">AGAINST</span>
+            </header>
+            <div class="exchange-body">
+                <div class="exchange-content">
+                    <p>You argue that the host society’s reaction to demographic shift is an "autoimmune" pathology where the system attacks itself rather than addressing its own internal fragility. However, if we define any protective response to a literal breakdown in public order as a "disease," are we not effectively demanding that a society undergo a lobotomy of its <span class="key-phrase">survival instinct</span>s to prove its tolerance? By framing the defense of a <span class="key-phrase">social contract</span> as a malfunction, do you not risk sacrificing the actual safety of citizens on the altar of a theoretical ideal that refuses to acknowledge when a system has reached its absolute breaking point?</p>
+                </div>
+                <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (4.0/5)</strong><br>The speaker accurately summarizes the opponent's complex metaphorical argument before launching the rebuttal, ensuring they are fighting the strongest version of the point.</div></div>
+            </div>
+            
+        </article>
+        </div>
+            </section>
+            
+            <section class="phase-section round-section" data-round="4">
+                <h2 class="phase-title">Round 4</h2>
+                <div class="exchanges">
+        <article class="exchange team-for" id="ex-51d40abd">
+            <header class="exchange-header">
+                <span class="debater-icon" style="color: #ff9800">?</span>
+                <span class="debater-name">The Skeptic</span>
+                <span class="team-label">FOR</span>
+            </header>
+            <div class="exchange-body">
+                <div class="exchange-content">
+                    <p>You argue that a society's defensive reaction to visible disorder is a legitimate survival mechanism intended to protect the safety of its citizens, rather than a pathological malfunction. However, by what empirical standard do we classify the impulse to target a specific demographic as a "<span class="key-phrase">survival instinct</span>" rather than a recurring historical <span class="key-phrase">contagion</span> that masks specific <span class="key-phrase">institutional failure</span>s? If we validate this <span class="key-phrase">collective blame</span> as a defensive necessity, how do we distinguish between a genuine protective measure and a simplistic narrative that halts any rigorous investigation into the actual mechanics of systemic collapse?</p>
+                </div>
+                <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (5.0/5)</strong><br>The speaker presents the opponent's argument as a 'legitimate survival mechanism intended to protect safety,' which is a very strong and charitable interpretation of the opposing view.</div></div>
+            </div>
+            
+        </article>
+        
+
+        <article class="exchange team-against" id="ex-04f1c82c">
+            <header class="exchange-header">
+                <span class="debater-icon" style="color: #9c27b0">@</span>
+                <span class="debater-name">The Historian</span>
+                <span class="team-label">AGAINST</span>
+            </header>
+            <div class="exchange-body">
+                <div class="exchange-content">
+                    <p>You suggest that validating <span class="key-phrase">collective blame</span> as a <span class="key-phrase">survival instinct</span> risks falling for an ancient psychological trap that obscures the specific, fixable failures within our institutions. However, we might wonder if the belief that institutions can—or should—absorb any degree of rapid demographic shift is itself a novel and unproven experiment, rather than a historical constant. By dismissing public reaction as a "<span class="key-phrase">contagion</span>," do we not ignore the possibility that certain high-trust social orders were contingent on specific shared norms that, once lost, cannot be replaced by even the most robust bureaucracy?</p>
+                </div>
+                <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (4.0/5)</strong><br>The speaker accurately captures the opponent's concern that collective blame is an 'ancient psychological trap' that masks fixable institutional failures.</div></div>
+            </div>
+            
+        </article>
+        </div>
+            </section>
+            
+            <section class="phase-section round-section" data-round="5">
+                <h2 class="phase-title">Round 5</h2>
+                <div class="exchanges">
+        <article class="exchange team-for" id="ex-cb31b6c1">
+            <header class="exchange-header">
+                <span class="debater-icon" style="color: #00bcd4">~</span>
+                <span class="debater-name">The Connector</span>
+                <span class="team-label">FOR</span>
+            </header>
+            <div class="exchange-body">
+                <div class="exchange-content">
+                    <p>You suggest that the invisible glue of shared norms is a finite resource that, once dissolved by rapid change, leaves a society hollowed out regardless of its bureaucratic strength. This reminds me of how <span class="metaphor" data-note="0">a forest fire is often blamed on the first dry branch to ignite</span>, ignoring the years of fire suppression that allowed the forest floor to become a tinderbox. I wonder if we are witnessing a recurring pattern where a system's own internal rigidity is misdiagnosed as an external threat, leading us to mistake the inevitable friction of growth for a terminal disease?</p>
+                </div>
+                
+            </div>
+            
+        </article>
+        
+
+        <article class="exchange team-against" id="ex-73b7e3fe">
+            <header class="exchange-header">
+                <span class="debater-icon" style="color: #f44336">!</span>
+                <span class="debater-name">The Provocateur</span>
+                <span class="team-label">AGAINST</span>
+            </header>
+            <div class="exchange-body">
+                <div class="exchange-content">
+                    <p>You argue that societal unrest is not caused by newcomers but by the long-term internal rigidity of institutions that have failed to adapt, turning the social landscape into a tinderbox where any spark causes a fire. Yet, if we insist that a system must have <span class="key-phrase">infinite elasticity</span>, are we not effectively demanding that a society commit <span class="key-phrase">cultural suicide</span> to prove its own resilience? By framing the identification of a specific group's impact as a "<span class="key-phrase">contagion</span>" of lies, do you not risk sacrificing the actual lives and safety of citizens on the altar of an ideology that refuses to admit when a <span class="key-phrase">social contract</span> has been shredded beyond repair?</p>
+                </div>
+                <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (5.0/5)</strong><br>The speaker provides an excellent summary of the opponent's position before dismantling it, showing a clear understanding of the 'systemic failure' argument.</div></div>
+            </div>
+            
+        </article>
+        </div>
+            </section>
+            
+            <section class="phase-section round-section" data-round="6">
+                <h2 class="phase-title">Round 6</h2>
+                <div class="exchanges">
+        <article class="exchange team-for" id="ex-56ad9c3a">
+            <header class="exchange-header">
+                <span class="debater-icon" style="color: #ff9800">?</span>
+                <span class="debater-name">The Skeptic</span>
+                <span class="team-label">FOR</span>
+            </header>
+            <div class="exchange-body">
+                <div class="exchange-content">
+                    <p>You argue that there is a finite limit to social elasticity and that ignoring the direct impact of newcomers on public safety risks a genuine collapse of the social order. However, by what operational definition do we conclude that the <span class="key-phrase">social contract</span> is "shredded" by a group's presence rather than by the specific failure of institutions to evolve their methods of governance? If we validate <span class="key-phrase">collective blame</span> as a <span class="key-phrase">survival instinct</span>, how do we ensure we aren't simply repeating the historical error of mistaking a symptom of administrative failure for an external <span class="key-phrase">contagion</span>?</p>
+                </div>
+                <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (4.0/5)</strong><br>The speaker acknowledges the opponent's likely premise regarding the limits of social elasticity before challenging its operational validity.</div></div>
+            </div>
+            
+        </article>
+        
+
+        <article class="exchange team-against" id="ex-2d0afecb">
+            <header class="exchange-header">
+                <span class="debater-icon" style="color: #9c27b0">@</span>
+                <span class="debater-name">The Historian</span>
+                <span class="team-label">AGAINST</span>
+            </header>
+            <div class="exchange-body">
+                <div class="exchange-content">
+                    <p>You rightly point out that <span class="key-phrase">collective blame</span> can act as a historical trap, obscuring the specific technical failures of institutions that simply neglected to update their methods for a changing world. Yet, we might wonder if the belief that a <span class="key-phrase">social contract</span> is a universal machine, capable of absorbing any degree of friction through "better administration," is itself a novel and unproven assumption. By dismissing the public’s reaction as a "<span class="key-phrase">contagion</span>," do we not ignore the possibility that certain social orders were never meant to be infinitely elastic, and that their breakdown is a direct result of losing the specific, shared expectations that once made them possible?</p>
+                </div>
+                <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (5.0/5)</strong><br>The speaker explicitly acknowledges the validity of the opponent's 'historical trap' argument before providing a counter-perspective.</div></div>
+            </div>
+            
+        </article>
+        </div>
+            </section>
+            
+            
+            <section class="phase-section closing-section">
+                <h2 class="phase-title">Closing Statements</h2>
+                <div class="exchanges">
+        <article class="exchange team-for" id="ex-1dd0551e">
+            <header class="exchange-header">
+                <span class="debater-icon" style="color: #00bcd4">~</span>
+                <span class="debater-name">The Connector</span>
+                <span class="team-label">FOR</span>
+            </header>
+            <div class="exchange-body">
+                <div class="exchange-content">
+                    <p>You suggest that a society's trust is not a universal constant but a specific, fragile fabric woven from shared expectations that, once torn, cannot be easily mended by bureaucratic decree. This reminds me of how <span class="metaphor" data-note="0">a bridge's collapse is often attributed to the weight of the final vehicle</span>, rather than the slow, invisible corrosion of the underlying supports that occurred long before. I wonder if the "<span class="key-phrase">contagion</span>" of blame we see today is simply the same ancient pattern where we mistake the symptom of a structural failure for the cause of the decay, leading us to target the newcomer rather than the rust?</p>
+                </div>
+                
+            </div>
+            
+        </article>
+        
+
+        <article class="exchange team-against" id="ex-e33ee2a0">
+            <header class="exchange-header">
+                <span class="debater-icon" style="color: #f44336">!</span>
+                <span class="debater-name">The Provocateur</span>
+                <span class="team-label">AGAINST</span>
+            </header>
+            <div class="exchange-body">
+                <div class="exchange-content">
+                    <p>Your strongest argument is that <span class="key-phrase">collective blame</span> serves as a psychological sedative, allowing failing institutions to hide their own administrative incompetence behind the convenient mask of a <span class="key-phrase">scapegoat</span>. However, by pathologizing the public’s reaction to a literal breakdown in safety as a "<span class="key-phrase">contagion</span>," you are effectively gaslighting a population into ignoring the tangible destruction of their social fabric for the sake of a theoretical ideal. If a society is forbidden from identifying when its core norms are being shredded by a specific, rapid demographic shift, it has been forced to trade its <span class="key-phrase">survival instinct</span> for a lobotomized "tolerance" that benefits only the elite architects of the collapse. To insist that a <span class="key-phrase">social contract</span> must have <span class="key-phrase">infinite elasticity</span> is not an act of progress; it is a demand for <span class="key-phrase">cultural suicide</span>.</p>
+                </div>
+                
+            </div>
+            
+        </article>
+        </div>
+            </section>
+            
+        </main>
+
+        
+            <section class="synthesis-section">
+                <h2>Moments of Recognition</h2>
+                <p class="synthesis-intro">These moments show each side accurately representing the other's strongest arguments.</p>
+                <div class="synthesis-moments">
+                <div class="synthesis-moment">
+                    <span class="synthesis-speaker">The Connector</span>
+                    <span class="synthesis-type">steelmanning</span>
+                    <p class="synthesis-note">The speaker acknowledges the opposing view's core concern—that there is a 'finite capacity' to culture—before recontextualizing it.</p>
+                </div>
+                
+                <div class="synthesis-moment">
+                    <span class="synthesis-speaker">The Provocateur</span>
+                    <span class="synthesis-type">steelmanning</span>
+                    <p class="synthesis-note">The speaker accurately summarizes the opponent's complex metaphorical argument before launching the rebuttal, ensuring they are fighting the strongest version of the point.</p>
+                </div>
+                
+                <div class="synthesis-moment">
+                    <span class="synthesis-speaker">The Skeptic</span>
+                    <span class="synthesis-type">steelmanning</span>
+                    <p class="synthesis-note">The speaker presents the opponent's argument as a 'legitimate survival mechanism intended to protect safety,' which is a very strong and charitable interpretation of the opposing view.</p>
+                </div>
+                
+                <div class="synthesis-moment">
+                    <span class="synthesis-speaker">The Historian</span>
+                    <span class="synthesis-type">steelmanning</span>
+                    <p class="synthesis-note">The speaker accurately captures the opponent's concern that collective blame is an 'ancient psychological trap' that masks fixable institutional failures.</p>
+                </div>
+                
+                <div class="synthesis-moment">
+                    <span class="synthesis-speaker">The Provocateur</span>
+                    <span class="synthesis-type">steelmanning</span>
+                    <p class="synthesis-note">The speaker provides an excellent summary of the opponent's position before dismantling it, showing a clear understanding of the 'systemic failure' argument.</p>
+                </div>
+                </div>
+            </section>
+            
+
+        <footer class="debate-footer">
+            <p>
+                Generated by <a href="https://github.com/your-repo/mull">mull</a> —
+                a cognitive environment for connected learning.
+            </p>
+            <p>
+                <em>"To turn over slowly in the mind"</em>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Depth drawer toggle
+    document.querySelectorAll('.depth-toggle').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const expanded = btn.getAttribute('aria-expanded') === 'true';
+            btn.setAttribute('aria-expanded', !expanded);
+            const content = btn.nextElementSibling;
+            content.hidden = expanded;
+        });
+    });
+
+    // Depth dial functionality
+    const depthLevels = ['essential', 'standard', 'deep', 'scholar'];
+    const depthLabels = ['Essential', 'Standard', 'Deep', 'Scholar'];
+
+    // Create depth dial
+    const dial = document.createElement('div');
+    dial.className = 'depth-dial';
+    dial.innerHTML = `
+        <label>Reading Depth</label>
+        <input type="range" min="0" max="3" value="1" id="depth-slider">
+        <div class="depth-value">Standard</div>
+    `;
+    document.body.appendChild(dial);
+
+    const slider = document.getElementById('depth-slider');
+    const valueDisplay = dial.querySelector('.depth-value');
+
+    function updateDepth(level) {
+        const levelName = depthLevels[level];
+        valueDisplay.textContent = depthLabels[level];
+
+        // Show/hide elements based on depth
+        document.querySelectorAll('.sidenote').forEach(function(el) {
+            el.style.display = level >= 1 ? '' : 'none';
+        });
+
+        document.querySelectorAll('.depth-drawer').forEach(function(el) {
+            el.style.display = level >= 2 ? '' : 'none';
+        });
+
+        document.querySelectorAll('.synthesis-section').forEach(function(el) {
+            el.style.display = level >= 1 ? '' : 'none';
+        });
+
+        // Key phrases only at scholar level
+        document.querySelectorAll('.key-phrase').forEach(function(el) {
+            el.style.background = level >= 3
+                ? 'linear-gradient(180deg, transparent 60%, #fff59d 60%)'
+                : 'none';
+        });
+    }
+
+    slider.addEventListener('input', function() {
+        updateDepth(parseInt(this.value));
+    });
+
+    // Initialize at standard level
+    updateDepth(1);
+
+    // Smooth scroll for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+});
+
+    </script>
+</body>
+</html>
