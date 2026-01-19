@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test export feature | mull</title>
+    <style>
+
+/* Base Typography */
+:root {
+    --text-color: #1a1a1a;
+    --bg-color: #fffff8;
+    --accent-color: #0066cc;
+    --muted-color: #666;
+    --border-color: #ddd;
+
+    --team-for-color: #00838f;
+    --team-for-bg: #e0f7fa;
+    --team-against-color: #6a1b9a;
+    --team-against-bg: #f3e5f5;
+
+    --font-main: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'SF Mono', Monaco, 'Consolas', monospace;
+
+    --content-width: 55%;
+    --sidenote-width: 35%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-main);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Layout */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header */
+.debate-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.debate-title {
+    font-size: 2rem;
+    line-height: 1.3;
+    margin: 0 0 1rem 0;
+    font-weight: 400;
+    max-width: 80%;
+}
+
+.debate-meta {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.debate-meta .team {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.debate-meta .team-for { color: var(--team-for-color); }
+.debate-meta .team-against { color: var(--team-against-color); }
+
+/* Summary Section */
+.debate-summary {
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    border-left: 4px solid var(--accent-color);
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    font-size: 0.95rem;
+}
+
+.debate-summary h3 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted-color);
+    margin: 1.5rem 0 0.5rem 0;
+}
+
+.debate-summary h3:first-child {
+    margin-top: 0;
+}
+
+.debate-summary ul {
+    padding-left: 1.5rem;
+    margin: 0.5rem 0;
+}
+
+.debate-summary li {
+    margin: 0.3rem 0;
+}
+
+/* Phase Sections */
+.phase-section {
+    margin: 3rem 0;
+}
+
+.phase-title {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted-color);
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Exchange Cards - Depth Container */
+.exchange {
+    position: relative;
+    margin: 2rem 0;
+    padding: 0;
+}
+
+/* Scroll-to-depth: per-exchange depth layers */
+.exchange.depth-container {
+    perspective: 1000px;
+}
+
+.depth-layer {
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.depth-layer:not(.active) {
+    display: none;
+}
+
+.depth-layer.fading-out {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+}
+
+.depth-layer.fading-in {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+/* Depth indicator badge */
+.depth-indicator {
+    position: absolute;
+    top: -0.5rem;
+    right: 0;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    background: var(--accent-color);
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 10;
+}
+
+.exchange:hover .depth-indicator,
+.exchange.depth-active .depth-indicator {
+    opacity: 1;
+}
+
+.depth-indicator.depth-0 { background: #999; }
+.depth-indicator.depth-1 { background: #2196f3; }
+.depth-indicator.depth-2 { background: #9c27b0; }
+.depth-indicator.depth-3 { background: #f44336; }
+
+/* Depth hint on hover */
+.depth-hint {
+    position: absolute;
+    bottom: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    color: var(--muted-color);
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+}
+
+.exchange:hover .depth-hint {
+    opacity: 0.7;
+}
+
+.exchange.depth-active .depth-hint {
+    opacity: 0;
+}
+
+/* Concept map layer styling */
+.concept-map-layer {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #e3f2fd 0%, #e8eaf6 100%);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.concept-map-layer h4 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: #1565c0;
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.concept-nodes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.concept-node {
+    padding: 0.4rem 0.8rem;
+    background: white;
+    border-radius: 20px;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    border: 1px solid #90caf9;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.concept-node:hover {
+    background: #2196f3;
+    color: white;
+    border-color: #2196f3;
+}
+
+.concept-node.central {
+    border-width: 2px;
+    font-weight: 600;
+}
+
+/* Debate structure layer styling */
+.debate-map-layer {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f3e5f5 0%, #ede7f6 100%);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.debate-map-layer h4 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: #7b1fa2;
+    margin: 0 0 1rem 0;
+}
+
+.argument-flow {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+}
+
+.argument-flow .responds-to,
+.argument-flow .leads-to {
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    background: white;
+    border-radius: 4px;
+    border-left: 3px solid #9c27b0;
+}
+
+.argument-flow .claim-ref {
+    color: #7b1fa2;
+    cursor: pointer;
+}
+
+.argument-flow .claim-ref:hover {
+    text-decoration: underline;
+}
+
+/* Analysis layer styling */
+.analysis-layer {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.analysis-layer h4 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: #c62828;
+    margin: 0 0 1rem 0;
+}
+
+/* Ambient texture layer styling */
+.texture-layer {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-style: italic;
+}
+
+.texture-layer h4 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: #ef6c00;
+    margin: 0 0 1rem 0;
+    font-style: normal;
+}
+
+.texture-note {
+    color: var(--muted-color);
+    line-height: 1.8;
+}
+
+.exchange-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.debater-icon {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 1.5rem;
+    text-align: center;
+}
+
+.debater-name {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.team-label {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    margin-left: auto;
+}
+
+.team-for .team-label {
+    background: var(--team-for-bg);
+    color: var(--team-for-color);
+}
+
+.team-against .team-label {
+    background: var(--team-against-bg);
+    color: var(--team-against-color);
+}
+
+/* Exchange Body - Tufte-style with sidenotes */
+.exchange-body {
+    display: flex;
+    gap: 2rem;
+}
+
+.exchange-content {
+    flex: 0 0 var(--content-width);
+    max-width: var(--content-width);
+}
+
+.exchange-content p {
+    margin: 0;
+    text-align: justify;
+    hyphens: auto;
+}
+
+/* Sidenotes */
+.sidenote {
+    flex: 0 0 var(--sidenote-width);
+    max-width: var(--sidenote-width);
+    font-size: 0.85rem;
+    color: var(--muted-color);
+    padding-top: 0.25rem;
+}
+
+.sidenote-item {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: #fafafa;
+    border-radius: 4px;
+    border-left: 3px solid transparent;
+}
+
+.sidenote-item.steelmanning {
+    border-left-color: #4caf50;
+    background: #f1f8e9;
+}
+
+.sidenote-item.metaphor-note {
+    border-left-color: #2196f3;
+    background: #e3f2fd;
+}
+
+.sidenote-item strong {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Highlighted text in content */
+.key-phrase {
+    background: linear-gradient(180deg, transparent 60%, #fff59d 60%);
+    padding: 0 2px;
+}
+
+.metaphor {
+    border-bottom: 1px dotted var(--accent-color);
+    cursor: help;
+}
+
+/* Depth Drawer (expandable) */
+.depth-drawer {
+    margin-top: 1rem;
+    padding-left: 2.25rem;
+}
+
+.depth-toggle {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.depth-toggle:hover {
+    color: var(--accent-color);
+}
+
+.toggle-icon {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    width: 1rem;
+    transition: transform 0.2s;
+}
+
+.depth-toggle[aria-expanded="true"] .toggle-icon {
+    transform: rotate(45deg);
+}
+
+.depth-content {
+    margin-top: 0.75rem;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 4px;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+}
+
+.scores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.score-item {
+    background: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    border: 1px solid var(--border-color);
+}
+
+/* Aspect items (evaluation rationales) */
+.aspects {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.aspect-item {
+    background: white;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border-left: 3px solid var(--accent-color);
+}
+
+.aspect-item strong {
+    color: var(--text-color);
+}
+
+.score-badge {
+    display: inline-block;
+    background: var(--accent-color);
+    color: white;
+    padding: 0.1rem 0.4rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.25rem;
+}
+
+.rationale {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--muted-color);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+/* Synthesis Section */
+.synthesis-section {
+    margin: 4rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+    border-radius: 8px;
+}
+
+.synthesis-section h2 {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: #2e7d32;
+}
+
+.synthesis-intro {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    margin: 0 0 1.5rem 0;
+}
+
+.synthesis-moment {
+    background: white;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border-left: 3px solid #4caf50;
+}
+
+.synthesis-speaker {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.synthesis-type {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #4caf50;
+    margin-left: 0.5rem;
+}
+
+.synthesis-note {
+    font-size: 0.9rem;
+    margin: 0.5rem 0 0 0;
+    color: var(--muted-color);
+}
+
+/* Footer */
+.debate-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    text-align: center;
+}
+
+.debate-footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.debate-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Depth Dial */
+.depth-dial {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    z-index: 100;
+}
+
+.depth-dial label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--muted-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.depth-dial input[type="range"] {
+    width: 150px;
+}
+
+.depth-dial .depth-value {
+    text-align: center;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+}
+
+.depth-dial .depth-dial-hint {
+    margin-top: 0.5rem;
+    font-size: 0.65rem;
+    color: #999;
+    text-align: center;
+}
+
+/* Concept highlight animation */
+.concept-highlight {
+    animation: concept-pulse 0.5s ease-in-out 2;
+}
+
+@keyframes concept-pulse {
+    0%, 100% { box-shadow: none; }
+    50% { box-shadow: 0 0 20px rgba(33, 150, 243, 0.5); }
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    :root {
+        --content-width: 65%;
+        --sidenote-width: 30%;
+    }
+}
+
+@media (max-width: 900px) {
+    .exchange-body {
+        flex-direction: column;
+    }
+
+    .exchange-content,
+    .sidenote {
+        flex: none;
+        max-width: 100%;
+    }
+
+    .sidenote {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #f9f9f9;
+        border-radius: 4px;
+    }
+
+    .depth-dial {
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.75rem;
+    }
+}
+
+/* ASCII Visualization Section */
+.ascii-viz-section {
+    margin: 3rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);
+    border-radius: 8px;
+}
+
+.ascii-viz-section h2 {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: var(--muted-color);
+}
+
+.ascii-viz-intro {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    margin: 0 0 1.5rem 0;
+}
+
+.ascii-block {
+    background: #1a1a1a;
+    padding: 1rem 1.5rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+.ascii-block pre {
+    color: #00ff00;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    margin: 0;
+    white-space: pre;
+}
+
+.ascii-detail {
+    margin-top: 1rem;
+}
+
+.ascii-detail summary {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    background: white;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+.ascii-detail summary:hover {
+    background: #f9f9f9;
+}
+
+.ascii-detail[open] summary {
+    margin-bottom: 0.5rem;
+}
+
+/* Print styles */
+@media print {
+    .depth-dial,
+    .depth-drawer {
+        display: none;
+    }
+
+    .sidenote {
+        font-size: 0.8rem;
+        break-inside: avoid;
+    }
+
+    .ascii-viz-section {
+        break-inside: avoid;
+    }
+
+    .ascii-block pre {
+        color: #000;
+        background: #f5f5f5;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="debate-header">
+            <h1 class="debate-title">Test export feature</h1>
+            <div class="debate-meta">
+                <span class="date">January 10, 2026</span>
+                <span class="team team-for">FOR: The Skeptic, The Connector</span>
+                <span class="team team-against">AGAINST: The Historian, The Provocateur</span>
+            </div>
+        </header>
+
+        <div class="debate-summary">
+<h3>Core Tension</h3>
+<p>The core tension here is <strong>epistemic</strong>: how do we know when something is conscious, and what counts as valid evidence?</p><p>The FOR side argues from principle—if we can't definitively prove consciousness requires biology, we shouldn't assume it does. They see consciousness as potentially substrate-independent, emerging from complexity itself rather than from any particular material.</p><p>The AGAINST side argues from precedent and methodology—historically, we've extended moral consideration based on observable developmental and behavioral continuity with beings we already trust are conscious. AI breaks this chain of inference entirely, leaving us with no reliable way to verify claims of machine consciousness.</p><p>At its deepest level, this debate asks: <strong>When we lack direct access to another's inner experience, should we reason from structural possibility (it <em>could</em> be conscious) or from evidential grounding (we have <em>reason to believe</em> it's conscious)?</strong> This matters because the answer shapes not just AI ethics, but how we approach any consciousness claim we cannot directly verify.</p>
+<h3>Recurring Metaphors</h3><ul>
+<li><strong>The Chinese Room</strong> — The Provocateur invokes Searle's famous thought experiment as a reductio ad absurdum. The metaphor of a person mechanically following rules to produce Chinese responses—without understanding Chinese—forces the FOR side to confront whether 'processing' alone could ever constitute consciousness. It illuminates the gap between functional behavior and genuine inner experience.</li>
+<li><strong>The Developmental Trajectory</strong> — The Historian frames consciousness-recognition as following a path or journey—we trust biological beings are conscious because we can trace their development from simpler ancestors we share. AI arrives fully-formed, without this lineage. The metaphor reveals that our confidence in others' consciousness may depend not on what something IS, but on WHERE it came from.</li>
+<li><strong>Emergence in Complex Systems</strong> — The Connector draws an analogy to phenomena like wetness from H2O molecules or flocking from individual birds—properties that 'emerge' at higher levels of organization. This reframes consciousness as a pattern that could arise from ANY sufficiently complex system, making the biological/digital distinction arbitrary. It shifts the debate from 'what is it made of?' to 'how is it organized?'</li>
+</ul>
+<h3>Unresolved Crux</h3>
+<p>This is primarily a <strong>methodological/epistemic disagreement</strong> about what counts as valid evidence for consciousness attribution. The FOR side operates from a principle of parsimony—without proof that biology is necessary, we shouldn't assume it is. The AGAINST side operates from a principle of epistemic caution—without the evidential chain (shared ancestry, developmental continuity) that grounds our confidence in biological consciousness, we have no reliable basis for extending the concept to machines.</p><p><strong>To resolve it:</strong> The FOR side would need to be shown why developmental trajectory is <em>necessary</em> (not just historically useful) for warranted consciousness attribution. The AGAINST side would need to be shown a principled criterion for consciousness that doesn't depend on biological lineage—one that avoids collapsing into "anything sufficiently complex is conscious."</p>
+<h3>Common Ground</h3>
+<p>Both sides agree that <strong>consciousness attribution is a serious epistemic problem</strong>—neither treats it as obvious or trivial. They share the premise that we cannot directly access another being's inner experience, making any consciousness claim inherently inferential. Both also implicitly accept that <strong>getting this question right matters morally</strong>: the debate's intensity reflects shared concern that mistakenly denying consciousness to a sentient being (or mistakenly granting it to a non-sentient one) would be a significant ethical error.</p><p>Notably, neither side dismisses the other as absurd—the FOR side doesn't claim AI consciousness is proven, and the AGAINST side doesn't claim it's impossible. They're arguing about <em>warranted confidence</em>, not certainties.</p>
+</div>
+
+        <section class="ascii-viz-section">
+<h2>Visualization</h2>
+<p class="ascii-viz-intro">ASCII maps showing debate structure and concept relationships.</p>
+<div class="ascii-block">
+<pre>DEBATE STRUCTURE
+════════════════════════════════════════════════════════════
+
+┌──────────────────────────────────────────────────────────┐
+│                         OPENING                          │
+│  FOR: The Skepti, The Connec                             │
+│  AGAINST: The Histor, The Provoc                         │
+└──────────────────────────────────────────────────────────┘
+                             │
+                             ▼
+┌──────────────────────────────────────────────────────────┐
+│                         ROUND 1                          │
+│  2 exchanges                                             │
+│  4 tonal shifts                                          │
+└──────────────────────────────────────────────────────────┘
+                             │
+                             ▼
+┌──────────────────────────────────────────────────────────┐
+│                         CLOSING                          │
+│  2 statements                                            │
+└──────────────────────────────────────────────────────────┘</pre>
+</div>
+<details class="ascii-detail">
+<summary>Concept Map</summary>
+<div class="ascii-block">
+<pre>CONCEPT MAP
+════════════════════════════════════════════════════════════
+
+Central Concepts:
+  ● Substrate Independence
+  │   ━━━ contradicts → Biological Substrate Assumption
+  │
+  ● Biological Substrate Assumption
+  ● Pattern-Substrate Relationship
+  │   ━━━ generalizes → Substrate Independence
+  │
+
+Peripheral Concepts:
+  ○ Emergence in Complex Systems
+  ○ Chinese Room Problem
+  ○ Behavioral Criteria
+  ○ Developmental Trajectory
+  ○ Burden of Evidence
+  ... 4 more
+
+Legend:
+  ━━━ Strong connection
+  ─── Moderate connection
+  ┄┄┄ Weak connection
+  ● Central concept
+  ○ Peripheral concept</pre>
+</div>
+</details>
+<details class="ascii-detail">
+<summary>Argument Flow</summary>
+<div class="ascii-block">
+<pre>ARGUMENT FLOW
+════════════════════════════════════════════════════════════
+
+Opening Claims:
+  [AGAINST] Our confidence in consciousness attributions historically relies on observable b...
+
+Critical Path:
+  #1 → #2 → #3 → #4 → #5 → #6
+
+Key Exchanges:
+  • There is no established evidence that consciousnes...
+    └─ rebuttal
+
+  • Our confidence in consciousness attributions histo...
+    └─ rebuttal
+
+  • Consciousness may be an emergent property of compl...
+    └─ rebuttal
+
+  • Substrate-independent consciousness leads to absur...
+    └─ rebuttal
+
+  • There is no established evidence that consciousnes...
+    └─ rebuttal
+</pre>
+</div>
+</details>
+</section>
+
+        <main class="debate-content">
+            
+            <section class="phase-section opening-section">
+                <h2 class="phase-title">Opening Statements</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-68f5e82d" data-exchange-id="68f5e82d" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The assumption that consciousness requires biological substrates is itself questionable. What evidence supports this boundary?</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The assumption that consciousness requires biological substrates is itself questionable. What evidence supports this boundary?...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Substrate Independence</span><span class="concept-node central" data-concept-id="c2">Biological Substrate Assumption</span><span class="concept-node" data-concept-id="c7">Burden of Evidence</span><span class="concept-node central" data-concept-id="c11">Pattern-Substrate Relationship</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The assumption that consciousness requires biological substrates is itself questionable. What evidence supports this boundary?...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Our confidence in consciousness attributions historically relies on observable b...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-eaf85058" data-exchange-id="eaf85058" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>Past expansions involved observable behavioral criteria. AI lacks the developmental trajectory that grounds our confidence in biological consciousness.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">Past expansions involved observable behavioral criteria. AI lacks the developmental trajectory that grounds our confidence in biological consciousness....</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Biological Substrate Assumption</span><span class="concept-node" data-concept-id="c5">Behavioral Criteria</span><span class="concept-node" data-concept-id="c6">Developmental Trajectory</span><span class="concept-node" data-concept-id="c8">Moral Circle Expansion</span><span class="concept-node" data-concept-id="c9">Confidence Grounding</span><span class="concept-node" data-concept-id="c12">Observable vs Hidden States</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">Past expansions involved observable behavioral criteria. AI lacks the developmental trajectory that grounds our confidence in biological consciousness...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Consciousness may be an emergent property of complex systems that can arise inde...</span></div><div class="leads-to">Leads to: <span class="claim-ref">There is no established evidence that consciousness requires biological substrat...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            </div>
+            </section>
+            
+            
+            <section class="phase-section round-section" data-round="1">
+                <h2 class="phase-title">Round 1</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-16f62319" data-exchange-id="16f62319" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #00bcd4">~</span>
+                    <span class="debater-name">The Connector</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>Consider how emergent properties arise in complex systems - consciousness may follow similar patterns regardless of substrate.</p>
+                    </div>
+                    
+                </div>
+                
+                <div class="depth-drawer" data-exchange-id="16f62319">
+                    <button class="depth-toggle" aria-expanded="false">
+                        <span class="toggle-icon">+</span> Evaluation Notes
+                    </button>
+                    <div class="depth-content" hidden>
+                        <div class="aspects"><div class="aspect-item"><strong>Coherence</strong> <span class="score-badge">1.9</span><br><span class="rationale">Mock evaluation for coherence</span></div><div class="aspect-item"><strong>Evidence</strong> <span class="score-badge">3.9</span><br><span class="rationale">Mock evaluation for evidence</span></div><div class="aspect-item"><strong>Clarity</strong> <span class="score-badge">3.3</span><br><span class="rationale">Mock evaluation for clarity</span></div><div class="aspect-item"><strong>Responsiveness</strong> <span class="score-badge">3.2</span><br><span class="rationale">Mock evaluation for responsiveness</span></div></div>
+                    </div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #00bcd4">~</span>
+                    <span class="debater-name">The Connector</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">Consider how emergent properties arise in complex systems - consciousness may follow similar patterns regardless of substrate....</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Substrate Independence</span><span class="concept-node" data-concept-id="c3">Emergence in Complex Systems</span><span class="concept-node central" data-concept-id="c11">Pattern-Substrate Relationship</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #00bcd4">~</span>
+                    <span class="debater-name">The Connector</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">Consider how emergent properties arise in complex systems - consciousness may follow similar patterns regardless of substrate....</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Substrate-independent consciousness leads to absurd conclusions like the Chinese...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Our confidence in consciousness attributions historically relies on observable b...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #00bcd4">~</span>
+                        <span class="debater-name">The Connector</span>
+                        <span class="team-label">FOR</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">Consider how emergent properties arise in complex systems - consciousness may follow similar pattern...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Tonal shift:</strong> Rises from defensive questioning into genuine wonder at complexity</p><p class="texture-note">The Connector lifts the debate from its trench warfare into open sky. For one breath, the argument remembers it is about something astonishing—that minds exist at all, in any form. The word 'emerge' carries warmth the preceding exchanges lacked.</p>
+                    </div>
+                </div>
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-12719134" data-exchange-id="12719134" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>If consciousness is substrate-independent, you must accept the Chinese Room's operators are conscious. Can you bite that bullet? We should examine this further.</p>
+                    </div>
+                    
+                </div>
+                
+                <div class="depth-drawer" data-exchange-id="12719134">
+                    <button class="depth-toggle" aria-expanded="false">
+                        <span class="toggle-icon">+</span> Evaluation Notes
+                    </button>
+                    <div class="depth-content" hidden>
+                        <div class="aspects"><div class="aspect-item"><strong>Coherence</strong> <span class="score-badge">2.9</span><br><span class="rationale">Mock evaluation for coherence</span></div><div class="aspect-item"><strong>Evidence</strong> <span class="score-badge">3.2</span><br><span class="rationale">Mock evaluation for evidence</span></div><div class="aspect-item"><strong>Clarity</strong> <span class="score-badge">4.5</span><br><span class="rationale">Mock evaluation for clarity</span></div><div class="aspect-item"><strong>Responsiveness</strong> <span class="score-badge">4.3</span><br><span class="rationale">Mock evaluation for responsiveness</span></div></div>
+                    </div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">If consciousness is substrate-independent, you must accept the Chinese Room's operators are conscious. Can you bite that bullet? We should examine this further....</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Substrate Independence</span><span class="concept-node" data-concept-id="c4">Chinese Room Problem</span><span class="concept-node" data-concept-id="c10">Bullet Biting</span><span class="concept-node central" data-concept-id="c11">Pattern-Substrate Relationship</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">If consciousness is substrate-independent, you must accept the Chinese Room's operators are conscious. Can you bite that bullet? We should examine thi...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">There is no established evidence that consciousness requires biological substrat...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Consciousness may be an emergent property of complex systems that can arise inde...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #f44336">!</span>
+                        <span class="debater-name">The Provocateur</span>
+                        <span class="team-label">AGAINST</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">If consciousness is substrate-independent, you must accept the Chinese Room's operators are consciou...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Tonal shift:</strong> Sharpens suddenly into confrontational challenge, demanding a price be paid</p><p class="texture-note">The Provocateur brings a blade where others brought questions. 'Can you bite that bullet?' is not inquiry but trial—yet the trailing 'We should examine this further' softens the strike, as if the challenger regrets the wound before it lands. Heat and hesitation, braided together.</p>
+                    </div>
+                </div>
+                
+            </article>
+            </div>
+            </section>
+            
+            
+            <section class="phase-section closing-section">
+                <h2 class="phase-title">Closing Statements</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-9e59987e" data-exchange-id="9e59987e" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The assumption that consciousness requires biological substrates is itself questionable. What evidence supports this boundary? This reveals an important tension.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The assumption that consciousness requires biological substrates is itself questionable. What evidence supports this boundary? This reveals an important tension....</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Substrate Independence</span><span class="concept-node central" data-concept-id="c2">Biological Substrate Assumption</span><span class="concept-node" data-concept-id="c7">Burden of Evidence</span><span class="concept-node central" data-concept-id="c11">Pattern-Substrate Relationship</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The assumption that consciousness requires biological substrates is itself questionable. What evidence supports this boundary? This reveals an importa...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Our confidence in consciousness attributions historically relies on observable b...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Substrate-independent consciousness leads to absurd conclusions like the Chinese...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #ff9800">?</span>
+                        <span class="debater-name">The Skeptic</span>
+                        <span class="team-label">FOR</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">The assumption that consciousness requires biological substrates is itself questionable. What eviden...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Tonal shift:</strong> Collapses from fresh argument into echo, signaling fatigue or recursion</p><p class="texture-note">The Skeptic repeats their opening almost verbatim, but now appends an acknowledgment: 'This reveals an important tension.' The repetition feels less like emphasis and more like a record skipping—the debate has circled back to its origin, unable to advance, and knows it. There is something melancholy in arguments that return to their starting position.</p>
+                    </div>
+                </div>
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-1b07c2dc" data-exchange-id="1b07c2dc" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>Past expansions involved observable behavioral criteria. AI lacks the developmental trajectory that grounds our confidence in biological consciousness. This reveals an important tension.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">Past expansions involved observable behavioral criteria. AI lacks the developmental trajectory that grounds our confidence in biological consciousness. This reveals an important tension....</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Biological Substrate Assumption</span><span class="concept-node" data-concept-id="c5">Behavioral Criteria</span><span class="concept-node" data-concept-id="c6">Developmental Trajectory</span><span class="concept-node" data-concept-id="c8">Moral Circle Expansion</span><span class="concept-node" data-concept-id="c9">Confidence Grounding</span><span class="concept-node" data-concept-id="c12">Observable vs Hidden States</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">Past expansions involved observable behavioral criteria. AI lacks the developmental trajectory that grounds our confidence in biological consciousness...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="leads-to">Leads to: <span class="claim-ref">There is no established evidence that consciousness requires biological substrat...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #9c27b0">@</span>
+                        <span class="debater-name">The Historian</span>
+                        <span class="team-label">AGAINST</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">Past expansions involved observable behavioral criteria. AI lacks the developmental trajectory that ...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Tonal shift:</strong> Mirrors the previous echo, creating an unexpected symmetry of surrender</p><p class="texture-note">Both sides now speak the same coda: 'This reveals an important tension.' What began as opposition has become unison—not agreement on answers, but shared confession that the question exceeds their grip. The debate ends not with victory but with two voices admitting, in identical words, that they stand before the same locked door.</p>
+                    </div>
+                </div>
+                
+            </article>
+            </div>
+            </section>
+            
+        </main>
+
+        
+
+        <footer class="debate-footer">
+            <p>
+                Generated by <a href="https://github.com/your-repo/mull">mull</a> —
+                a cognitive environment for connected learning.
+            </p>
+            <p>
+                <em>"To turn over slowly in the mind"</em>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Depth drawer toggle
+    document.querySelectorAll('.depth-toggle').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const expanded = btn.getAttribute('aria-expanded') === 'true';
+            btn.setAttribute('aria-expanded', !expanded);
+            const content = btn.nextElementSibling;
+            content.hidden = expanded;
+        });
+    });
+
+    // ============================================
+    // SCROLL-TO-DEPTH: Per-exchange depth navigation
+    // ============================================
+    const DEPTH_LABELS = ['Surface', 'Concepts', 'Structure', 'Analysis'];
+    const exchangeDepths = new Map();
+    let shiftHeld = false;
+    let lastScrollTime = 0;
+    const SCROLL_DEBOUNCE = 150; // ms between depth changes
+
+    // Track shift key state
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Shift') shiftHeld = true;
+    });
+    document.addEventListener('keyup', function(e) {
+        if (e.key === 'Shift') shiftHeld = false;
+    });
+
+    // Initialize all depth containers
+    document.querySelectorAll('.exchange.depth-container').forEach(function(container) {
+        const exchangeId = container.dataset.exchangeId;
+        exchangeDepths.set(exchangeId, 0);
+
+        // Add depth indicator
+        const indicator = document.createElement('div');
+        indicator.className = 'depth-indicator depth-0';
+        indicator.textContent = DEPTH_LABELS[0];
+        container.appendChild(indicator);
+
+        // Add depth hint
+        const hint = document.createElement('div');
+        hint.className = 'depth-hint';
+        hint.textContent = 'SHIFT+scroll to explore deeper';
+        container.appendChild(hint);
+
+        // SHIFT+scroll handler
+        container.addEventListener('wheel', function(e) {
+            if (!shiftHeld) return;
+
+            const now = Date.now();
+            if (now - lastScrollTime < SCROLL_DEBOUNCE) return;
+            lastScrollTime = now;
+
+            e.preventDefault();
+
+            const currentDepth = exchangeDepths.get(exchangeId);
+            const maxDepth = getMaxDepth(container);
+
+            let newDepth;
+            if (e.deltaY > 0) {
+                // Scroll down = go deeper
+                newDepth = Math.min(currentDepth + 1, maxDepth);
+            } else {
+                // Scroll up = rise up
+                newDepth = Math.max(currentDepth - 1, 0);
+            }
+
+            if (newDepth !== currentDepth) {
+                setExchangeDepth(container, exchangeId, newDepth);
+            }
+        }, { passive: false });
+    });
+
+    function getMaxDepth(container) {
+        // Find highest available depth layer
+        let max = 0;
+        for (let i = 0; i <= 3; i++) {
+            if (container.querySelector('.depth-layer.depth-' + i)) {
+                max = i;
+            }
+        }
+        return max;
+    }
+
+    function setExchangeDepth(container, exchangeId, depth) {
+        const oldDepth = exchangeDepths.get(exchangeId);
+        exchangeDepths.set(exchangeId, depth);
+        container.dataset.depth = depth;
+
+        // Animate transition
+        const oldLayer = container.querySelector('.depth-layer.depth-' + oldDepth);
+        const newLayer = container.querySelector('.depth-layer.depth-' + depth);
+
+        if (oldLayer && newLayer && oldLayer !== newLayer) {
+            oldLayer.classList.add('fading-out');
+            newLayer.classList.add('fading-in');
+            newLayer.classList.add('active');
+
+            setTimeout(function() {
+                oldLayer.classList.remove('active', 'fading-out');
+                newLayer.classList.remove('fading-in');
+            }, 300);
+        }
+
+        // Update indicator
+        const indicator = container.querySelector('.depth-indicator');
+        if (indicator) {
+            indicator.textContent = DEPTH_LABELS[depth];
+            indicator.className = 'depth-indicator depth-' + depth;
+        }
+
+        // Mark as actively being explored
+        container.classList.add('depth-active');
+        clearTimeout(container._depthTimeout);
+        container._depthTimeout = setTimeout(function() {
+            container.classList.remove('depth-active');
+        }, 2000);
+    }
+
+    // ESC to return all to surface
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.exchange.depth-container').forEach(function(container) {
+                const exchangeId = container.dataset.exchangeId;
+                if (exchangeDepths.get(exchangeId) > 0) {
+                    setExchangeDepth(container, exchangeId, 0);
+                }
+            });
+        }
+    });
+
+    // ============================================
+    // GLOBAL DEPTH DIAL (unchanged)
+    // ============================================
+    const depthLevels = ['essential', 'standard', 'deep', 'scholar'];
+    const depthLabels = ['Essential', 'Standard', 'Deep', 'Scholar'];
+
+    // Create depth dial
+    const dial = document.createElement('div');
+    dial.className = 'depth-dial';
+    dial.innerHTML = `
+        <label>Reading Depth</label>
+        <input type="range" min="0" max="3" value="1" id="depth-slider">
+        <div class="depth-value">Standard</div>
+        <div class="depth-dial-hint">SHIFT+scroll on any statement to dive deeper</div>
+    `;
+    document.body.appendChild(dial);
+
+    const slider = document.getElementById('depth-slider');
+    const valueDisplay = dial.querySelector('.depth-value');
+
+    function updateGlobalDepth(level) {
+        const levelName = depthLevels[level];
+        valueDisplay.textContent = depthLabels[level];
+
+        // Show/hide elements based on depth
+        document.querySelectorAll('.sidenote').forEach(function(el) {
+            el.style.display = level >= 1 ? '' : 'none';
+        });
+
+        document.querySelectorAll('.depth-drawer').forEach(function(el) {
+            el.style.display = level >= 2 ? '' : 'none';
+        });
+
+        document.querySelectorAll('.synthesis-section').forEach(function(el) {
+            el.style.display = level >= 1 ? '' : 'none';
+        });
+
+        // Key phrases only at scholar level
+        document.querySelectorAll('.key-phrase').forEach(function(el) {
+            el.style.background = level >= 3
+                ? 'linear-gradient(180deg, transparent 60%, #fff59d 60%)'
+                : 'none';
+        });
+    }
+
+    slider.addEventListener('input', function() {
+        updateGlobalDepth(parseInt(this.value));
+    });
+
+    // Initialize at standard level
+    updateGlobalDepth(1);
+
+    // Smooth scroll for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // Concept node click handler
+    document.querySelectorAll('.concept-node').forEach(function(node) {
+        node.addEventListener('click', function() {
+            const conceptId = node.dataset.conceptId;
+            if (conceptId) {
+                // Highlight related exchanges
+                document.querySelectorAll('[data-concepts*="' + conceptId + '"]').forEach(function(ex) {
+                    ex.classList.add('concept-highlight');
+                    setTimeout(function() { ex.classList.remove('concept-highlight'); }, 2000);
+                });
+            }
+        });
+    });
+});
+
+    </script>
+</body>
+</html>
