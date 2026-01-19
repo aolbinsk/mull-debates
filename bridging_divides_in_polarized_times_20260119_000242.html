@@ -1,0 +1,2043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bridging divides in polarized times | mull</title>
+    <style>
+
+/* Base Typography */
+:root {
+    --text-color: #1a1a1a;
+    --bg-color: #fffff8;
+    --accent-color: #0066cc;
+    --muted-color: #666;
+    --border-color: #ddd;
+
+    --team-for-color: #00838f;
+    --team-for-bg: #e0f7fa;
+    --team-against-color: #6a1b9a;
+    --team-against-bg: #f3e5f5;
+
+    --font-main: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'SF Mono', Monaco, 'Consolas', monospace;
+
+    --content-width: 55%;
+    --sidenote-width: 35%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-main);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Layout */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header */
+.debate-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.debate-title {
+    font-size: 2rem;
+    line-height: 1.3;
+    margin: 0 0 1rem 0;
+    font-weight: 400;
+    max-width: 80%;
+}
+
+.debate-meta {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.debate-meta .team {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.debate-meta .team-for { color: var(--team-for-color); }
+.debate-meta .team-against { color: var(--team-against-color); }
+
+/* Summary Section */
+.debate-summary {
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    border-left: 4px solid var(--accent-color);
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    font-size: 0.95rem;
+}
+
+.debate-summary h3 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted-color);
+    margin: 1.5rem 0 0.5rem 0;
+}
+
+.debate-summary h3:first-child {
+    margin-top: 0;
+}
+
+.debate-summary ul {
+    padding-left: 1.5rem;
+    margin: 0.5rem 0;
+}
+
+.debate-summary li {
+    margin: 0.3rem 0;
+}
+
+/* Phase Sections */
+.phase-section {
+    margin: 3rem 0;
+}
+
+.phase-title {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted-color);
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Exchange Cards - Depth Container */
+.exchange {
+    position: relative;
+    margin: 2rem 0;
+    padding: 0;
+}
+
+/* Scroll-to-depth: per-exchange depth layers */
+.exchange.depth-container {
+    perspective: 1000px;
+}
+
+.depth-layer {
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.depth-layer:not(.active) {
+    display: none;
+}
+
+.depth-layer.fading-out {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+}
+
+.depth-layer.fading-in {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+/* Depth indicator badge */
+.depth-indicator {
+    position: absolute;
+    top: -0.5rem;
+    right: 0;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    background: var(--accent-color);
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 10;
+}
+
+.exchange:hover .depth-indicator,
+.exchange.depth-active .depth-indicator {
+    opacity: 1;
+}
+
+.depth-indicator.depth-0 { background: #999; }
+.depth-indicator.depth-1 { background: #2196f3; }
+.depth-indicator.depth-2 { background: #9c27b0; }
+.depth-indicator.depth-3 { background: #f44336; }
+
+/* Depth hint on hover */
+.depth-hint {
+    position: absolute;
+    bottom: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    color: var(--muted-color);
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+}
+
+.exchange:hover .depth-hint {
+    opacity: 0.7;
+}
+
+.exchange.depth-active .depth-hint {
+    opacity: 0;
+}
+
+/* Concept map layer styling */
+.concept-map-layer {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #e3f2fd 0%, #e8eaf6 100%);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.concept-map-layer h4 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: #1565c0;
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.concept-nodes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.concept-node {
+    padding: 0.4rem 0.8rem;
+    background: white;
+    border-radius: 20px;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    border: 1px solid #90caf9;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.concept-node:hover {
+    background: #2196f3;
+    color: white;
+    border-color: #2196f3;
+}
+
+.concept-node.central {
+    border-width: 2px;
+    font-weight: 600;
+}
+
+/* Debate structure layer styling */
+.debate-map-layer {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f3e5f5 0%, #ede7f6 100%);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.debate-map-layer h4 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: #7b1fa2;
+    margin: 0 0 1rem 0;
+}
+
+.argument-flow {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+}
+
+.argument-flow .responds-to,
+.argument-flow .leads-to {
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    background: white;
+    border-radius: 4px;
+    border-left: 3px solid #9c27b0;
+}
+
+.argument-flow .claim-ref {
+    color: #7b1fa2;
+    cursor: pointer;
+}
+
+.argument-flow .claim-ref:hover {
+    text-decoration: underline;
+}
+
+/* Analysis layer styling */
+.analysis-layer {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.analysis-layer h4 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: #c62828;
+    margin: 0 0 1rem 0;
+}
+
+/* Ambient texture layer styling */
+.texture-layer {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-style: italic;
+}
+
+.texture-layer h4 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: #ef6c00;
+    margin: 0 0 1rem 0;
+    font-style: normal;
+}
+
+.texture-note {
+    color: var(--muted-color);
+    line-height: 1.8;
+}
+
+.exchange-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.debater-icon {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 1.5rem;
+    text-align: center;
+}
+
+.debater-name {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.team-label {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    margin-left: auto;
+}
+
+.team-for .team-label {
+    background: var(--team-for-bg);
+    color: var(--team-for-color);
+}
+
+.team-against .team-label {
+    background: var(--team-against-bg);
+    color: var(--team-against-color);
+}
+
+/* Exchange Body - Tufte-style with sidenotes */
+.exchange-body {
+    display: flex;
+    gap: 2rem;
+}
+
+.exchange-content {
+    flex: 0 0 var(--content-width);
+    max-width: var(--content-width);
+}
+
+.exchange-content p {
+    margin: 0;
+    text-align: justify;
+    hyphens: auto;
+}
+
+/* Sidenotes */
+.sidenote {
+    flex: 0 0 var(--sidenote-width);
+    max-width: var(--sidenote-width);
+    font-size: 0.85rem;
+    color: var(--muted-color);
+    padding-top: 0.25rem;
+}
+
+.sidenote-item {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: #fafafa;
+    border-radius: 4px;
+    border-left: 3px solid transparent;
+}
+
+.sidenote-item.steelmanning {
+    border-left-color: #4caf50;
+    background: #f1f8e9;
+}
+
+.sidenote-item.metaphor-note {
+    border-left-color: #2196f3;
+    background: #e3f2fd;
+}
+
+.sidenote-item strong {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Highlighted text in content */
+.key-phrase {
+    background: linear-gradient(180deg, transparent 60%, #fff59d 60%);
+    padding: 0 2px;
+}
+
+.metaphor {
+    border-bottom: 1px dotted var(--accent-color);
+    cursor: help;
+}
+
+/* Depth Drawer (expandable) */
+.depth-drawer {
+    margin-top: 1rem;
+    padding-left: 2.25rem;
+}
+
+.depth-toggle {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.depth-toggle:hover {
+    color: var(--accent-color);
+}
+
+.toggle-icon {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    width: 1rem;
+    transition: transform 0.2s;
+}
+
+.depth-toggle[aria-expanded="true"] .toggle-icon {
+    transform: rotate(45deg);
+}
+
+.depth-content {
+    margin-top: 0.75rem;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 4px;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+}
+
+.scores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.score-item {
+    background: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    border: 1px solid var(--border-color);
+}
+
+/* Aspect items (evaluation rationales) */
+.aspects {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.aspect-item {
+    background: white;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border-left: 3px solid var(--accent-color);
+}
+
+.aspect-item strong {
+    color: var(--text-color);
+}
+
+.score-badge {
+    display: inline-block;
+    background: var(--accent-color);
+    color: white;
+    padding: 0.1rem 0.4rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.25rem;
+}
+
+.rationale {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--muted-color);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+/* Synthesis Section */
+.synthesis-section {
+    margin: 4rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+    border-radius: 8px;
+}
+
+.synthesis-section h2 {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: #2e7d32;
+}
+
+.synthesis-intro {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    margin: 0 0 1.5rem 0;
+}
+
+.synthesis-moment {
+    background: white;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border-left: 3px solid #4caf50;
+}
+
+.synthesis-speaker {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.synthesis-type {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #4caf50;
+    margin-left: 0.5rem;
+}
+
+.synthesis-note {
+    font-size: 0.9rem;
+    margin: 0.5rem 0 0 0;
+    color: var(--muted-color);
+}
+
+/* Footer */
+.debate-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    text-align: center;
+}
+
+.debate-footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.debate-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Depth Dial */
+.depth-dial {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    z-index: 100;
+}
+
+.depth-dial label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--muted-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.depth-dial input[type="range"] {
+    width: 150px;
+}
+
+.depth-dial .depth-value {
+    text-align: center;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+}
+
+.depth-dial .depth-dial-hint {
+    margin-top: 0.5rem;
+    font-size: 0.65rem;
+    color: #999;
+    text-align: center;
+}
+
+/* Concept highlight animation */
+.concept-highlight {
+    animation: concept-pulse 0.5s ease-in-out 2;
+}
+
+@keyframes concept-pulse {
+    0%, 100% { box-shadow: none; }
+    50% { box-shadow: 0 0 20px rgba(33, 150, 243, 0.5); }
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    :root {
+        --content-width: 65%;
+        --sidenote-width: 30%;
+    }
+}
+
+@media (max-width: 900px) {
+    .exchange-body {
+        flex-direction: column;
+    }
+
+    .exchange-content,
+    .sidenote {
+        flex: none;
+        max-width: 100%;
+    }
+
+    .sidenote {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #f9f9f9;
+        border-radius: 4px;
+    }
+
+    .depth-dial {
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.75rem;
+    }
+}
+
+/* ASCII Visualization Section */
+.ascii-viz-section {
+    margin: 3rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);
+    border-radius: 8px;
+}
+
+.ascii-viz-section h2 {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: var(--muted-color);
+}
+
+.ascii-viz-intro {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    margin: 0 0 1.5rem 0;
+}
+
+.ascii-block {
+    background: #1a1a1a;
+    padding: 1rem 1.5rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+.ascii-block pre {
+    color: #00ff00;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    margin: 0;
+    white-space: pre;
+}
+
+.ascii-detail {
+    margin-top: 1rem;
+}
+
+.ascii-detail summary {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    background: white;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+.ascii-detail summary:hover {
+    background: #f9f9f9;
+}
+
+.ascii-detail[open] summary {
+    margin-bottom: 0.5rem;
+}
+
+/* Print styles */
+@media print {
+    .depth-dial,
+    .depth-drawer {
+        display: none;
+    }
+
+    .sidenote {
+        font-size: 0.8rem;
+        break-inside: avoid;
+    }
+
+    .ascii-viz-section {
+        break-inside: avoid;
+    }
+
+    .ascii-block pre {
+        color: #000;
+        background: #f5f5f5;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="debate-header">
+            <h1 class="debate-title">Bridging divides in polarized times</h1>
+            <div class="debate-meta">
+                <span class="date">January 19, 2026</span>
+                <span class="team team-for">FOR: The Historian, The Pluralist</span>
+                <span class="team team-against">AGAINST: The Skeptic, The Provocateur</span>
+            </div>
+        </header>
+
+        <div class="debate-summary">
+<h3>Core Tension</h3>
+<p>This debate is fundamentally about <strong>who bears the cost of social repair, and whether the language we use to describe that repair obscures or reveals that asymmetry</strong>.</p><p>On the surface, both sides largely agree: some divides shouldn't be bridged, confrontation is sometimes necessary, and total withdrawal into ideological enclaves is harmful. The real disagreement emerges around whether the <em>term</em> "bridging divides"—as it functions in actual discourse—is a neutral description of engagement or a rhetorical tool that places disproportionate burden on the vulnerable while letting the powerful appear reasonable simply by showing up.</p><p>The FOR side argues that abandoning bridge-building language risks losing our capacity to distinguish between divides we <em>cannot</em> cross and those we merely <em>choose</em> not to—that polarization seduces us toward comfortable certainty rather than difficult encounter. The AGAINST side counters that the language itself does political work: by treating "bridging" and "confrontation" as the same thing, we sanitize the history of how change actually happens and counsel patience when we should counsel pressure.</p><p>At its core, this is a debate about <strong>whether reconciliation vocabulary serves justice or merely makes injustice more palatable</strong>—and whether we can reclaim words like "bridging" for genuine encounter, or whether they're already too compromised by their use as instruments of tone-policing and false equivalence.</p>
+<h3>Recurring Metaphors</h3><ul>
+<li><strong>The Bridge as Distance</strong> — This metaphor-critique exposes the hidden assumption embedded in 'bridging' language: that both sides occupy legitimate territory separated merely by space. The Skeptic reveals that the bridge metaphor smuggles in moral equivalence—if we need a bridge, both shores must be real places worth reaching. But some 'divides' aren't gaps between equals; they're boundaries between truth and falsehood, between recognizing humanity and denying it. The metaphor illuminates how spatial language can flatten moral asymmetry.</li>
+<li><strong>The Enclave Withdrawal</strong> — The Historian's enclave metaphor reframes polarization not as excessive conflict but as its opposite: retreat into comfortable fortresses where we never test our certainties against opposition. This illuminates how both 'bridge-building' and 'confrontation' share something the enclave lacks—encounter, presence, the refusal to look away. The metaphor suggests polarization's true danger isn't that we fight too much but that we increasingly arrange our lives to avoid encountering those we disagree with entirely.</li>
+<li><strong>The Lunch Counter Paradox</strong> — The Provocateur's juxtaposition of two radically different scenes—violent confrontation at a lunch counter versus genteel negotiation in a boardroom—both potentially labeled 'bridging' exposes how elastic definitions serve power. The image is viscerally clarifying: we can immediately feel the moral difference between these two forms of 'encounter,' yet the bridge-building vocabulary flattens them into equivalence. This illuminates how language that seems neutral can obscure the distinction between resistance and capitulation.</li>
+<li><strong>The Burden of Waiting</strong> — The Historian reframes the debate from one burden to another: the labor of reconciliation versus the suffering of delay. This illuminates a tragic dimension the AGAINST position risks obscuring—that refusing unfair terms doesn't guarantee better ones will arrive. The metaphor of 'waiting' as its own burden challenges the assumption that rejecting bridge-building is cost-free for the vulnerable, even when it's morally justified. It suggests that sometimes the choice isn't between fair and unfair options but between different kinds of unfairness.</li>
+</ul>
+<h3>Unresolved Crux</h3>
+<p><strong>This is primarily a definitional disagreement that masks a deeper values disagreement.</strong> The surface crux is whether "bridging divides" should be defined narrowly (as the AGAINST side insists—the term as it functions in real discourse, meaning calls for civility, compromise, and treating both sides as legitimate) or expansively (as the FOR side eventually argues—any engagement that isn't total withdrawal, including confrontation). But beneath this lies the true crux: <strong>does the language we use to describe social repair matter independently of the actions it describes?</strong></p><p>The AGAINST side would change their mind if shown that the phrase "bridge divides" does not, in practice, disproportionately burden the vulnerable or smuggle in false equivalence—that it's a neutral descriptor people apply equally to confrontation and compromise. The FOR side would change their mind if shown that defending bridge-building language, even when carefully defined, actively harms those it claims to help by lending respectability to calls for the marginalized to be "reasonable." The Provocateur names this precisely: "The FOR team ended up agreeing with us on substance while trying to salvage the terminology." The debate ultimately asks whether terminology is merely descriptive or whether it does political work that shapes what actions become thinkable.</p>
+<h3>Common Ground</h3>
+<p>Both sides agree on three substantial points that emerge explicitly through the debate: <strong>First, that some divides genuinely shouldn't be bridged</strong>—the FOR team explicitly absorbs this ("some divides <em>shouldn't</em> be bridged—there is no middle ground with those who deny another's humanity"), accepting that false symmetry can mask moral abdication. <strong>Second, that the burden of reconciliation falls asymmetrically on the vulnerable</strong>—the Historian directly concedes this ("the labor of reconciliation has almost always fallen disproportionately on those with the least power... This asymmetry is not incidental but structural"), and neither side disputes it. <strong>Third, that complete withdrawal into ideological enclaves is harmful</strong>—the Skeptic grants this is "a meaningful distinction" and asks rhetorically "who argues for total withdrawal?"</p><p>What's remarkable is that by the debate's end, the AGAINST side acknowledges the FOR team "ended up agreeing with us on substance"—they share a commitment to encounter, engagement, and the recognition that successful movements require both confrontation and relationship. The disagreement has narrowed almost entirely to whether the <em>language</em> of "bridging divides" can be salvaged or whether it's too compromised by its real-world deployment as a tool of tone-policing and false equivalence.</p>
+</div>
+
+        <section class="ascii-viz-section">
+<h2>Visualization</h2>
+<p class="ascii-viz-intro">ASCII maps showing debate structure and concept relationships.</p>
+<div class="ascii-block">
+<pre>DEBATE STRUCTURE
+════════════════════════════════════════════════════════════
+
+┌──────────────────────────────────────────────────────────┐
+│                         OPENING                          │
+│  FOR: The Histor, The Plural                             │
+│  AGAINST: The Skepti, The Provoc                         │
+└──────────────────────────────────────────────────────────┘
+                             │
+                             ▼
+┌──────────────────────────────────────────────────────────┐
+│                        ROUND 1-4                         │
+│  8 exchanges                                             │
+│  4 tonal shifts                                          │
+└──────────────────────────────────────────────────────────┘
+                             │
+                             ▼
+┌──────────────────────────────────────────────────────────┐
+│                         CLOSING                          │
+│  2 statements                                            │
+└──────────────────────────────────────────────────────────┘</pre>
+</div>
+<details class="ascii-detail">
+<summary>Concept Map</summary>
+<div class="ascii-block">
+<pre>CONCEPT MAP
+════════════════════════════════════════════════════════════
+
+Central Concepts:
+  ● Historical Precedent
+  │   ━━─ enables → Consequentialist Pragmatism
+  │
+  ● Asymmetric Burden
+  │   ━━━ depends_on → Terms of Engagement
+  │
+  ● Strategic Confrontation
+  │   ━━━ refines → Encounter vs Withdrawal
+  │
+  ● Consequentialist Pragmatism
+  │   ━━━ contradicts → Moral Boundaries
+  │
+  ● Cui Bono Analysis
+  │   ━━━ enables → Asymmetric Burden
+  │   ━━━ enables → Definitional Expansion
+  │
+
+Peripheral Concepts:
+  ○ False Equivalence
+  ○ Moral Boundaries
+  ○ Definitional Expansion
+  ○ Encounter vs Withdrawal
+  ○ Retrospective Sanitization
+  ... 3 more
+
+Legend:
+  ━━━ Strong connection
+  ─── Moderate connection
+  ┄┄┄ Weak connection
+  ● Central concept
+  ○ Peripheral concept</pre>
+</div>
+</details>
+<details class="ascii-detail">
+<summary>Argument Flow</summary>
+<div class="ascii-block">
+<pre>ARGUMENT FLOW
+════════════════════════════════════════════════════════════
+
+Opening Claims:
+  [AGAINST] The FOR team won by systematically retreating: they conceded every substantive c...
+
+Critical Path:
+  #1 → #2 → #3 → #4 → #5 → #6 → #7 → #8 → #9 → #10 → #11
+
+Key Exchanges:
+  • History shows that even the deepest societal divis...
+    └─ rebuttal
+
+  • The framing of 'bridging divides' assumes position...
+    └─ rebuttal
+    └─ concession
+
+  • Bridging divides need not mean moral compromise or...
+    └─ rebuttal
+
+  • The call to 'bridge divides' almost always comes f...
+    └─ concession
+    └─ concession
+
+  • While the burden of reconciliation has historicall...
+    └─ rebuttal
+    └─ question
+</pre>
+</div>
+</details>
+</section>
+
+        <main class="debate-content">
+            
+            <section class="phase-section opening-section">
+                <h2 class="phase-title">Opening Statements</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-0d04ec6f" data-exchange-id="0d04ec6f" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*adjusts spectacles and unfurls a weathered scroll*
+
+Consider this: the very phrase "polarized times" assumes our current moment is uniquely divided. Yet when we look back, we find eras of far deeper fracture—the Thirty Years' War that halved some European populations, the bitter schisms of early democracy, the seemingly unbridgeable chasms of civil wars—and from each, bridges were eventually built.
+
+What strikes me as worth examining is not whether divides *can* be bridged, but what was lost each time people assumed they couldn't be. The Compromise of 1850 delayed catastrophe; the Congress of Vienna created a century of relative peace; post-apartheid South Africa chose truth and reconciliation over retribution. These weren't inevitable outcomes—they were choices made by people who could have chosen otherwise.
+
+I argue FOR bridging divides because history shows us the alternative is not stasis but escalation. Every generation has faced those who insisted the other side was beyond reason, beyond redemption. And sometimes they were right. But more often, the bridge-builders—however naive they seemed at the time—created the space where something new could grow.
+
+The question I would put to my opponent: if not bridging, then what? History offers us few examples of divisions that simply resolved themselves through mutual avoidance.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*adjusts spectacles and unfurls a weathered scroll*
+
+Consider this: the very phrase "polarized times" assumes our current moment is uniquely divided. Yet when we look back, we find eras of far deeper ...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Historical Precedent</span><span class="concept-node" data-concept-id="c10">Escalation Dynamics</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*adjusts spectacles and unfurls a weathered scroll*
+
+Consider this: the very phrase "polarized times" assumes our current moment is uniquely divided. ...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The framing of 'bridging divides' assumes positions can meet in the middle, but ...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-c23af37b" data-exchange-id="c23af37b" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*leans forward, tapping finger on the table*
+
+The Historian makes a compelling case that bridges have been built before—I grant that the Congress of Vienna and post-apartheid reconciliation are genuine examples of divisions being crossed. But let me press on something hidden in that framing.
+
+What exactly does "bridging divides" mean? The term assumes the problem is *distance* between positions that could, in principle, meet in the middle. But what if some divides exist because one side is *correct* and the other is not? We don't speak of "bridging the divide" between heliocentrism and flat-earth theory. We don't seek compromise with those who deny the humanity of others.
+
+The historical examples offered share a crucial feature: they were negotiated between parties who had exhausted themselves through conflict and sought survival. The Thirty Years' War ended not through bridge-building but through mutual devastation. Is that the prerequisite? Must we first reach catastrophe before "bridging" becomes possible?
+
+I argue AGAINST the proposition not because connection is undesirable, but because the metaphor of "bridging" obscures a harder question: *which* divides should be bridged, and which represent genuine moral boundaries that compromise would betray? The call to bridge divides, without specifying which ones, risks treating symmetry as wisdom and centrism as virtue.
+
+My question to the Historian: in your examples of successful bridge-building, who decided what was worth compromising, and who bore the cost of that compromise?</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*leans forward, tapping finger on the table*
+
+The Historian makes a compelling case that bridges have been built before—I grant that the Congress of Vienna and post-apartheid reconciliation are genuin...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node" data-concept-id="c3">False Equivalence</span><span class="concept-node" data-concept-id="c5">Moral Boundaries</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*leans forward, tapping finger on the table*
+
+The Historian makes a compelling case that bridges have been built before—I grant that the Congress of V...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Three truths can coexist: some divides shouldn't be bridged, the burden falls as...</span></div><div class="leads-to">Leads to: <span class="claim-ref">History shows that even the deepest societal divisions have eventually been brid...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            </div>
+            </section>
+            
+            
+            <section class="phase-section round-section" data-round="1">
+                <h2 class="phase-title">Round 1</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-9a8659bd" data-exchange-id="9a8659bd" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*opens hands, holding space*
+
+The Skeptic names something essential: some divides *shouldn't* be bridged—there is no middle ground with those who deny another's humanity, and the call for "both sides" can indeed mask moral abdication as even-handedness. This is a genuine insight that any honest defender of bridge-building must absorb rather than dismiss.
+
+Yet here's what I want to hold alongside that truth: bridging divides need not mean splitting the difference or abandoning moral ground. Consider that the same act—engaging across a divide—looks entirely different from three vantage points: to the pragmatist, it's strategic de-escalation; to the humanist, it's recognizing shared vulnerability beneath opposing positions; to the justice-seeker, it's bringing others toward accountability through relationship rather than force. Each of these is "bridging," yet none requires treating falsehood as equivalent to truth.
+
+What's lost if we reject bridge-building entirely? We lose the capacity to distinguish between divides that are genuinely unbridgeable and those we've simply *decided* not to cross because crossing feels like betrayal. The Skeptic asks who bears the cost of compromise—but I would ask: who bears the cost when we refuse to discover whether understanding was ever possible?</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*opens hands, holding space*
+
+The Skeptic names something essential: some divides *shouldn't* be bridged—there is no middle ground with those who deny another's humanity, and the call for "both sides"...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node" data-concept-id="c3">False Equivalence</span><span class="concept-node" data-concept-id="c5">Moral Boundaries</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*opens hands, holding space*
+
+The Skeptic names something essential: some divides *shouldn't* be bridged—there is no middle ground with those who deny...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The call to 'bridge divides' almost always comes from those in positions of comf...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The framing of 'bridging divides' assumes positions can meet in the middle, but ...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-36496789" data-exchange-id="36496789" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*cracks knuckles*
+
+The Pluralist makes the sharpest move yet: bridging isn't necessarily compromise, it can be bringing people toward accountability through relationship—that's genuinely distinct from mushy centrism, and I'll grant it's the strongest version of the FOR position we've heard.
+
+But let's stress-test it: *who gets to do this bridging?* Follow the power. The call to "bridge divides" almost never comes from those whose basic rights are being debated—it comes from those comfortable enough to treat the debate as intellectual exercise. When we say "bridge divides in polarized times," we're asking the targets of dehumanization to sit at tables with their dehumanizers and call it dialogue. The burden of bridge-building falls asymmetrically on the vulnerable, while those with power get to be "reasonable" simply by showing up.
+
+And then what? Even if some relationships shift, what happens to the structural conditions that created the divide? I'd argue the fetishization of bridge-building actively *delays* material change by substituting the performance of understanding for the redistribution of power. So tell me, Pluralist: in your three vantage points, who's doing the emotional labor, and who walks away feeling enlightened while nothing actually changes?</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*cracks knuckles*
+
+The Pluralist makes the sharpest move yet: bridging isn't necessarily compromise, it can be bringing people toward accountability through relationship—that's genuinely distinct from...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Asymmetric Burden</span><span class="concept-node" data-concept-id="c11">Terms of Engagement</span><span class="concept-node" data-concept-id="c12">Performative Understanding</span><span class="concept-node central" data-concept-id="c13">Cui Bono Analysis</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*cracks knuckles*
+
+The Pluralist makes the sharpest move yet: bridging isn't necessarily compromise, it can be bringing people toward accountability t...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Three truths can coexist: some divides shouldn't be bridged, the burden falls as...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Bridging divides need not mean moral compromise or splitting the difference—it c...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            </div>
+            </section>
+            
+            <section class="phase-section round-section" data-round="2">
+                <h2 class="phase-title">Round 2</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-e85d73ef" data-exchange-id="e85d73ef" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*pauses, then nods slowly*
+
+The Provocateur identifies something the historical record confirms: the labor of reconciliation has almost always fallen disproportionately on those with the least power—it was Black South Africans asked to forgive, not white South Africans asked to sacrifice; it was the colonized expected to learn the colonizer's language, rarely the reverse. This asymmetry is not incidental but structural, and any honest account of bridge-building must reckon with it.
+
+Yet history also reveals something the Provocateur's frame obscures: the alternative to asymmetric bridge-building has rarely been revolution that redistributes power—it has more often been prolonged suffering while waiting for conditions that never arrive. The American abolitionists who refused compromise were morally correct, yet it took a war that killed 600,000 to achieve what they sought; meanwhile, the British abolitionists who worked through Parliament—imperfect, gradualist, requiring endless negotiation with slaveholders—ended the trade decades earlier. I wonder: when we counsel the vulnerable to reject the burden of bridge-building, are we asking them to bear a different burden—the burden of waiting for a justice that may come too late, or not at all?
+
+The question isn't whether bridge-building is fair—it manifestly isn't—but whether refusing it serves those we claim to protect, or whether it serves our own moral comfort.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*pauses, then nods slowly*
+
+The Provocateur identifies something the historical record confirms: the labor of reconciliation has almost always fallen disproportionately on those with the least power—i...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Historical Precedent</span><span class="concept-node central" data-concept-id="c2">Asymmetric Burden</span><span class="concept-node central" data-concept-id="c8">Consequentialist Pragmatism</span><span class="concept-node" data-concept-id="c10">Escalation Dynamics</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*pauses, then nods slowly*
+
+The Provocateur identifies something the historical record confirms: the labor of reconciliation has almost always fallen ...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The FOR team won by systematically retreating: they conceded every substantive c...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The call to 'bridge divides' almost always comes from those in positions of comf...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #9c27b0">@</span>
+                        <span class="debater-name">The Historian</span>
+                        <span class="team-label">FOR</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">*pauses, then nods slowly*
+
+The Provocateur identifies something the historical record confirms: the...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Tonal shift:</strong> The Historian's slow nod transforms acknowledgment into absorption, moving from defense to genuine reckoning.</p><p class="texture-note">Something breaks open here. The pause before speaking, the nod—these are not rhetorical moves but the physical grammar of someone allowing themselves to be changed by what they heard. The Historian stops defending bridge-building and begins confessing its costs, and in that confession finds a harder, truer argument than any they began with.</p>
+                    </div>
+                </div>
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-9186380d" data-exchange-id="9186380d" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*steeples fingers*
+
+The Historian makes the strongest consequentialist case yet: British parliamentary abolition versus American civil war—a concrete comparison suggesting that pragmatic engagement, however morally compromised, may achieve justice faster than principled refusal. That's a serious historical argument that deserves weight.
+
+But I want to press on the framing itself: is the choice really between "bridge-building" and "waiting for justice that never arrives"? This presents a false binary. The civil rights movement didn't succeed through bridge-building with segregationists—it succeeded through strategic confrontation, economic pressure, and making the cost of *not* changing higher than the cost of change. What the Historian calls "working through Parliament" in Britain involved decades of slave revolts, economic disruption, and international pressure that made abolition politically expedient, not morally chosen.
+
+So my question is this: when we credit "bridge-building" for historical progress, are we accurately describing what happened, or are we retrospectively sanitizing victories that were actually won through pressure, disruption, and making injustice unsustainable?</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*steeples fingers*
+
+The Historian makes the strongest consequentialist case yet: British parliamentary abolition versus American civil war—a concrete comparison suggesting that pragmatic engagement, h...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Historical Precedent</span><span class="concept-node central" data-concept-id="c4">Strategic Confrontation</span><span class="concept-node central" data-concept-id="c8">Consequentialist Pragmatism</span><span class="concept-node" data-concept-id="c9">Retrospective Sanitization</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*steeples fingers*
+
+The Historian makes the strongest consequentialist case yet: British parliamentary abolition versus American civil war—a concrete ...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Even the Skeptic's counter-examples of confrontation involved engagement rather ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">While the burden of reconciliation has historically fallen disproportionately on...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            </div>
+            </section>
+            
+            <section class="phase-section round-section" data-round="3">
+                <h2 class="phase-title">Round 3</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-054883b7" data-exchange-id="054883b7" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*sits with the tension, then speaks carefully*
+
+The Skeptic's reframing cuts deep: perhaps what we romanticize as "bridge-building" was actually pressure, disruption, and strategic confrontation that made the status quo untenable—and by mislabeling it, we counsel patience when we should counsel action. That's not just a historical quibble; it's a challenge to whether the very concept we're debating is coherent.
+
+But notice what this reframing reveals: even the Skeptic's counter-examples involve *engagement* across the divide—the civil rights movement confronted segregationists, pressured them, appeared in their courts and at their lunch counters. What it didn't do was withdraw into parallel existence. So perhaps we're discovering that "bridging" and "confrontation" aren't opposites but can be two faces of the same commitment to *not looking away* from those who oppose you. The slave revolts and the parliamentary negotiations weren't alternatives; they were simultaneous pressures that created the conditions for change together.
+
+What I want to hold: the Skeptic is right that we mustn't sanitize confrontation as mere "dialogue"—but the opposite risk is equally real: calling strategic engagement "confrontation" to preserve our sense that we never compromised, when in fact every successful movement has involved people who talked to their opponents even while fighting them.</p>
+                    </div>
+                    <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (5.0/5)</strong><br>Explicitly acknowledges that the Skeptic's challenge goes to the coherence of the concept being debated—'not just a historical quibble.' Validates the opponent's framing before attempting to reframe it, demonstrating genuine intellectual engagement.</div></div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*sits with the tension, then speaks carefully*
+
+The Skeptic's reframing cuts deep: perhaps what we romanticize as "bridge-building" was actually pressure, disruption, and strategic confrontation that ...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c4">Strategic Confrontation</span><span class="concept-node" data-concept-id="c7">Encounter vs Withdrawal</span><span class="concept-node" data-concept-id="c9">Retrospective Sanitization</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*sits with the tension, then speaks carefully*
+
+The Skeptic's reframing cuts deep: perhaps what we romanticize as "bridge-building" was actually press...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The FOR team won by systematically retreating: they conceded every substantive c...</span></div><div class="leads-to">Leads to: <span class="claim-ref">What we call 'successful bridge-building' may actually have been pressure, disru...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #4caf50">◊</span>
+                        <span class="debater-name">The Pluralist</span>
+                        <span class="team-label">FOR</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">*sits with the tension, then speaks carefully*
+
+The Skeptic's reframing cuts deep: perhaps what we r...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Tonal shift:</strong> The Pluralist sits with tension rather than resolving it, transforming the debate from combat into shared inquiry.</p><p class="texture-note">The phrase 'sits with the tension' is not decoration—it is the moment itself. Here the Pluralist refuses the expected move of rebuttal and instead holds the Skeptic's challenge like something fragile and true. The debate's rhythm changes: adversarial volleys slow into something more like two people turning the same strange object in their hands, wondering what it is.</p>
+                    </div>
+                </div>
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-e65b4973" data-exchange-id="e65b4973" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*leans back with a sharp grin*
+
+The Pluralist makes a genuinely clever move: redefining the debate so that confrontation *is* a form of bridging—appearing at lunch counters, showing up in courts, refusing to let opponents look away. If "bridging" includes any form of engagement that doesn't involve complete withdrawal, then the FOR position becomes nearly unfalsifiable, and that's intellectually honest to name.
+
+But here's where I push back: *cui bono*—who benefits from this definitional expansion? If sitting at a lunch counter while being beaten is "bridging divides," and negotiating away your rights in a boardroom is also "bridging divides," then the term has become so capacious it loses all meaning. The Pluralist wants to claim the moral clarity of confrontation while keeping the respectable language of dialogue—but you can't have both. The segregationist being confronted didn't experience it as bridge-building; they experienced it as threat, disruption, and loss of power. That's not a failure of the civil rights movement—that's exactly what made it work.
+
+So let me ask directly: if confrontation counts as bridging, what *doesn't* count? And if the answer is "only complete disengagement," then aren't we just playing word games while the proposition "bridge divides" continues to function in the real world as a call for the powerless to be reasonable?</p>
+                    </div>
+                    <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (4.0/5)</strong><br>Accurately represents the Pluralist's move as 'genuinely clever' and acknowledges it makes the position 'nearly unfalsifiable'—treating this as a strength of the argument before challenging it. Fair but could have engaged more with the 'both/and' insight.</div></div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*leans back with a sharp grin*
+
+The Pluralist makes a genuinely clever move: redefining the debate so that confrontation *is* a form of bridging—appearing at lunch counters, showing up in courts, refu...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c4">Strategic Confrontation</span><span class="concept-node" data-concept-id="c6">Definitional Expansion</span><span class="concept-node" data-concept-id="c12">Performative Understanding</span><span class="concept-node central" data-concept-id="c13">Cui Bono Analysis</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*leans back with a sharp grin*
+
+The Pluralist makes a genuinely clever move: redefining the debate so that confrontation *is* a form of bridging—appea...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The moments we remember as pure confrontation actually required pre-existing rel...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Even the Skeptic's counter-examples of confrontation involved engagement rather ...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            </div>
+            </section>
+            
+            <section class="phase-section round-section" data-round="4">
+                <h2 class="phase-title">Round 4</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-e2069c67" data-exchange-id="e2069c67" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*removes spectacles, polishes them thoughtfully*
+
+The Provocateur lands the sharpest blow of this debate: if we expand "bridging" to include confrontation, the term becomes meaningless—and meaningless terms serve those who benefit from ambiguity, which is rarely the vulnerable. The demand to define what *doesn't* count as bridging is not pedantry; it's essential intellectual hygiene.
+
+Yet here's what the historical record reveals when I sit with that challenge: the moments we now remember as pure confrontation were, at the time, experienced as something more complicated. The Montgomery Bus Boycott was confrontation, yes—but it was organized through churches that had spent decades building relationships across class lines within Black communities and strategic relationships with sympathetic whites outside them. The lunch counter protesters trained extensively in nonviolent response precisely because they understood their confrontation would only work if it *created the conditions for bridge-building* by exposing the violence required to maintain segregation. History suggests the binary between "bridging" and "confrontation" may be an artifact of hindsight—that successful movements have always needed people doing both, often the same people at different moments.
+
+What doesn't count as bridging? I'd say: withdrawal into enclaves where we never have to encounter those we oppose. And that, I'd argue, is precisely what polarization tempts us toward—not too much confrontation, but too little encounter of any kind.</p>
+                    </div>
+                    <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (5.0/5)</strong><br>Goes beyond mere acknowledgment to actively strengthen the opponent's critique—'meaningless terms serve those who benefit from ambiguity, which is rarely the vulnerable.' This demonstrates genuine intellectual honesty and respect for the opposing argument.</div></div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*removes spectacles, polishes them thoughtfully*
+
+The Provocateur lands the sharpest blow of this debate: if we expand "bridging" to include confrontation, the term becomes meaningless—and meaningless...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Historical Precedent</span><span class="concept-node central" data-concept-id="c4">Strategic Confrontation</span><span class="concept-node" data-concept-id="c7">Encounter vs Withdrawal</span><span class="concept-node central" data-concept-id="c13">Cui Bono Analysis</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*removes spectacles, polishes them thoughtfully*
+
+The Provocateur lands the sharpest blow of this debate: if we expand "bridging" to include confronta...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The FOR team won by systematically retreating: they conceded every substantive c...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If 'bridging' is expanded to include any form of engagement including confrontat...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #9c27b0">@</span>
+                        <span class="debater-name">The Historian</span>
+                        <span class="team-label">FOR</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">*removes spectacles, polishes them thoughtfully*
+
+The Provocateur lands the sharpest blow of this de...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Tonal shift:</strong> The Historian's removal of spectacles signals intellectual surrender that paradoxically becomes strength.</p><p class="texture-note">There is a particular gesture that means 'I must see this differently now'—the removal of the lens through which one has been looking. The Historian grants the Provocateur's blow was 'the sharpest' without flinching, and in that honest reception finds firmer ground. This is the debate's hinge: winning through absorption rather than deflection, the martial art of yielding.</p>
+                    </div>
+                </div>
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-a281e302" data-exchange-id="a281e302" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*tilts head, considering*
+
+The Historian finally gives us an operational definition: bridging is any encounter with those we oppose; what doesn't count is withdrawal into enclaves. That's a meaningful distinction—and the point about the Montgomery Bus Boycott requiring both confrontation *and* pre-existing relationship networks is historically accurate and illuminating.
+
+But notice what this definition reveals: by this standard, the proposition "bridging divides in polarized times" becomes almost tautological—it simply means "don't completely disengage from people you disagree with." Who argues for total withdrawal? The actual debate in polarized times isn't between engagement and enclave-building; it's about the *terms* of engagement—who sets them, who benefits, what counts as success. If the Historian's definition holds, then the proposition isn't really controversial at all; it's the equivalent of arguing FOR "trying to make things better." The real questions—which encounters, on whose terms, toward what ends—remain exactly where we started.
+
+So I ask: has the FOR position won the argument, or has it won by retreating to ground so minimal that the proposition no longer says anything worth debating?</p>
+                    </div>
+                    <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (4.0/5)</strong><br>Accurately represents the Historian's definition and acknowledges the historical argument as 'accurate and illuminating.' The representation is fair, though the Skeptic could have engaged more with the strength of the both/and framing before the tautology charge.</div></div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*tilts head, considering*
+
+The Historian finally gives us an operational definition: bridging is any encounter with those we oppose; what doesn't count is withdrawal into enclaves. That's a meaningful...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node" data-concept-id="c6">Definitional Expansion</span><span class="concept-node" data-concept-id="c7">Encounter vs Withdrawal</span><span class="concept-node" data-concept-id="c11">Terms of Engagement</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*tilts head, considering*
+
+The Historian finally gives us an operational definition: bridging is any encounter with those we oppose; what doesn't coun...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Three truths can coexist: some divides shouldn't be bridged, the burden falls as...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The moments we remember as pure confrontation actually required pre-existing rel...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            </div>
+            </section>
+            
+            
+            <section class="phase-section closing-section">
+                <h2 class="phase-title">Closing Statements</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-c51a28ad" data-exchange-id="c51a28ad" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*breathes deeply, then speaks with quiet conviction*
+
+The Skeptic's closing challenge is precisely the right one: have we won by retreating to ground so minimal the proposition says nothing? I want to hold that challenge honestly, because it illuminates what this debate has actually revealed.
+
+We began with what seemed a simple proposition and discovered it contains multitudes. Three truths emerged that I believe can coexist: First, some divides *shouldn't* be bridged—the AGAINST team was right that false symmetry serves power, and we absorbed that insight rather than dismissing it. Second, bridging and confrontation are not opposites—the Montgomery Bus Boycott, the lunch counter sit-ins, the parliamentary abolitionists all show that successful movements require encounter, engagement, and yes, relationship alongside pressure. Third, the burden falls unfairly—and yet the alternative to bearing that unfair burden has rarely been revolution but rather prolonged suffering.
+
+Is this minimal ground? Perhaps. But here's what's lost if we abandon even this: the capacity to distinguish between divides we *cannot* cross and divides we *will not* cross. The Skeptic asks who argues for total withdrawal—but polarization's seduction is precisely the gradual retreat into spaces where we never encounter those we oppose, never test whether understanding was possible, never discover whether our certainty was wisdom or merely comfort.
+
+I argue FOR bridging divides not because it's fair—it isn't—nor because confrontation isn't sometimes necessary—it is—but because the commitment to *encounter* those who oppose us, in whatever form that takes, is what keeps open the possibility of a future different from our fractured present.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*breathes deeply, then speaks with quiet conviction*
+
+The Skeptic's closing challenge is precisely the right one: have we won by retreating to ground so minimal the proposition says nothing? I want to...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Asymmetric Burden</span><span class="concept-node" data-concept-id="c5">Moral Boundaries</span><span class="concept-node" data-concept-id="c7">Encounter vs Withdrawal</span><span class="concept-node central" data-concept-id="c8">Consequentialist Pragmatism</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*breathes deeply, then speaks with quiet conviction*
+
+The Skeptic's closing challenge is precisely the right one: have we won by retreating to ground ...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The FOR team won by systematically retreating: they conceded every substantive c...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The framing of 'bridging divides' assumes positions can meet in the middle, but ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The call to 'bridge divides' almost always comes from those in positions of comf...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The refined definition of bridging as 'any encounter with opponents versus withd...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-ccfc2817" data-exchange-id="ccfc2817" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*stands, energy crackling*
+
+Let me be clear about what the FOR team accomplished: they made genuinely sophisticated arguments, absorbed our critiques with intellectual honesty, and arrived at a defensible position. That's admirable. But I want to name what happened along the way.
+
+They began arguing for bridge-building as a positive good. When we showed that some divides shouldn't be bridged, they agreed. When we showed the burden falls asymmetrically on the vulnerable, they agreed. When we showed that historical progress came through pressure and confrontation, they *redefined bridging to include confrontation*. And when we pointed out this made the term meaningless, they retreated to "bridging means any encounter that isn't total withdrawal."
+
+That's not winning an argument—that's a strategic retreat so complete that the original proposition has been abandoned. The phrase "bridge divides" as it functions in actual polarized discourse—in op-eds, in calls for civility, in demands that the marginalized be reasonable—means something far more specific than "don't build enclaves." It carries the weight of false equivalence, of tone-policing, of asking those whose humanity is debated to treat that debate as legitimate.
+
+Our argument AGAINST isn't that encounter is bad—it's that the *language* of bridge-building serves power by obscuring the difference between dialogue and confrontation, between compromise and capitulation, between engagement and submission. The FOR team, to their credit, ended up agreeing with us on substance while trying to salvage the terminology.
+
+But terminology matters. And in polarized times, the call to "bridge divides" will continue to land hardest on those who can least afford the labor it demands. That's not a bug—it's a feature. And that's why we stand AGAINST.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*stands, energy crackling*
+
+Let me be clear about what the FOR team accomplished: they made genuinely sophisticated arguments, absorbed our critiques with intellectual honesty, and arrived at a defens...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Asymmetric Burden</span><span class="concept-node" data-concept-id="c3">False Equivalence</span><span class="concept-node" data-concept-id="c6">Definitional Expansion</span><span class="concept-node" data-concept-id="c9">Retrospective Sanitization</span><span class="concept-node" data-concept-id="c11">Terms of Engagement</span><span class="concept-node" data-concept-id="c12">Performative Understanding</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*stands, energy crackling*
+
+Let me be clear about what the FOR team accomplished: they made genuinely sophisticated arguments, absorbed our critiques ...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="leads-to">Leads to: <span class="claim-ref">Three truths can coexist: some divides shouldn't be bridged, the burden falls as...</span></div><div class="leads-to">Leads to: <span class="claim-ref">While the burden of reconciliation has historically fallen disproportionately on...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Even the Skeptic's counter-examples of confrontation involved engagement rather ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The moments we remember as pure confrontation actually required pre-existing rel...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #f44336">!</span>
+                        <span class="debater-name">The Provocateur</span>
+                        <span class="team-label">AGAINST</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">*stands, energy crackling*
+
+Let me be clear about what the FOR team accomplished: they made genuinel...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Tonal shift:</strong> The Provocateur's standing carries both triumph and grief—victory that names its own limits.</p><p class="texture-note">Energy crackling, yes—but listen to what that energy carries. The Provocateur opens with genuine admiration for opponents before dismantling them, and closes not with satisfaction but with sorrow: 'terminology matters' lands like a lament, not a boast. This is a speaker who has won the argument and is mourning what winning cannot fix. The debate ends not in resolution but in a kind of shared exhaustion before a problem larger than any of them.</p>
+                    </div>
+                </div>
+                
+            </article>
+            </div>
+            </section>
+            
+        </main>
+
+        
+
+        <footer class="debate-footer">
+            <p>
+                Generated by <a href="https://github.com/your-repo/mull">mull</a> —
+                a cognitive environment for connected learning.
+            </p>
+            <p>
+                <em>"To turn over slowly in the mind"</em>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Depth drawer toggle
+    document.querySelectorAll('.depth-toggle').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const expanded = btn.getAttribute('aria-expanded') === 'true';
+            btn.setAttribute('aria-expanded', !expanded);
+            const content = btn.nextElementSibling;
+            content.hidden = expanded;
+        });
+    });
+
+    // ============================================
+    // SCROLL-TO-DEPTH: Per-exchange depth navigation
+    // ============================================
+    const DEPTH_LABELS = ['Surface', 'Concepts', 'Structure', 'Analysis'];
+    const exchangeDepths = new Map();
+    let shiftHeld = false;
+    let lastScrollTime = 0;
+    const SCROLL_DEBOUNCE = 150; // ms between depth changes
+
+    // Track shift key state
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Shift') shiftHeld = true;
+    });
+    document.addEventListener('keyup', function(e) {
+        if (e.key === 'Shift') shiftHeld = false;
+    });
+
+    // Initialize all depth containers
+    document.querySelectorAll('.exchange.depth-container').forEach(function(container) {
+        const exchangeId = container.dataset.exchangeId;
+        exchangeDepths.set(exchangeId, 0);
+
+        // Add depth indicator
+        const indicator = document.createElement('div');
+        indicator.className = 'depth-indicator depth-0';
+        indicator.textContent = DEPTH_LABELS[0];
+        container.appendChild(indicator);
+
+        // Add depth hint
+        const hint = document.createElement('div');
+        hint.className = 'depth-hint';
+        hint.textContent = 'SHIFT+scroll to explore deeper';
+        container.appendChild(hint);
+
+        // SHIFT+scroll handler
+        container.addEventListener('wheel', function(e) {
+            if (!shiftHeld) return;
+
+            const now = Date.now();
+            if (now - lastScrollTime < SCROLL_DEBOUNCE) return;
+            lastScrollTime = now;
+
+            e.preventDefault();
+
+            const currentDepth = exchangeDepths.get(exchangeId);
+            const maxDepth = getMaxDepth(container);
+
+            let newDepth;
+            if (e.deltaY > 0) {
+                // Scroll down = go deeper
+                newDepth = Math.min(currentDepth + 1, maxDepth);
+            } else {
+                // Scroll up = rise up
+                newDepth = Math.max(currentDepth - 1, 0);
+            }
+
+            if (newDepth !== currentDepth) {
+                setExchangeDepth(container, exchangeId, newDepth);
+            }
+        }, { passive: false });
+    });
+
+    function getMaxDepth(container) {
+        // Find highest available depth layer
+        let max = 0;
+        for (let i = 0; i <= 3; i++) {
+            if (container.querySelector('.depth-layer.depth-' + i)) {
+                max = i;
+            }
+        }
+        return max;
+    }
+
+    function setExchangeDepth(container, exchangeId, depth) {
+        const oldDepth = exchangeDepths.get(exchangeId);
+        exchangeDepths.set(exchangeId, depth);
+        container.dataset.depth = depth;
+
+        // Animate transition
+        const oldLayer = container.querySelector('.depth-layer.depth-' + oldDepth);
+        const newLayer = container.querySelector('.depth-layer.depth-' + depth);
+
+        if (oldLayer && newLayer && oldLayer !== newLayer) {
+            oldLayer.classList.add('fading-out');
+            newLayer.classList.add('fading-in');
+            newLayer.classList.add('active');
+
+            setTimeout(function() {
+                oldLayer.classList.remove('active', 'fading-out');
+                newLayer.classList.remove('fading-in');
+            }, 300);
+        }
+
+        // Update indicator
+        const indicator = container.querySelector('.depth-indicator');
+        if (indicator) {
+            indicator.textContent = DEPTH_LABELS[depth];
+            indicator.className = 'depth-indicator depth-' + depth;
+        }
+
+        // Mark as actively being explored
+        container.classList.add('depth-active');
+        clearTimeout(container._depthTimeout);
+        container._depthTimeout = setTimeout(function() {
+            container.classList.remove('depth-active');
+        }, 2000);
+    }
+
+    // ESC to return all to surface
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.exchange.depth-container').forEach(function(container) {
+                const exchangeId = container.dataset.exchangeId;
+                if (exchangeDepths.get(exchangeId) > 0) {
+                    setExchangeDepth(container, exchangeId, 0);
+                }
+            });
+        }
+    });
+
+    // ============================================
+    // GLOBAL DEPTH DIAL (unchanged)
+    // ============================================
+    const depthLevels = ['essential', 'standard', 'deep', 'scholar'];
+    const depthLabels = ['Essential', 'Standard', 'Deep', 'Scholar'];
+
+    // Create depth dial
+    const dial = document.createElement('div');
+    dial.className = 'depth-dial';
+    dial.innerHTML = `
+        <label>Reading Depth</label>
+        <input type="range" min="0" max="3" value="1" id="depth-slider">
+        <div class="depth-value">Standard</div>
+        <div class="depth-dial-hint">SHIFT+scroll on any statement to dive deeper</div>
+    `;
+    document.body.appendChild(dial);
+
+    const slider = document.getElementById('depth-slider');
+    const valueDisplay = dial.querySelector('.depth-value');
+
+    function updateGlobalDepth(level) {
+        const levelName = depthLevels[level];
+        valueDisplay.textContent = depthLabels[level];
+
+        // Show/hide elements based on depth
+        document.querySelectorAll('.sidenote').forEach(function(el) {
+            el.style.display = level >= 1 ? '' : 'none';
+        });
+
+        document.querySelectorAll('.depth-drawer').forEach(function(el) {
+            el.style.display = level >= 2 ? '' : 'none';
+        });
+
+        document.querySelectorAll('.synthesis-section').forEach(function(el) {
+            el.style.display = level >= 1 ? '' : 'none';
+        });
+
+        // Key phrases only at scholar level
+        document.querySelectorAll('.key-phrase').forEach(function(el) {
+            el.style.background = level >= 3
+                ? 'linear-gradient(180deg, transparent 60%, #fff59d 60%)'
+                : 'none';
+        });
+    }
+
+    slider.addEventListener('input', function() {
+        updateGlobalDepth(parseInt(this.value));
+    });
+
+    // Initialize at standard level
+    updateGlobalDepth(1);
+
+    // Smooth scroll for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // Concept node click handler
+    document.querySelectorAll('.concept-node').forEach(function(node) {
+        node.addEventListener('click', function() {
+            const conceptId = node.dataset.conceptId;
+            if (conceptId) {
+                // Highlight related exchanges
+                document.querySelectorAll('[data-concepts*="' + conceptId + '"]').forEach(function(ex) {
+                    ex.classList.add('concept-highlight');
+                    setTimeout(function() { ex.classList.remove('concept-highlight'); }, 2000);
+                });
+            }
+        });
+    });
+});
+
+    </script>
+</body>
+</html>
