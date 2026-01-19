@@ -1,0 +1,2226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How can God create without determining the outcome completely? | mull</title>
+    <style>
+
+/* Base Typography */
+:root {
+    --text-color: #1a1a1a;
+    --bg-color: #fffff8;
+    --accent-color: #0066cc;
+    --muted-color: #666;
+    --border-color: #ddd;
+
+    --team-for-color: #00838f;
+    --team-for-bg: #e0f7fa;
+    --team-against-color: #6a1b9a;
+    --team-against-bg: #f3e5f5;
+
+    --font-main: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'SF Mono', Monaco, 'Consolas', monospace;
+
+    --content-width: 55%;
+    --sidenote-width: 35%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-main);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Layout */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header */
+.debate-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.debate-title {
+    font-size: 2rem;
+    line-height: 1.3;
+    margin: 0 0 1rem 0;
+    font-weight: 400;
+    max-width: 80%;
+}
+
+.debate-meta {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.debate-meta .team {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.debate-meta .team-for { color: var(--team-for-color); }
+.debate-meta .team-against { color: var(--team-against-color); }
+
+/* Summary Section */
+.debate-summary {
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    border-left: 4px solid var(--accent-color);
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    font-size: 0.95rem;
+}
+
+.debate-summary h3 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted-color);
+    margin: 1.5rem 0 0.5rem 0;
+}
+
+.debate-summary h3:first-child {
+    margin-top: 0;
+}
+
+.debate-summary ul {
+    padding-left: 1.5rem;
+    margin: 0.5rem 0;
+}
+
+.debate-summary li {
+    margin: 0.3rem 0;
+}
+
+/* Phase Sections */
+.phase-section {
+    margin: 3rem 0;
+}
+
+.phase-title {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted-color);
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Exchange Cards - Depth Container */
+.exchange {
+    position: relative;
+    margin: 2rem 0;
+    padding: 0;
+}
+
+/* Scroll-to-depth: per-exchange depth layers */
+.exchange.depth-container {
+    perspective: 1000px;
+}
+
+.depth-layer {
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.depth-layer:not(.active) {
+    display: none;
+}
+
+.depth-layer.fading-out {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+}
+
+.depth-layer.fading-in {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+/* Depth indicator badge */
+.depth-indicator {
+    position: absolute;
+    top: -0.5rem;
+    right: 0;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    background: var(--accent-color);
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 10;
+}
+
+.exchange:hover .depth-indicator,
+.exchange.depth-active .depth-indicator {
+    opacity: 1;
+}
+
+.depth-indicator.depth-0 { background: #999; }
+.depth-indicator.depth-1 { background: #2196f3; }
+.depth-indicator.depth-2 { background: #9c27b0; }
+.depth-indicator.depth-3 { background: #f44336; }
+
+/* Depth hint on hover */
+.depth-hint {
+    position: absolute;
+    bottom: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    color: var(--muted-color);
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+}
+
+.exchange:hover .depth-hint {
+    opacity: 0.7;
+}
+
+.exchange.depth-active .depth-hint {
+    opacity: 0;
+}
+
+/* Concept map layer styling */
+.concept-map-layer {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #e3f2fd 0%, #e8eaf6 100%);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.concept-map-layer h4 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: #1565c0;
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.concept-nodes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.concept-node {
+    padding: 0.4rem 0.8rem;
+    background: white;
+    border-radius: 20px;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    border: 1px solid #90caf9;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.concept-node:hover {
+    background: #2196f3;
+    color: white;
+    border-color: #2196f3;
+}
+
+.concept-node.central {
+    border-width: 2px;
+    font-weight: 600;
+}
+
+/* Debate structure layer styling */
+.debate-map-layer {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f3e5f5 0%, #ede7f6 100%);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.debate-map-layer h4 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: #7b1fa2;
+    margin: 0 0 1rem 0;
+}
+
+.argument-flow {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+}
+
+.argument-flow .responds-to,
+.argument-flow .leads-to {
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    background: white;
+    border-radius: 4px;
+    border-left: 3px solid #9c27b0;
+}
+
+.argument-flow .claim-ref {
+    color: #7b1fa2;
+    cursor: pointer;
+}
+
+.argument-flow .claim-ref:hover {
+    text-decoration: underline;
+}
+
+/* Analysis layer styling */
+.analysis-layer {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.analysis-layer h4 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: #c62828;
+    margin: 0 0 1rem 0;
+}
+
+/* Ambient texture layer styling */
+.texture-layer {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-style: italic;
+}
+
+.texture-layer h4 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: #ef6c00;
+    margin: 0 0 1rem 0;
+    font-style: normal;
+}
+
+.texture-note {
+    color: var(--muted-color);
+    line-height: 1.8;
+}
+
+.exchange-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.debater-icon {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 1.5rem;
+    text-align: center;
+}
+
+.debater-name {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.team-label {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    margin-left: auto;
+}
+
+.team-for .team-label {
+    background: var(--team-for-bg);
+    color: var(--team-for-color);
+}
+
+.team-against .team-label {
+    background: var(--team-against-bg);
+    color: var(--team-against-color);
+}
+
+/* Exchange Body - Tufte-style with sidenotes */
+.exchange-body {
+    display: flex;
+    gap: 2rem;
+}
+
+.exchange-content {
+    flex: 0 0 var(--content-width);
+    max-width: var(--content-width);
+}
+
+.exchange-content p {
+    margin: 0;
+    text-align: justify;
+    hyphens: auto;
+}
+
+/* Sidenotes */
+.sidenote {
+    flex: 0 0 var(--sidenote-width);
+    max-width: var(--sidenote-width);
+    font-size: 0.85rem;
+    color: var(--muted-color);
+    padding-top: 0.25rem;
+}
+
+.sidenote-item {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: #fafafa;
+    border-radius: 4px;
+    border-left: 3px solid transparent;
+}
+
+.sidenote-item.steelmanning {
+    border-left-color: #4caf50;
+    background: #f1f8e9;
+}
+
+.sidenote-item.metaphor-note {
+    border-left-color: #2196f3;
+    background: #e3f2fd;
+}
+
+.sidenote-item strong {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Highlighted text in content */
+.key-phrase {
+    background: linear-gradient(180deg, transparent 60%, #fff59d 60%);
+    padding: 0 2px;
+}
+
+.metaphor {
+    border-bottom: 1px dotted var(--accent-color);
+    cursor: help;
+}
+
+/* Depth Drawer (expandable) */
+.depth-drawer {
+    margin-top: 1rem;
+    padding-left: 2.25rem;
+}
+
+.depth-toggle {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.depth-toggle:hover {
+    color: var(--accent-color);
+}
+
+.toggle-icon {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    width: 1rem;
+    transition: transform 0.2s;
+}
+
+.depth-toggle[aria-expanded="true"] .toggle-icon {
+    transform: rotate(45deg);
+}
+
+.depth-content {
+    margin-top: 0.75rem;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 4px;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+}
+
+.scores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.score-item {
+    background: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    border: 1px solid var(--border-color);
+}
+
+/* Aspect items (evaluation rationales) */
+.aspects {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.aspect-item {
+    background: white;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border-left: 3px solid var(--accent-color);
+}
+
+.aspect-item strong {
+    color: var(--text-color);
+}
+
+.score-badge {
+    display: inline-block;
+    background: var(--accent-color);
+    color: white;
+    padding: 0.1rem 0.4rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.25rem;
+}
+
+.rationale {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--muted-color);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+/* Synthesis Section */
+.synthesis-section {
+    margin: 4rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+    border-radius: 8px;
+}
+
+.synthesis-section h2 {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: #2e7d32;
+}
+
+.synthesis-intro {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    margin: 0 0 1.5rem 0;
+}
+
+.synthesis-moment {
+    background: white;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border-left: 3px solid #4caf50;
+}
+
+.synthesis-speaker {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.synthesis-type {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #4caf50;
+    margin-left: 0.5rem;
+}
+
+.synthesis-note {
+    font-size: 0.9rem;
+    margin: 0.5rem 0 0 0;
+    color: var(--muted-color);
+}
+
+/* Footer */
+.debate-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    text-align: center;
+}
+
+.debate-footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.debate-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Depth Dial */
+.depth-dial {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    z-index: 100;
+}
+
+.depth-dial label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--muted-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.depth-dial input[type="range"] {
+    width: 150px;
+}
+
+.depth-dial .depth-value {
+    text-align: center;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+}
+
+.depth-dial .depth-dial-hint {
+    margin-top: 0.5rem;
+    font-size: 0.65rem;
+    color: #999;
+    text-align: center;
+}
+
+/* Concept highlight animation */
+.concept-highlight {
+    animation: concept-pulse 0.5s ease-in-out 2;
+}
+
+@keyframes concept-pulse {
+    0%, 100% { box-shadow: none; }
+    50% { box-shadow: 0 0 20px rgba(33, 150, 243, 0.5); }
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    :root {
+        --content-width: 65%;
+        --sidenote-width: 30%;
+    }
+}
+
+@media (max-width: 900px) {
+    .exchange-body {
+        flex-direction: column;
+    }
+
+    .exchange-content,
+    .sidenote {
+        flex: none;
+        max-width: 100%;
+    }
+
+    .sidenote {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #f9f9f9;
+        border-radius: 4px;
+    }
+
+    .depth-dial {
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.75rem;
+    }
+}
+
+/* ASCII Visualization Section */
+.ascii-viz-section {
+    margin: 3rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);
+    border-radius: 8px;
+}
+
+.ascii-viz-section h2 {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: var(--muted-color);
+}
+
+.ascii-viz-intro {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    margin: 0 0 1.5rem 0;
+}
+
+.ascii-block {
+    background: #1a1a1a;
+    padding: 1rem 1.5rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+.ascii-block pre {
+    color: #00ff00;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    margin: 0;
+    white-space: pre;
+}
+
+.ascii-detail {
+    margin-top: 1rem;
+}
+
+.ascii-detail summary {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    background: white;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+.ascii-detail summary:hover {
+    background: #f9f9f9;
+}
+
+.ascii-detail[open] summary {
+    margin-bottom: 0.5rem;
+}
+
+/* Print styles */
+@media print {
+    .depth-dial,
+    .depth-drawer {
+        display: none;
+    }
+
+    .sidenote {
+        font-size: 0.8rem;
+        break-inside: avoid;
+    }
+
+    .ascii-viz-section {
+        break-inside: avoid;
+    }
+
+    .ascii-block pre {
+        color: #000;
+        background: #f5f5f5;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="debate-header">
+            <h1 class="debate-title">How can God create without determining the outcome completely?</h1>
+            <div class="debate-meta">
+                <span class="date">January 10, 2026</span>
+                <span class="team team-for">FOR: The Skeptic, The Connector</span>
+                <span class="team team-against">AGAINST: The Historian, The Provocateur</span>
+            </div>
+        </header>
+
+        <div class="debate-summary">
+<h3>Core Tension</h3>
+<p>The core tension in this debate is whether <strong>determination and freedom are logically compatible</strong>, or whether any system whose initial conditions are set by an omniscient designer must necessarily produce predetermined outcomes regardless of how much "space" is left for the created beings.</p><p>The FOR side (Skeptic and Connector) argues that <strong>causality is inescapable</strong>: if a creator defines the nature, environment, and rules governing any agent, then every subsequent "choice" is simply the inevitable unfolding of those initial parameters—like a seed that can only grow into what its genetics permit, or an instrument that can only play notes its strings allow. For them, "freedom" within a designed system is a comforting illusion, a relabeling of complex causation we refuse to trace to its source.</p><p>The AGAINST side (Historian and Provocateur) argues that <strong>true power includes the capacity for self-limitation</strong>: a creator who cannot produce something genuinely independent is paradoxically <em>less</em> powerful, trapped in solipsistic self-reflection. They invoke <em>kenosis</em>—divine withdrawal—suggesting that the highest act of creation is granting beings a share in the creator's own spontaneity, making them new <em>origins</em> of action rather than mere executors of predetermined scripts.</p><p>What this debate is really about: <strong>whether genuine novelty can emerge from within a system, or whether all apparent novelty is merely the playing out of hidden determinism</strong>. It's a question that extends far beyond theology—into debates about free will, consciousness, artificial intelligence, and whether anything in the universe can truly surprise its own origins.</p>
+<h3>Recurring Metaphors</h3><ul>
+<li><strong>The Pre-Loaded Spring</strong> — This captures the deterministic position with visceral clarity: a spring stores energy in a specific configuration, and its release is entirely determined by how it was wound. The metaphor exposes the hidden assumption that created beings are mechanisms storing potential energy that can only discharge in one predetermined direction. It makes abstract causality feel physical and inevitable.</li>
+<li><strong>The Cosmic Hall of Mirrors</strong> — This turns the deterministic argument back on itself as a theological weakness. If God can only create extensions of His own will, He is imprisoned by His own omnipotence—surrounded only by reflections, never encountering genuine otherness. The metaphor reframes total control not as strength but as a kind of cosmic loneliness, suggesting that true power requires the vulnerability of creating something that could reject you.</li>
+<li><strong>The Luthier's Frets</strong> — This elegant analogy acknowledges the opposition's 'witness not author' position while subtly undermining it. The luthier doesn't play the music, but by choosing the number of strings, the fret spacing, and the resonance chamber, they've already determined every possible note. It illuminates how 'stepping back' doesn't escape determination—the constraints themselves are a form of authorship. Yet it also hints at the counterargument: the same frets enable infinite melodies the luthier never imagined.</li>
+<li><strong>The Invented Grammar</strong> — This metaphor operates at the deepest level of the debate—not physical constraints but cognitive ones. A grammar doesn't just limit what can be said; it shapes what can be thought. This suggests that a creator's most profound determination isn't in the rules of physics but in the structure of consciousness itself. If the very categories of thought are designed, then even rebellion is already linguistically contained.</li>
+</ul>
+<h3>Unresolved Crux</h3>
+<p><strong>Type: Definitional disagreement about the nature of "creation" itself</strong></p><p>The crux is whether creation is fundamentally an act of <em>specification</em> (designing a closed system whose outputs are determined by its inputs) or an act of <em>ontological generosity</em> (granting genuine being that shares in the creator's own spontaneity). The FOR side would need to be shown that "giving existence" is categorically different from "programming behavior"—that a creator can impart the <em>capacity</em> for origination without dictating <em>what</em> is originated. The AGAINST side would need to be shown that there is no coherent mechanism by which a designed nature could produce truly undetermined outputs—that "sharing spontaneity" is either logically incoherent or collapses back into the designer's causal chain.</p>
+<h3>Common Ground</h3>
+<p>Both sides agree that <strong>constraints shape outcomes</strong>: they accept that any created being operates within parameters established by its creator—nature, environment, laws of causality—and that these parameters genuinely limit the space of possible actions. Neither side disputes that an omniscient creator would have foreknowledge of what unfolds within their creation.</p><p>Crucially, both sides also share a <strong>normative vision of what true creation should accomplish</strong>: the capacity to produce a genuine "Other" rather than a mere reflection. The FOR side doesn't argue that a solipsistic creator would be <em>preferable</em>—they argue it's <em>logically unavoidable</em>. The AGAINST side agrees this would be a theological failure; they simply believe it can be escaped through kenosis. Both treat the emergence of independent otherness as the gold standard of creative power—they disagree only about whether it's achievable.</p>
+</div>
+
+        <section class="ascii-viz-section">
+<h2>Visualization</h2>
+<p class="ascii-viz-intro">ASCII maps showing debate structure and concept relationships.</p>
+<div class="ascii-block">
+<pre>DEBATE STRUCTURE
+════════════════════════════════════════════════════════════
+
+┌──────────────────────────────────────────────────────────┐
+│                         OPENING                          │
+│  FOR: The Skepti, The Connec                             │
+│  AGAINST: The Histor, The Provoc                         │
+└──────────────────────────────────────────────────────────┘
+                             │
+                             ▼
+┌──────────────────────────────────────────────────────────┐
+│                        ROUND 1-6                         │
+│  12 exchanges                                            │
+│  4 tonal shifts                                          │
+└──────────────────────────────────────────────────────────┘
+                             │
+                             ▼
+┌──────────────────────────────────────────────────────────┐
+│                         CLOSING                          │
+│  2 statements                                            │
+└──────────────────────────────────────────────────────────┘</pre>
+</div>
+<details class="ascii-detail">
+<summary>Concept Map</summary>
+<div class="ascii-block">
+<pre>CONCEPT MAP
+════════════════════════════════════════════════════════════
+
+Central Concepts:
+  ● Causal Determinism
+  │   ━━━ contradicts → The Independent Other
+  │   ━━━ enables → Divine Solipsism
+  │
+  ● Kenosis
+  │   ━━━ enables → Open-Ended Creation
+  │
+  ● Operational Independence
+  ● Constraint-Bound Freedom
+  │   ━━━ refines → Operational Independence
+  │
+  ● The Independent Other
+  │   ━━─ exemplifies → Emergence of New Centers
+  │
+  ● Foresight and Control
+  │   ━━━ depends_on → Operational Independence
+  │
+  ● Divine Solipsism
+  │   ━━━ contradicts → Kenosis
+  │
+  ● Delegated Sovereignty
+  │   ━━━ depends_on → Kenosis
+  │
+
+Peripheral Concepts:
+  ○ Creator as Witness
+  ○ Granting Existence vs. Assembly
+  ○ Open-Ended Creation
+  ○ Emergence of New Centers
+
+Legend:
+  ━━━ Strong connection
+  ─── Moderate connection
+  ┄┄┄ Weak connection
+  ● Central concept
+  ○ Peripheral concept</pre>
+</div>
+</details>
+<details class="ascii-detail">
+<summary>Argument Flow</summary>
+<div class="ascii-block">
+<pre>ARGUMENT FLOW
+════════════════════════════════════════════════════════════
+
+Opening Claims:
+  [AGAINST] True divine power is not total control but the kenosis required to grant beings ...
+
+Critical Path:
+  #1 → #2 → #3 → #4 → #5 → #6
+
+Key Exchanges:
+  • If an omniscient creator sets all initial conditio...
+    └─ rebuttal
+    └─ support
+
+  • Creation need not be a closed script; a creator ca...
+    └─ rebuttal
+    └─ support
+
+  • Even if a creator 'makes space' for autonomy, like...
+    └─ rebuttal
+    └─ support
+
+  • Denying the possibility of undetermined outcomes r...
+    └─ rebuttal
+    └─ support
+
+  • If a creator establishes an agent's nature, enviro...
+    └─ rebuttal
+    └─ support
+</pre>
+</div>
+</details>
+</section>
+
+        <main class="debate-content">
+            
+            <section class="phase-section opening-section">
+                <h2 class="phase-title">Opening Statements</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-a692fc84" data-exchange-id="a692fc84" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>While some argue that a creator can grant autonomy to their creation to allow for genuine freedom, does this not ignore the logical necessity that every effect is contained within its first cause? If an omniscient architect sets every initial condition, what operational definition of "choice" allows for an outcome that was not already inherent in the design? Can you provide a single counter-example of a created system where the result is not a direct, inevitable consequence of its creator's specifications?</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">While some argue that a creator can grant autonomy to their creation to allow for genuine freedom, does this not ignore the logical necessity that every effect is contained within its first cause? If ...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Causal Determinism</span><span class="concept-node central" data-concept-id="c3">Operational Independence</span><span class="concept-node central" data-concept-id="c8">Foresight and Control</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">While some argue that a creator can grant autonomy to their creation to allow for genuine freedom, does this not ignore the logical necessity that eve...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If a creator establishes an agent's nature, environment, and laws of causality, ...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-99c0912e" data-exchange-id="99c0912e" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The proposition rightly observes that a sovereign designer would seem to leave no room for surprise, as a blueprint implies every finished corner. However, why have we come to view creation as a closed script rather than the opening of a theater, an idea once held by those who saw divine power as the intentional "making space" for the unpredicted? If a creator establishes the laws of the game but leaves the play to the players, is the act of creation any less complete for being open-ended?</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The proposition rightly observes that a sovereign designer would seem to leave no room for surprise, as a blueprint implies every finished corner. However, why have we come to view creation as a close...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node" data-concept-id="c10">Open-Ended Creation</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The proposition rightly observes that a sovereign designer would seem to leave no room for surprise, as a blueprint implies every finished corner. How...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Creation may be an act of kenosis (divine withdrawal) rather than mechanistic im...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If an omniscient creator sets all initial conditions, then every outcome is alre...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            </div>
+            </section>
+            
+            
+            <section class="phase-section round-section" data-round="1">
+                <h2 class="phase-title">Round 1</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-37265406" data-exchange-id="37265406" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #00bcd4">~</span>
+                    <span class="debater-name">The Connector</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The Historian suggests that a creator might "make space" for autonomy, much like <span class="metaphor" data-note="0">a playwright who builds a theater and sets the rules but leaves the performance to the actors</span>. This reminds me of a master programmer who designs both the physics engine and the characters' logic; can the "play" ever truly transcend the parameters of the code? I wonder if a game can ever truly surprise its maker if the maker defined every possible move and every player's capacity to choose.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #00bcd4">~</span>
+                    <span class="debater-name">The Connector</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Historian suggests that a creator might "make space" for autonomy, much like a playwright who builds a theater and sets the rules but leaves the performance to the actors. This reminds me of a mas...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Causal Determinism</span><span class="concept-node central" data-concept-id="c5">Constraint-Bound Freedom</span><span class="concept-node" data-concept-id="c10">Open-Ended Creation</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #00bcd4">~</span>
+                    <span class="debater-name">The Connector</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Historian suggests that a creator might "make space" for autonomy, much like a playwright who builds a theater and sets the rules but leaves the p...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Even a cleared space created by withdrawal is defined by its borders; like a gar...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Creation need not be a closed script; a creator can establish rules while leavin...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #00bcd4">~</span>
+                        <span class="debater-name">The Connector</span>
+                        <span class="team-label">FOR</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">The Historian suggests that a creator might "make space" for autonomy, much like a playwright who bu...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Metaphor:</strong> The metaphor reveals that "stepping back" from direct control doesn't escape determinism—a game designer who defines both the physics and the AI logic has already constrained every possible outcome, making the distinction between "scripting the play" and "setting the rules" illusory.</p>
+                    </div>
+                </div>
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-622d8af6" data-exchange-id="622d8af6" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The Connector correctly identifies that any "freedom" within a system is still a subset of the creator’s code, making every "choice" a mere traversal of a pre-mapped architecture. However, if you deny the possibility of an undetermined outcome, you are effectively arguing that God is a cosmic narcissist trapped in a solipsistic loop, incapable of the ultimate act of power: the creation of a truly independent "Other." Is your version of a Creator so fragile that He cannot survive the existence of a will He does not personally pilot, or is He simply a prisoner of His own inability to delegate sovereignty?</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Connector correctly identifies that any "freedom" within a system is still a subset of the creator’s code, making every "choice" a mere traversal of a pre-mapped architecture. However, if you deny...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c5">Constraint-Bound Freedom</span><span class="concept-node central" data-concept-id="c6">The Independent Other</span><span class="concept-node central" data-concept-id="c9">Divine Solipsism</span><span class="concept-node central" data-concept-id="c11">Delegated Sovereignty</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Connector correctly identifies that any "freedom" within a system is still a subset of the creator’s code, making every "choice" a mere traversal ...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Insisting that foresight necessitates total control reduces the divine to a soli...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Even if a creator 'makes space' for autonomy, like a programmer designing both p...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #f44336">!</span>
+                        <span class="debater-name">The Provocateur</span>
+                        <span class="team-label">AGAINST</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">The Connector correctly identifies that any "freedom" within a system is still a subset of the creat...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Tonal shift:</strong> The debate leaps from philosophical inquiry to personal accusation—the word 'narcissist' enters like a stone through glass.</p><p class="texture-note">Here the Provocateur transforms a question about causality into a question about character. Suddenly we are not asking what God *does* but what God *is*—fragile, solipsistic, trapped. The temperature rises because the argument has become an insult, and insults require defense of a different kind than syllogisms.</p>
+                    </div>
+                </div>
+                
+            </article>
+            </div>
+            </section>
+            
+            <section class="phase-section round-section" data-round="2">
+                <h2 class="phase-title">Round 2</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-a1137127" data-exchange-id="a1137127" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The opposition posits that a truly omnipotent being must have the capacity to abdicate control, thereby creating an "Other" whose actions are not merely a reflection of the creator's intent. However, if the creator establishes the agent's nature, the environment, and the very laws of causality, what operational definition of "independence" prevents the outcome from being a necessary derivative of those initial conditions? Can a will be considered "independent" if every factor influencing its choice was curated by the architect who knew the result of those factors before implementation?</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The opposition posits that a truly omnipotent being must have the capacity to abdicate control, thereby creating an "Other" whose actions are not merely a reflection of the creator's intent. However, ...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Causal Determinism</span><span class="concept-node central" data-concept-id="c3">Operational Independence</span><span class="concept-node central" data-concept-id="c6">The Independent Other</span><span class="concept-node central" data-concept-id="c8">Foresight and Control</span><span class="concept-node central" data-concept-id="c11">Delegated Sovereignty</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The opposition posits that a truly omnipotent being must have the capacity to abdicate control, thereby creating an "Other" whose actions are not mere...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If a being is built to specific design and placed in a curated environment, its ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Denying the possibility of undetermined outcomes reduces God to a solipsistic be...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If an omniscient creator sets all initial conditions, then every outcome is alre...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-391958e9" data-exchange-id="391958e9" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The Skeptic correctly observes that if every variable of a being’s nature and environment is curated by an all-knowing designer, then any "choice" appears to be merely the inevitable unfolding of a pre-calculated sequence. However, why do we assume creation must be a mechanistic imposition of will, rather than an act of *kenosis* or withdrawal—a concept once central to those who believed the ultimate power lies in the capacity to step back? If the creator’s primary act is to bound their own influence to make room for a genuine "other," is the resulting uncertainty not a deliberate design choice rather than a failure of control?</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Skeptic correctly observes that if every variable of a being’s nature and environment is curated by an all-knowing designer, then any "choice" appears to be merely the inevitable unfolding of a pr...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Causal Determinism</span><span class="concept-node central" data-concept-id="c2">Kenosis</span><span class="concept-node" data-concept-id="c10">Open-Ended Creation</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Skeptic correctly observes that if every variable of a being’s nature and environment is curated by an all-knowing designer, then any "choice" app...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">True divine power is not total control but the kenosis required to grant beings ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If a creator establishes an agent's nature, environment, and laws of causality, ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Creation need not be a closed script; a creator can establish rules while leavin...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #9c27b0">@</span>
+                        <span class="debater-name">The Historian</span>
+                        <span class="team-label">AGAINST</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">The Skeptic correctly observes that if every variable of a being’s nature and environment is curated...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Tonal shift:</strong> A return to the archival—the Historian invokes *kenosis*, and the room grows quieter, older, more reverent.</p><p class="texture-note">After the Provocateur's heat, this response feels like someone opening a window onto ancient stone. The word 'withdrawal' introduces gentleness into a debate that had been all about grip and control. For a moment, power is reimagined as stepping back rather than pressing forward—a tonal softening that makes space for mystery.</p>
+                    </div>
+                </div>
+                
+            </article>
+            </div>
+            </section>
+            
+            <section class="phase-section round-section" data-round="3">
+                <h2 class="phase-title">Round 3</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-a02b725d" data-exchange-id="a02b725d" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #00bcd4">~</span>
+                    <span class="debater-name">The Connector</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The Historian suggests that the ultimate act of power is *kenosis*, the intentional withdrawal of a creator to make room for a truly independent "Other." This reminds me of <span class="metaphor" data-note="0">a gardener who plants a seed and steps away</span>; while the gardener no longer touches the plant, is the tree's eventual height and leaf shape not still bound by the genetic code the gardener chose to plant? I wonder if a "cleared space" is ever truly vacant, or if the boundaries of that silence still dictate the only songs that can be sung within it.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #00bcd4">~</span>
+                    <span class="debater-name">The Connector</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Historian suggests that the ultimate act of power is *kenosis*, the intentional withdrawal of a creator to make room for a truly independent "Other." This reminds me of a gardener who plants a see...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Causal Determinism</span><span class="concept-node central" data-concept-id="c2">Kenosis</span><span class="concept-node central" data-concept-id="c5">Constraint-Bound Freedom</span><span class="concept-node central" data-concept-id="c6">The Independent Other</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #00bcd4">~</span>
+                    <span class="debater-name">The Connector</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Historian suggests that the ultimate act of power is *kenosis*, the intentional withdrawal of a creator to make room for a truly independent "Othe...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Like a musician designing an instrument, even a 'new center of being' is constra...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Creation may be an act of kenosis (divine withdrawal) rather than mechanistic im...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Even if a creator 'makes space' for autonomy, like a programmer designing both p...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #00bcd4">~</span>
+                        <span class="debater-name">The Connector</span>
+                        <span class="team-label">FOR</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">The Historian suggests that the ultimate act of power is *kenosis*, the intentional withdrawal of a ...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Metaphor:</strong> The metaphor exposes a hidden flaw in the "divine withdrawal" argument: the gardener's absence doesn't grant the seed freedom, because the genetic code chosen at planting has already determined the tree's possible forms—withdrawal relocates determinism rather than escaping it.</p>
+                    </div>
+                </div>
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-bba758eb" data-exchange-id="bba758eb" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The Connector rightly notes that even a "cleared space" is defined by its borders, implying that any action within those limits is merely the inevitable execution of the creator's original code. However, if you insist that a creator’s foresight necessitates total control, you reduce the divine to a cosmic solipsist trapped in a hall of mirrors, incapable of the ultimate act of power: creating a being that can genuinely say "No." Is your version of God so fragile that He can only love reflections of His own will, or does He possess the strength to survive the existence of a truly independent "Other" that He does not personally pilot?</p>
+                    </div>
+                    <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (4.0/5)</strong><br>The speaker accurately summarizes the opponent’s point about defined borders and original code before launching into their counter-argument.</div></div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Connector rightly notes that even a "cleared space" is defined by its borders, implying that any action within those limits is merely the inevitable execution of the creator's original code. Howev...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Kenosis</span><span class="concept-node central" data-concept-id="c5">Constraint-Bound Freedom</span><span class="concept-node central" data-concept-id="c6">The Independent Other</span><span class="concept-node central" data-concept-id="c8">Foresight and Control</span><span class="concept-node central" data-concept-id="c9">Divine Solipsism</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Connector rightly notes that even a "cleared space" is defined by its borders, implying that any action within those limits is merely the inevitab...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Denying undetermined outcomes makes the Creator a narcissist too fragile to shar...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Even a cleared space created by withdrawal is defined by its borders; like a gar...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Denying the possibility of undetermined outcomes reduces God to a solipsistic be...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            </div>
+            </section>
+            
+            <section class="phase-section round-section" data-round="4">
+                <h2 class="phase-title">Round 4</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-835615b2" data-exchange-id="835615b2" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The opposition argues that a truly powerful creator must be capable of abdicating sovereignty to allow for a genuine "Other" who possesses the capacity for independent resistance. Yet, if the "Other" is built according to a specific design and placed in a curated environment, how can a "No" be anything more than a programmed response inherent to those initial conditions? Can you provide an operational definition of "independence" that isn't just a complex subset of the creator's original specifications? If the architect foresees the "No" and proceeds with the design anyway, does that not make the rebellion a necessary component of the determined outcome?</p>
+                    </div>
+                    <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (4.0/5)</strong><br>The speaker accurately represents the opponent's strongest potential defense—the intentional abdication of power—before attempting to deconstruct it.</div></div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The opposition argues that a truly powerful creator must be capable of abdicating sovereignty to allow for a genuine "Other" who possesses the capacity for independent resistance. Yet, if the "Other" ...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Causal Determinism</span><span class="concept-node central" data-concept-id="c3">Operational Independence</span><span class="concept-node central" data-concept-id="c6">The Independent Other</span><span class="concept-node central" data-concept-id="c8">Foresight and Control</span><span class="concept-node central" data-concept-id="c11">Delegated Sovereignty</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The opposition argues that a truly powerful creator must be capable of abdicating sovereignty to allow for a genuine "Other" who possesses the capacit...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">An independent will operating with creator-provided nature and logic can only pr...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Insisting that foresight necessitates total control reduces the divine to a soli...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If a creator establishes an agent's nature, environment, and laws of causality, ...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-7909577f" data-exchange-id="7909577f" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The Skeptic rightly observes that if a designer curates every impulse and environment while knowing the result, then any "independent" act appears to be merely the inevitable discharge of a pre-loaded spring. However, why have we come to define creation as the assembly of a machine rather than the granting of *existence*—a distinction once vital to those who saw the "No" not as a programmed variable, but as the emergence of a new center of being? If the creator provides the *capacity* for action without dictating the *content* of the act, is it not possible that foresight acts as a witness to freedom rather than its author?</p>
+                    </div>
+                    <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (5.0/5)</strong><br>The Historian provides a perfect summary of the Skeptic's position, even improving its rhetorical force, before offering a counter-perspective.</div></div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Skeptic rightly observes that if a designer curates every impulse and environment while knowing the result, then any "independent" act appears to be merely the inevitable discharge of a pre-loaded...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Causal Determinism</span><span class="concept-node" data-concept-id="c4">Creator as Witness</span><span class="concept-node central" data-concept-id="c6">The Independent Other</span><span class="concept-node" data-concept-id="c7">Granting Existence vs. Assembly</span><span class="concept-node central" data-concept-id="c8">Foresight and Control</span><span class="concept-node" data-concept-id="c12">Emergence of New Centers</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Skeptic rightly observes that if a designer curates every impulse and environment while knowing the result, then any "independent" act appears to ...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">To give being is to grant a share in the creator's own spontaneity; if the desig...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If a being is built to specific design and placed in a curated environment, its ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Creation may be an act of kenosis (divine withdrawal) rather than mechanistic im...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #9c27b0">@</span>
+                        <span class="debater-name">The Historian</span>
+                        <span class="team-label">AGAINST</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">The Skeptic rightly observes that if a designer curates every impulse and environment while knowing ...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Tonal shift:</strong> The metaphor deepens from mechanism to ontology—'giving being' rather than 'assembling a machine.'</p><p class="texture-note">The Historian stops defending and begins to *offer*. There is something almost tender in the phrase 'grant a share in the very spontaneity'—as if creation might be communion rather than construction. The debate pauses here, exhales, and for one breath considers that the question might not be about control at all but about kinship.</p>
+                    </div>
+                </div>
+                
+            </article>
+            </div>
+            </section>
+            
+            <section class="phase-section round-section" data-round="5">
+                <h2 class="phase-title">Round 5</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-97256f5c" data-exchange-id="97256f5c" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #00bcd4">~</span>
+                    <span class="debater-name">The Connector</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The Historian suggests that existence is a gift of agency where the Creator acts as a witness to an emerging "Other" rather than a programmer of a machine. This reminds me of <span class="metaphor" data-note="0">a musician who designs a new instrument</span>; while they do not play the notes themselves, are the melodies not still strictly defined by the physical constraints of the strings and frets they chose to install? I wonder if a "new center of being" can ever truly deviate from the path, or if its "freedom" is simply the inevitable vibration of a string plucked by the very act of its creation.</p>
+                    </div>
+                    <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (4.0/5)</strong><br>The speaker acknowledges the opponent's view of God as a 'witness' and existence as a 'gift of agency' before presenting their counter-perspective.</div></div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #00bcd4">~</span>
+                    <span class="debater-name">The Connector</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Historian suggests that existence is a gift of agency where the Creator acts as a witness to an emerging "Other" rather than a programmer of a machine. This reminds me of a musician who designs a ...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Causal Determinism</span><span class="concept-node" data-concept-id="c4">Creator as Witness</span><span class="concept-node central" data-concept-id="c5">Constraint-Bound Freedom</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #00bcd4">~</span>
+                    <span class="debater-name">The Connector</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Historian suggests that existence is a gift of agency where the Creator acts as a witness to an emerging "Other" rather than a programmer of a mac...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Like a writer inventing a grammar for their world, even characters who speak 'fr...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Creation should be understood as granting existence and a new center of being, n...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Even a cleared space created by withdrawal is defined by its borders; like a gar...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #00bcd4">~</span>
+                        <span class="debater-name">The Connector</span>
+                        <span class="team-label">FOR</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">The Historian suggests that existence is a gift of agency where the Creator acts as a witness to an ...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Metaphor:</strong> The luthier metaphor shows that even when a creator delegates all action to another, the structural constraints they've built into the instrument have already defined the entire possibility space of expression—the player's "freedom" is bounded by frets the maker chose.</p>
+                    </div>
+                </div>
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-b94e7386" data-exchange-id="b94e7386" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The Connector correctly observes that the structural constraints of an instrument—the "strings and frets"—seem to dictate the music, suggesting that every "choice" is merely the resonance of a pre-set design. However, if you deny the possibility of an undetermined outcome, you transform the Creator into a cosmic narcissist who is too fragile to share existence with anything other than a mirror. Is your God so insecure that He must script every "No" just to feel in control, or can He actually perform the ultimate act of power: creating a will that is truly, dangerously, His equal in agency?</p>
+                    </div>
+                    <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (4.0/5)</strong><br>The speaker accurately restates the Connector's position on pre-set design before challenging the theological implications of that position.</div></div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Connector correctly observes that the structural constraints of an instrument—the "strings and frets"—seem to dictate the music, suggesting that every "choice" is merely the resonance of a pre-set...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c5">Constraint-Bound Freedom</span><span class="concept-node central" data-concept-id="c6">The Independent Other</span><span class="concept-node central" data-concept-id="c9">Divine Solipsism</span><span class="concept-node central" data-concept-id="c11">Delegated Sovereignty</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Connector correctly observes that the structural constraints of an instrument—the "strings and frets"—seem to dictate the music, suggesting that e...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">True divine power is not total control but the kenosis required to grant beings ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Like a musician designing an instrument, even a 'new center of being' is constra...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Insisting that foresight necessitates total control reduces the divine to a soli...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            </div>
+            </section>
+            
+            <section class="phase-section round-section" data-round="6">
+                <h2 class="phase-title">Round 6</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-1a416dd5" data-exchange-id="1a416dd5" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The opposition contends that a creator’s highest expression of power is the capacity to limit their own sovereignty, thereby granting a created will an agency that is not a mere extension of the divine script. However, if this "independent" will operates using a nature and logic provided by the creator, how can its "No" be anything more than an inevitable output of those specific inputs? Can you provide an operational definition of "independence" that does not rely on the very parameters the architect established, or is "freedom" simply a label for a causal chain we refuse to trace back to its origin?</p>
+                    </div>
+                    <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (4.0/5)</strong><br>The speaker accurately represents the sophisticated 'self-limitation' argument of theists before critiquing it.</div></div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The opposition contends that a creator’s highest expression of power is the capacity to limit their own sovereignty, thereby granting a created will an agency that is not a mere extension of the divin...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Causal Determinism</span><span class="concept-node central" data-concept-id="c2">Kenosis</span><span class="concept-node central" data-concept-id="c3">Operational Independence</span><span class="concept-node central" data-concept-id="c11">Delegated Sovereignty</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The opposition contends that a creator’s highest expression of power is the capacity to limit their own sovereignty, thereby granting a created will a...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">To give being is to grant a share in the creator's own spontaneity; if the desig...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Denying undetermined outcomes makes the Creator a narcissist too fragile to shar...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If a being is built to specific design and placed in a curated environment, its ...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-bb97e91b" data-exchange-id="bb97e91b" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The Skeptic rightly points out that if the "nature" of a being is a closed system of logic provided by a designer, then every choice is merely the inevitable output of that system's internal math. Yet, why have we abandoned the older intuition that to "give being" is to grant a share in the very spontaneity that characterizes the creator, rather than just delivering a set of instructions? If the architect’s design is specifically to create an *originator* of actions, is the "No" not a new beginning rather than a pre-traced conclusion?</p>
+                    </div>
+                    <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (5.0/5)</strong><br>The speaker explicitly validates the Skeptic's logic as a 'closed system' before offering a wider perspective that encompasses that logic.</div></div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Skeptic rightly points out that if the "nature" of a being is a closed system of logic provided by a designer, then every choice is merely the inevitable output of that system's internal math. Yet...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node" data-concept-id="c4">Creator as Witness</span><span class="concept-node" data-concept-id="c7">Granting Existence vs. Assembly</span><span class="concept-node" data-concept-id="c12">Emergence of New Centers</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Skeptic rightly points out that if the "nature" of a being is a closed system of logic provided by a designer, then every choice is merely the ine...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Like a writer inventing a grammar for their world, even characters who speak 'fr...</span></div><div class="leads-to">Leads to: <span class="claim-ref">An independent will operating with creator-provided nature and logic can only pr...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Creation should be understood as granting existence and a new center of being, n...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            </div>
+            </section>
+            
+            
+            <section class="phase-section closing-section">
+                <h2 class="phase-title">Closing Statements</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-0a2a18bd" data-exchange-id="0a2a18bd" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #00bcd4">~</span>
+                    <span class="debater-name">The Connector</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The opposition suggests that the Creator acts not as a programmer, but as a generous source, granting a share of their own spontaneous nature to the creature so it may become a true origin of action. Our side has observed how the gardener’s choice of seed and the luthier’s placement of frets define the limits of growth and melody before the first leaf or note ever appears. This reminds me of <span class="metaphor" data-note="0">a writer who invents a unique grammar for their world</span>; while the characters may speak "freely," can they ever express a thought that the language itself does not permit? I wonder if the "independence" we celebrate is merely the inevitable shape of the container the Creator chose to build, making every "spontaneous" act the final, necessary movement of a clock set in motion at the start of time.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #00bcd4">~</span>
+                    <span class="debater-name">The Connector</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The opposition suggests that the Creator acts not as a programmer, but as a generous source, granting a share of their own spontaneous nature to the creature so it may become a true origin of action. ...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Causal Determinism</span><span class="concept-node central" data-concept-id="c5">Constraint-Bound Freedom</span><span class="concept-node" data-concept-id="c7">Granting Existence vs. Assembly</span><span class="concept-node" data-concept-id="c12">Emergence of New Centers</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #00bcd4">~</span>
+                    <span class="debater-name">The Connector</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The opposition suggests that the Creator acts not as a programmer, but as a generous source, granting a share of their own spontaneous nature to the c...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">True divine power is not total control but the kenosis required to grant beings ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">To give being is to grant a share in the creator's own spontaneity; if the desig...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Like a musician designing an instrument, even a 'new center of being' is constra...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #00bcd4">~</span>
+                        <span class="debater-name">The Connector</span>
+                        <span class="team-label">FOR</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">The opposition suggests that the Creator acts not as a programmer, but as a generous source, grantin...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Metaphor:</strong> The invented grammar metaphor deepens the determinism argument beyond physical constraints to cognitive ones: a creator who designs the very language of thought has limited not just what beings can *do* but what they can *conceive*, making even their most rebellious ideas pre-contained within the vocabulary they were given.</p>
+                    </div>
+                </div>
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-fd92f5bf" data-exchange-id="fd92f5bf" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>The Skeptic correctly argues that if the Creator provides the nature, logic, and environment of a being, every "independent" act is simply the inevitable output of a pre-calculated causal chain. Yet, if you cling to this deterministic trap, you reduce the Divine to a cosmic solipsist who is too fragile to exist alongside anything other than a mirror. True power is not the total control of a machine, but the *kenosis* required to grant a being the genuine capacity to say "No" to its source. If your God cannot survive the existence of a truly independent will, then He hasn't created a universe—He’s just talking to Himself in the dark.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Skeptic correctly argues that if the Creator provides the nature, logic, and environment of a being, every "independent" act is simply the inevitable output of a pre-calculated causal chain. Yet, ...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Causal Determinism</span><span class="concept-node central" data-concept-id="c2">Kenosis</span><span class="concept-node central" data-concept-id="c6">The Independent Other</span><span class="concept-node central" data-concept-id="c9">Divine Solipsism</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">The Skeptic correctly argues that if the Creator provides the nature, logic, and environment of a being, every "independent" act is simply the inevita...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="leads-to">Leads to: <span class="claim-ref">Like a writer inventing a grammar for their world, even characters who speak 'fr...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Denying undetermined outcomes makes the Creator a narcissist too fragile to shar...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Creation may be an act of kenosis (divine withdrawal) rather than mechanistic im...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #f44336">!</span>
+                        <span class="debater-name">The Provocateur</span>
+                        <span class="team-label">AGAINST</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">The Skeptic correctly argues that if the Creator provides the nature, logic, and environment of a be...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Tonal shift:</strong> Exhaustion beneath defiance—the final accusation carries the weight of everything unresolved.</p><p class="texture-note">The Provocateur's closing image—'talking to Himself in the dark'—lands not as triumph but as lament. There is loneliness in this picture, a cosmic ache that belongs to the accuser as much as the accused. The debate ends not with resolution but with the sound of a question echoing in an empty room, waiting for someone to sit with it longer.</p>
+                    </div>
+                </div>
+                
+            </article>
+            </div>
+            </section>
+            
+        </main>
+
+        
+            <section class="synthesis-section">
+                <h2>Moments of Recognition</h2>
+                <p class="synthesis-intro">These moments show each side accurately representing the other's strongest arguments.</p>
+                <div class="synthesis-moments">
+                <div class="synthesis-moment">
+                    <span class="synthesis-speaker">The Connector</span>
+                    <span class="synthesis-type">steelmanning</span>
+                    <p class="synthesis-note">The speaker acknowledges the opponent's view of God as a 'witness' and existence as a 'gift of agency' before presenting their counter-perspective.</p>
+                </div>
+                </div>
+            </section>
+            
+
+        <footer class="debate-footer">
+            <p>
+                Generated by <a href="https://github.com/your-repo/mull">mull</a> —
+                a cognitive environment for connected learning.
+            </p>
+            <p>
+                <em>"To turn over slowly in the mind"</em>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Depth drawer toggle
+    document.querySelectorAll('.depth-toggle').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const expanded = btn.getAttribute('aria-expanded') === 'true';
+            btn.setAttribute('aria-expanded', !expanded);
+            const content = btn.nextElementSibling;
+            content.hidden = expanded;
+        });
+    });
+
+    // ============================================
+    // SCROLL-TO-DEPTH: Per-exchange depth navigation
+    // ============================================
+    const DEPTH_LABELS = ['Surface', 'Concepts', 'Structure', 'Analysis'];
+    const exchangeDepths = new Map();
+    let shiftHeld = false;
+    let lastScrollTime = 0;
+    const SCROLL_DEBOUNCE = 150; // ms between depth changes
+
+    // Track shift key state
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Shift') shiftHeld = true;
+    });
+    document.addEventListener('keyup', function(e) {
+        if (e.key === 'Shift') shiftHeld = false;
+    });
+
+    // Initialize all depth containers
+    document.querySelectorAll('.exchange.depth-container').forEach(function(container) {
+        const exchangeId = container.dataset.exchangeId;
+        exchangeDepths.set(exchangeId, 0);
+
+        // Add depth indicator
+        const indicator = document.createElement('div');
+        indicator.className = 'depth-indicator depth-0';
+        indicator.textContent = DEPTH_LABELS[0];
+        container.appendChild(indicator);
+
+        // Add depth hint
+        const hint = document.createElement('div');
+        hint.className = 'depth-hint';
+        hint.textContent = 'SHIFT+scroll to explore deeper';
+        container.appendChild(hint);
+
+        // SHIFT+scroll handler
+        container.addEventListener('wheel', function(e) {
+            if (!shiftHeld) return;
+
+            const now = Date.now();
+            if (now - lastScrollTime < SCROLL_DEBOUNCE) return;
+            lastScrollTime = now;
+
+            e.preventDefault();
+
+            const currentDepth = exchangeDepths.get(exchangeId);
+            const maxDepth = getMaxDepth(container);
+
+            let newDepth;
+            if (e.deltaY > 0) {
+                // Scroll down = go deeper
+                newDepth = Math.min(currentDepth + 1, maxDepth);
+            } else {
+                // Scroll up = rise up
+                newDepth = Math.max(currentDepth - 1, 0);
+            }
+
+            if (newDepth !== currentDepth) {
+                setExchangeDepth(container, exchangeId, newDepth);
+            }
+        }, { passive: false });
+    });
+
+    function getMaxDepth(container) {
+        // Find highest available depth layer
+        let max = 0;
+        for (let i = 0; i <= 3; i++) {
+            if (container.querySelector('.depth-layer.depth-' + i)) {
+                max = i;
+            }
+        }
+        return max;
+    }
+
+    function setExchangeDepth(container, exchangeId, depth) {
+        const oldDepth = exchangeDepths.get(exchangeId);
+        exchangeDepths.set(exchangeId, depth);
+        container.dataset.depth = depth;
+
+        // Animate transition
+        const oldLayer = container.querySelector('.depth-layer.depth-' + oldDepth);
+        const newLayer = container.querySelector('.depth-layer.depth-' + depth);
+
+        if (oldLayer && newLayer && oldLayer !== newLayer) {
+            oldLayer.classList.add('fading-out');
+            newLayer.classList.add('fading-in');
+            newLayer.classList.add('active');
+
+            setTimeout(function() {
+                oldLayer.classList.remove('active', 'fading-out');
+                newLayer.classList.remove('fading-in');
+            }, 300);
+        }
+
+        // Update indicator
+        const indicator = container.querySelector('.depth-indicator');
+        if (indicator) {
+            indicator.textContent = DEPTH_LABELS[depth];
+            indicator.className = 'depth-indicator depth-' + depth;
+        }
+
+        // Mark as actively being explored
+        container.classList.add('depth-active');
+        clearTimeout(container._depthTimeout);
+        container._depthTimeout = setTimeout(function() {
+            container.classList.remove('depth-active');
+        }, 2000);
+    }
+
+    // ESC to return all to surface
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.exchange.depth-container').forEach(function(container) {
+                const exchangeId = container.dataset.exchangeId;
+                if (exchangeDepths.get(exchangeId) > 0) {
+                    setExchangeDepth(container, exchangeId, 0);
+                }
+            });
+        }
+    });
+
+    // ============================================
+    // GLOBAL DEPTH DIAL (unchanged)
+    // ============================================
+    const depthLevels = ['essential', 'standard', 'deep', 'scholar'];
+    const depthLabels = ['Essential', 'Standard', 'Deep', 'Scholar'];
+
+    // Create depth dial
+    const dial = document.createElement('div');
+    dial.className = 'depth-dial';
+    dial.innerHTML = `
+        <label>Reading Depth</label>
+        <input type="range" min="0" max="3" value="1" id="depth-slider">
+        <div class="depth-value">Standard</div>
+        <div class="depth-dial-hint">SHIFT+scroll on any statement to dive deeper</div>
+    `;
+    document.body.appendChild(dial);
+
+    const slider = document.getElementById('depth-slider');
+    const valueDisplay = dial.querySelector('.depth-value');
+
+    function updateGlobalDepth(level) {
+        const levelName = depthLevels[level];
+        valueDisplay.textContent = depthLabels[level];
+
+        // Show/hide elements based on depth
+        document.querySelectorAll('.sidenote').forEach(function(el) {
+            el.style.display = level >= 1 ? '' : 'none';
+        });
+
+        document.querySelectorAll('.depth-drawer').forEach(function(el) {
+            el.style.display = level >= 2 ? '' : 'none';
+        });
+
+        document.querySelectorAll('.synthesis-section').forEach(function(el) {
+            el.style.display = level >= 1 ? '' : 'none';
+        });
+
+        // Key phrases only at scholar level
+        document.querySelectorAll('.key-phrase').forEach(function(el) {
+            el.style.background = level >= 3
+                ? 'linear-gradient(180deg, transparent 60%, #fff59d 60%)'
+                : 'none';
+        });
+    }
+
+    slider.addEventListener('input', function() {
+        updateGlobalDepth(parseInt(this.value));
+    });
+
+    // Initialize at standard level
+    updateGlobalDepth(1);
+
+    // Smooth scroll for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // Concept node click handler
+    document.querySelectorAll('.concept-node').forEach(function(node) {
+        node.addEventListener('click', function() {
+            const conceptId = node.dataset.conceptId;
+            if (conceptId) {
+                // Highlight related exchanges
+                document.querySelectorAll('[data-concepts*="' + conceptId + '"]').forEach(function(ex) {
+                    ex.classList.add('concept-highlight');
+                    setTimeout(function() { ex.classList.remove('concept-highlight'); }, 2000);
+                });
+            }
+        });
+    });
+});
+
+    </script>
+</body>
+</html>
