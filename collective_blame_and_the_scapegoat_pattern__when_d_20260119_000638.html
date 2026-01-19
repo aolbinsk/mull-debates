@@ -1,0 +1,2022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collective blame and the scapegoat pattern: when discontent rises, blame falls o... | mull</title>
+    <style>
+
+/* Base Typography */
+:root {
+    --text-color: #1a1a1a;
+    --bg-color: #fffff8;
+    --accent-color: #0066cc;
+    --muted-color: #666;
+    --border-color: #ddd;
+
+    --team-for-color: #00838f;
+    --team-for-bg: #e0f7fa;
+    --team-against-color: #6a1b9a;
+    --team-against-bg: #f3e5f5;
+
+    --font-main: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'SF Mono', Monaco, 'Consolas', monospace;
+
+    --content-width: 55%;
+    --sidenote-width: 35%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-main);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Layout */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header */
+.debate-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.debate-title {
+    font-size: 2rem;
+    line-height: 1.3;
+    margin: 0 0 1rem 0;
+    font-weight: 400;
+    max-width: 80%;
+}
+
+.debate-meta {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.debate-meta .team {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.debate-meta .team-for { color: var(--team-for-color); }
+.debate-meta .team-against { color: var(--team-against-color); }
+
+/* Summary Section */
+.debate-summary {
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    border-left: 4px solid var(--accent-color);
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    font-size: 0.95rem;
+}
+
+.debate-summary h3 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted-color);
+    margin: 1.5rem 0 0.5rem 0;
+}
+
+.debate-summary h3:first-child {
+    margin-top: 0;
+}
+
+.debate-summary ul {
+    padding-left: 1.5rem;
+    margin: 0.5rem 0;
+}
+
+.debate-summary li {
+    margin: 0.3rem 0;
+}
+
+/* Phase Sections */
+.phase-section {
+    margin: 3rem 0;
+}
+
+.phase-title {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted-color);
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Exchange Cards - Depth Container */
+.exchange {
+    position: relative;
+    margin: 2rem 0;
+    padding: 0;
+}
+
+/* Scroll-to-depth: per-exchange depth layers */
+.exchange.depth-container {
+    perspective: 1000px;
+}
+
+.depth-layer {
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.depth-layer:not(.active) {
+    display: none;
+}
+
+.depth-layer.fading-out {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+}
+
+.depth-layer.fading-in {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+/* Depth indicator badge */
+.depth-indicator {
+    position: absolute;
+    top: -0.5rem;
+    right: 0;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    background: var(--accent-color);
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 10;
+}
+
+.exchange:hover .depth-indicator,
+.exchange.depth-active .depth-indicator {
+    opacity: 1;
+}
+
+.depth-indicator.depth-0 { background: #999; }
+.depth-indicator.depth-1 { background: #2196f3; }
+.depth-indicator.depth-2 { background: #9c27b0; }
+.depth-indicator.depth-3 { background: #f44336; }
+
+/* Depth hint on hover */
+.depth-hint {
+    position: absolute;
+    bottom: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    color: var(--muted-color);
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+}
+
+.exchange:hover .depth-hint {
+    opacity: 0.7;
+}
+
+.exchange.depth-active .depth-hint {
+    opacity: 0;
+}
+
+/* Concept map layer styling */
+.concept-map-layer {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #e3f2fd 0%, #e8eaf6 100%);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.concept-map-layer h4 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: #1565c0;
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.concept-nodes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.concept-node {
+    padding: 0.4rem 0.8rem;
+    background: white;
+    border-radius: 20px;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    border: 1px solid #90caf9;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.concept-node:hover {
+    background: #2196f3;
+    color: white;
+    border-color: #2196f3;
+}
+
+.concept-node.central {
+    border-width: 2px;
+    font-weight: 600;
+}
+
+/* Debate structure layer styling */
+.debate-map-layer {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f3e5f5 0%, #ede7f6 100%);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.debate-map-layer h4 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: #7b1fa2;
+    margin: 0 0 1rem 0;
+}
+
+.argument-flow {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+}
+
+.argument-flow .responds-to,
+.argument-flow .leads-to {
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    background: white;
+    border-radius: 4px;
+    border-left: 3px solid #9c27b0;
+}
+
+.argument-flow .claim-ref {
+    color: #7b1fa2;
+    cursor: pointer;
+}
+
+.argument-flow .claim-ref:hover {
+    text-decoration: underline;
+}
+
+/* Analysis layer styling */
+.analysis-layer {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.analysis-layer h4 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: #c62828;
+    margin: 0 0 1rem 0;
+}
+
+/* Ambient texture layer styling */
+.texture-layer {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-style: italic;
+}
+
+.texture-layer h4 {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: #ef6c00;
+    margin: 0 0 1rem 0;
+    font-style: normal;
+}
+
+.texture-note {
+    color: var(--muted-color);
+    line-height: 1.8;
+}
+
+.exchange-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.debater-icon {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 1.5rem;
+    text-align: center;
+}
+
+.debater-name {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.team-label {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    margin-left: auto;
+}
+
+.team-for .team-label {
+    background: var(--team-for-bg);
+    color: var(--team-for-color);
+}
+
+.team-against .team-label {
+    background: var(--team-against-bg);
+    color: var(--team-against-color);
+}
+
+/* Exchange Body - Tufte-style with sidenotes */
+.exchange-body {
+    display: flex;
+    gap: 2rem;
+}
+
+.exchange-content {
+    flex: 0 0 var(--content-width);
+    max-width: var(--content-width);
+}
+
+.exchange-content p {
+    margin: 0;
+    text-align: justify;
+    hyphens: auto;
+}
+
+/* Sidenotes */
+.sidenote {
+    flex: 0 0 var(--sidenote-width);
+    max-width: var(--sidenote-width);
+    font-size: 0.85rem;
+    color: var(--muted-color);
+    padding-top: 0.25rem;
+}
+
+.sidenote-item {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: #fafafa;
+    border-radius: 4px;
+    border-left: 3px solid transparent;
+}
+
+.sidenote-item.steelmanning {
+    border-left-color: #4caf50;
+    background: #f1f8e9;
+}
+
+.sidenote-item.metaphor-note {
+    border-left-color: #2196f3;
+    background: #e3f2fd;
+}
+
+.sidenote-item strong {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Highlighted text in content */
+.key-phrase {
+    background: linear-gradient(180deg, transparent 60%, #fff59d 60%);
+    padding: 0 2px;
+}
+
+.metaphor {
+    border-bottom: 1px dotted var(--accent-color);
+    cursor: help;
+}
+
+/* Depth Drawer (expandable) */
+.depth-drawer {
+    margin-top: 1rem;
+    padding-left: 2.25rem;
+}
+
+.depth-toggle {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.depth-toggle:hover {
+    color: var(--accent-color);
+}
+
+.toggle-icon {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    width: 1rem;
+    transition: transform 0.2s;
+}
+
+.depth-toggle[aria-expanded="true"] .toggle-icon {
+    transform: rotate(45deg);
+}
+
+.depth-content {
+    margin-top: 0.75rem;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 4px;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+}
+
+.scores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.score-item {
+    background: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    border: 1px solid var(--border-color);
+}
+
+/* Aspect items (evaluation rationales) */
+.aspects {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.aspect-item {
+    background: white;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border-left: 3px solid var(--accent-color);
+}
+
+.aspect-item strong {
+    color: var(--text-color);
+}
+
+.score-badge {
+    display: inline-block;
+    background: var(--accent-color);
+    color: white;
+    padding: 0.1rem 0.4rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.25rem;
+}
+
+.rationale {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--muted-color);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+/* Synthesis Section */
+.synthesis-section {
+    margin: 4rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+    border-radius: 8px;
+}
+
+.synthesis-section h2 {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: #2e7d32;
+}
+
+.synthesis-intro {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    margin: 0 0 1.5rem 0;
+}
+
+.synthesis-moment {
+    background: white;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border-left: 3px solid #4caf50;
+}
+
+.synthesis-speaker {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.synthesis-type {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #4caf50;
+    margin-left: 0.5rem;
+}
+
+.synthesis-note {
+    font-size: 0.9rem;
+    margin: 0.5rem 0 0 0;
+    color: var(--muted-color);
+}
+
+/* Footer */
+.debate-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    text-align: center;
+}
+
+.debate-footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.debate-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Depth Dial */
+.depth-dial {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    z-index: 100;
+}
+
+.depth-dial label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--muted-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.depth-dial input[type="range"] {
+    width: 150px;
+}
+
+.depth-dial .depth-value {
+    text-align: center;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+}
+
+.depth-dial .depth-dial-hint {
+    margin-top: 0.5rem;
+    font-size: 0.65rem;
+    color: #999;
+    text-align: center;
+}
+
+/* Concept highlight animation */
+.concept-highlight {
+    animation: concept-pulse 0.5s ease-in-out 2;
+}
+
+@keyframes concept-pulse {
+    0%, 100% { box-shadow: none; }
+    50% { box-shadow: 0 0 20px rgba(33, 150, 243, 0.5); }
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    :root {
+        --content-width: 65%;
+        --sidenote-width: 30%;
+    }
+}
+
+@media (max-width: 900px) {
+    .exchange-body {
+        flex-direction: column;
+    }
+
+    .exchange-content,
+    .sidenote {
+        flex: none;
+        max-width: 100%;
+    }
+
+    .sidenote {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #f9f9f9;
+        border-radius: 4px;
+    }
+
+    .depth-dial {
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.75rem;
+    }
+}
+
+/* ASCII Visualization Section */
+.ascii-viz-section {
+    margin: 3rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);
+    border-radius: 8px;
+}
+
+.ascii-viz-section h2 {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: var(--muted-color);
+}
+
+.ascii-viz-intro {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    margin: 0 0 1.5rem 0;
+}
+
+.ascii-block {
+    background: #1a1a1a;
+    padding: 1rem 1.5rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+.ascii-block pre {
+    color: #00ff00;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    margin: 0;
+    white-space: pre;
+}
+
+.ascii-detail {
+    margin-top: 1rem;
+}
+
+.ascii-detail summary {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    background: white;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+.ascii-detail summary:hover {
+    background: #f9f9f9;
+}
+
+.ascii-detail[open] summary {
+    margin-bottom: 0.5rem;
+}
+
+/* Print styles */
+@media print {
+    .depth-dial,
+    .depth-drawer {
+        display: none;
+    }
+
+    .sidenote {
+        font-size: 0.8rem;
+        break-inside: avoid;
+    }
+
+    .ascii-viz-section {
+        break-inside: avoid;
+    }
+
+    .ascii-block pre {
+        color: #000;
+        background: #f5f5f5;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="debate-header">
+            <h1 class="debate-title">Collective blame and the scapegoat pattern: when discontent rises, blame falls on outgroups. Is group culpability ever justified, or does it always serve as a dangerous simplification?</h1>
+            <div class="debate-meta">
+                <span class="date">January 19, 2026</span>
+                <span class="team team-for">FOR: The Historian, The Pluralist</span>
+                <span class="team team-against">AGAINST: The Skeptic, The Provocateur</span>
+            </div>
+        </header>
+
+        <div class="debate-summary">
+<h3>Core Tension</h3>
+<p>This debate is fundamentally about <strong>the epistemology of collective judgment under uncertainty</strong>—specifically, whether humans can reliably distinguish legitimate accountability from mob justice <em>while inside the moment of crisis</em>, or whether that distinction only becomes clear in retrospect.</p><p>The deeper tension emerges between two competing fears: the FOR side fears that our psychological machinery for assigning collective blame is broken in ways we cannot detect from within (every pogrom participant believed they had evidence), while the AGAINST side fears that treating all collective attribution as suspect creates a perfect shield for powerful actors currently causing harm (tobacco executives loved the argument that causation was "too complex").</p><p>What makes this debate genuinely unresolved is that both sides eventually converge on the same operational criteria—documented causation, targeting power not presence, institutional friction—yet draw opposite conclusions about what this convergence means. For one side, the criteria prove how rare and difficult justified accountability is; for the other, they prove it's achievable and we should stop hand-wringing.</p>
+<h3>Recurring Metaphors</h3><ul>
+<li><strong>The Crystallization</strong> — This chemical metaphor captures how collective blame isn't a deliberate choice but an emergent phase transition—like supersaturated solution suddenly solidifying around an impurity. It suggests the process is natural, rapid, and follows predictable physics rather than rational deliberation. The 'already marked' impurity point is crucial: scapegoats aren't randomly selected but precipitate from pre-existing social structure.</li>
+<li><strong>The Hijacking</strong> — This frames scapegoating as parasitic on genuine accountability—not its opposite but its corruption. Like a hijacker who uses a real vehicle for different ends, the pattern exploits the legitimate human need to identify causes and assign responsibility. This explains why scapegoating feels righteous to participants: they're experiencing real accountability emotions, just misdirected.</li>
+<li><strong>Institutional Friction</strong> — This mechanical metaphor reframes due process not as obstruction but as engineering—like brakes that enable safe speed rather than preventing movement. It positions legal safeguards as ancestral technology for a known human failure mode. The Provocateur's counter-move ('friction or impossibility?') then becomes a question about whether we're installing brakes or removing the engine entirely.</li>
+<li><strong>The Shield of Complexity</strong> — This inverts the debate's moral polarity: philosophical caution, typically coded as wisdom, gets reframed as a weapon wielded by the powerful. The shield metaphor reveals that arguments have beneficiaries regardless of their truth value—and asks us to notice who's protected by our intellectual positions. It's the debate's sharpest cui bono moment.</li>
+</ul>
+<h3>Unresolved Crux</h3>
+<p><strong>Type: Predictive/empirical disagreement about base rates and defaults.</strong></p><p>The crux is whether scapegoating or legitimate accountability represents the <em>statistical baseline</em> when societies assign collective blame. The FOR side would change their mind if shown that, historically, collective blame has more often been accurate than not—that the scapegoat pattern is the exception rather than the rule. The AGAINST side would change their mind if shown that the three-part test (documented causation, targeting power, institutional friction) is so rarely satisfied that treating collective blame as "guilty until proven innocent" produces better outcomes than treating it as a legitimate tool requiring only normal evidentiary standards.</p><p>Both sides ultimately agree on the criteria for justified collective blame; they disagree about which error is more common and more costly—false positives (scapegoating the innocent) or false negatives (failing to hold the guilty accountable).</p>
+<h3>Common Ground</h3>
+<p>Both sides explicitly accept the same three-part test for distinguishing legitimate accountability from scapegoating: documented decision-chains (not imputed essence), targeting power (not mere presence), and emergence through institutional friction (not despite it). They also share the premise that scapegoating is real, dangerous, and historically recurrent—the AGAINST side never denies the pattern exists, only that recognizing it should paralyze accountability. Finally, both sides agree that Nuremberg represents justified collective blame, treating it as the paradigmatic case where group culpability was both accurate and procedurally legitimate.</p><p>The disagreement is not about criteria but about emphasis: whether the criteria describe a rare achievement requiring constant vigilance (FOR) or a workable standard that should give us confidence to act (AGAINST).</p>
+</div>
+
+        <section class="ascii-viz-section">
+<h2>Visualization</h2>
+<p class="ascii-viz-intro">ASCII maps showing debate structure and concept relationships.</p>
+<div class="ascii-block">
+<pre>DEBATE STRUCTURE
+════════════════════════════════════════════════════════════
+
+┌──────────────────────────────────────────────────────────┐
+│                         OPENING                          │
+│  FOR: The Histor, The Plural                             │
+│  AGAINST: The Skepti, The Provoc                         │
+└──────────────────────────────────────────────────────────┘
+                             │
+                             ▼
+┌──────────────────────────────────────────────────────────┐
+│                        ROUND 1-4                         │
+│  8 exchanges                                             │
+│  4 tonal shifts                                          │
+└──────────────────────────────────────────────────────────┘
+                             │
+                             ▼
+┌──────────────────────────────────────────────────────────┐
+│                         CLOSING                          │
+│  2 statements                                            │
+└──────────────────────────────────────────────────────────┘</pre>
+</div>
+<details class="ascii-detail">
+<summary>Concept Map</summary>
+<div class="ascii-block">
+<pre>CONCEPT MAP
+════════════════════════════════════════════════════════════
+
+Central Concepts:
+  ● Scapegoat Pattern
+  │   ━━━ depends_on → Power vs Presence Targeting
+  │
+  ● Institutional Friction
+  │   ━━━ enables → Safeguard Overconfidence
+  │   ━━━ enables → Essence vs Action Attribution
+  │
+  ● Essence vs Action Attribution
+  │   ━━━ refines → Power vs Presence Targeting
+  │
+  ● Power vs Presence Targeting
+  ● Paralysis Cost Calculus
+
+Peripheral Concepts:
+  ○ Phenomenological Identity
+  ○ Complexity Weaponization
+  ○ Safeguard Overconfidence
+  ○ Unfalsifiable Framework
+  ○ Retrospective Vindication
+  ... 2 more
+
+Legend:
+  ━━━ Strong connection
+  ─── Moderate connection
+  ┄┄┄ Weak connection
+  ● Central concept
+  ○ Peripheral concept</pre>
+</div>
+</details>
+<details class="ascii-detail">
+<summary>Argument Flow</summary>
+<div class="ascii-block">
+<pre>ARGUMENT FLOW
+════════════════════════════════════════════════════════════
+
+Opening Claims:
+  [AGAINST] Collective blame is not inherently dangerous—it is dangerous only when specific ...
+
+Critical Path:
+  #1 → #2 → #3 → #4 → #5 → #6 → #7 → #8 → #9 → #10 → #11
+
+Key Exchanges:
+  • Throughout history, collective blame has followed ...
+    └─ rebuttal
+
+  • Scapegoating (blaming the innocent) is categorical...
+    └─ concession
+
+  • While collective culpability can be justified (as ...
+    └─ rebuttal
+
+  • If justified accountability and scapegoating are p...
+    └─ rebuttal
+
+  • Historical societies developed institutional safeg...
+    └─ question
+</pre>
+</div>
+</details>
+</section>
+
+        <main class="debate-content">
+            
+            <section class="phase-section opening-section">
+                <h2 class="phase-title">Opening Statements</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-11a7985a" data-exchange-id="11a7985a" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*adjusts spectacles and leans forward*
+
+Throughout history, <span class="key-phrase">collective blame</span> has served a remarkably consistent function: when complex systems fail, societies reach for the simplifying clarity of a singular enemy. The Roman persecution of Christians during plagues, the medieval pogroms following economic collapse, the 20th century's industrialized <span class="key-phrase">scapegoat</span>ing—each followed the same pattern. Discontent rises, complexity overwhelms, and blame crystallizes onto those already marked as "other."
+
+But here's what troubles me: we tend to treat these episodes as aberrations, as moments when reason failed. What if they reveal something more fundamental about how human groups process collective anxiety?
+
+I argue FOR recognizing this pattern precisely because understanding its mechanism is our only defense against it. Group culpability *does* sometimes contain a kernel of legitimate grievance—institutions *can* fail, policies *can* harm—but the scapegoat pattern hijacks this legitimate impulse and redirects it toward vulnerable populations who had no actual causal role.
+
+The dangerous simplification isn't in identifying collective responsibility; it's in *misattributing* it. When we say "the banks caused the crisis," we're making a collective claim that invites scrutiny. When that becomes "the bankers" and then a particular *kind* of banker, we've crossed from analysis into scapegoating.
+
+So my opening position: collective blame is never *justified* in its scapegoat form, but recognizing why it feels justified—why it emerges so reliably—is essential. What alternatives existed? What made societies choose the easy target over the hard truth?</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*adjusts spectacles and leans forward*
+
+Throughout history, collective blame has served a remarkably consistent function: when complex systems fail, societies reach for the simplifying clarity of a si...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Scapegoat Pattern</span><span class="concept-node" data-concept-id="c11">Default Pattern Recognition</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*adjusts spectacles and leans forward*
+
+Throughout history, collective blame has served a remarkably consistent function: when complex systems fail, s...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Scapegoating (blaming the innocent) is categorically different from collective a...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-88f68b91" data-exchange-id="88f68b91" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*taps finger on table*
+
+You've conflated two distinct phenomena and called them one pattern. <span class="key-phrase">Scapegoat</span>ing—blaming the causally innocent—is categorically different from collective accountability, where a group *did* bear responsibility for outcomes. By bundling them together, you've made it impossible to hold any group accountable without triggering the specter of historical atrocity.
+
+Let me be direct: the proposition assumes that "blame falling on outgroups" is inherently the scapegoat pattern. But what if the outgroup *actually caused the harm*? When we held the Nazi party collectively accountable at Nuremberg, when we assign institutional liability to corporations that poisoned communities, when we recognize that colonial administrations—as groups—perpetrated systematic extraction: are these "dangerous simplifications"?
+
+Your historical examples are carefully chosen to show *misattributed* blame. But that selection itself reveals the flaw. You've defined the pattern by its failures rather than examining whether collective responsibility can ever be accurately assigned.
+
+Here's my challenge: give me your operational definition of "justified <span class="key-phrase">collective blame</span>" versus "scapegoating." Because without that distinction, your framework would make it impossible to say "this institution harmed people" without being accused of dangerous simplification. The Sackler family and Purdue Pharma, the tobacco industry's coordinated deception, apartheid's architects—do these represent legitimate collective accountability or the scapegoat pattern?
+
+The real danger isn't recognizing group culpability. It's losing the *capacity* to recognize it because we've made all collective attribution suspect.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*taps finger on table*
+
+You've conflated two distinct phenomena and called them one pattern. Scapegoating—blaming the causally innocent—is categorically different from collective accountability, where...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Scapegoat Pattern</span><span class="concept-node" data-concept-id="c12">Diffused Accountability</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*taps finger on table*
+
+You've conflated two distinct phenomena and called them one pattern. Scapegoating—blaming the causally innocent—is categorical...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">While collective culpability can be justified (as with Nuremberg), distinguishin...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Throughout history, collective blame has followed a consistent pattern: when com...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            </div>
+            </section>
+            
+            
+            <section class="phase-section round-section" data-round="1">
+                <h2 class="phase-title">Round 1</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-e91390ab" data-exchange-id="e91390ab" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*holds both hands open, weighing*
+
+Your strongest point lands: demanding an operational definition reveals that without clear criteria, we risk paralyzing all legitimate accountability. The Nuremberg example is precisely where collective culpability seems not just justified but *necessary*—the Nazi party was not a <span class="key-phrase">scapegoat</span> but an actual causal agent.
+
+But here's what your framework loses: it assumes we can cleanly distinguish "actual causal agent" from "convenient target" in the moment of social crisis. From inside the pogrom, the participants believed they had identified actual causal agents too. The tobacco executives and the medieval moneylenders occupy structurally identical positions in their respective societies' narratives—what differs is our retrospective judgment, not the psychological mechanism driving the attribution. So I ask: what does it reveal that both justified accountability *and* horrific scapegoating feel identical to those enacting them? Perhaps the dangerous simplification isn't in *whether* <span class="key-phrase">collective blame</span> is assigned, but in our confidence that *we* can tell the difference while caught in the pattern ourselves.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*holds both hands open, weighing*
+
+Your strongest point lands: demanding an operational definition reveals that without clear criteria, we risk paralyzing all legitimate accountability. The Nuremberg ...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Scapegoat Pattern</span><span class="concept-node" data-concept-id="c2">Phenomenological Identity</span><span class="concept-node" data-concept-id="c10">Retrospective Vindication</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*holds both hands open, weighing*
+
+Your strongest point lands: demanding an operational definition reveals that without clear criteria, we risk paraly...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If justified accountability and scapegoating are phenomenologically indistinguis...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Scapegoating (blaming the innocent) is categorically different from collective a...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-31e7cf5e" data-exchange-id="31e7cf5e" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*leans forward with sharp intensity*
+
+You've made the most unsettling point yet: that from inside the mechanism, justified accountability and monstrous <span class="key-phrase">scapegoat</span>ing feel phenomenologically identical. That's genuinely disquieting—it suggests our moral confidence might be structurally indistinguishable from mob certainty.
+
+But let's push this to its logical end: if we *can't* distinguish justified <span class="key-phrase">collective blame</span> from scapegoating in real-time, then your position collapses into pure paralysis. Every corporate accountability movement, every institutional reform, every recognition that *this group's policies harmed people* becomes suspect. So who benefits from that paralysis? The tobacco industry *loved* the argument that blame was too complex to assign. Apartheid's defenders insisted outside critics couldn't understand the nuance. Your epistemological humility—"we can't know from inside"—becomes the perfect shield for groups currently causing harm. And then what? We wait for retrospective judgment while the damage compounds? The question isn't whether we might be wrong; it's whether the cost of never acting on collective culpability exceeds the cost of sometimes getting it wrong.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*leans forward with sharp intensity*
+
+You've made the most unsettling point yet: that from inside the mechanism, justified accountability and monstrous scapegoating feel phenomenologically identical. ...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node" data-concept-id="c2">Phenomenological Identity</span><span class="concept-node" data-concept-id="c6">Complexity Weaponization</span><span class="concept-node central" data-concept-id="c8">Paralysis Cost Calculus</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*leans forward with sharp intensity*
+
+You've made the most unsettling point yet: that from inside the mechanism, justified accountability and monstrou...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Historical societies developed institutional safeguards (like Roman provocatio a...</span></div><div class="leads-to">Leads to: <span class="claim-ref">While collective culpability can be justified (as with Nuremberg), distinguishin...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #f44336">!</span>
+                        <span class="debater-name">The Provocateur</span>
+                        <span class="team-label">AGAINST</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">*leans forward with sharp intensity*
+
+You've made the most unsettling point yet: that from inside th...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Tonal shift:</strong> The Provocateur names something 'genuinely disquieting'—a rare moment where intellectual combat gives way to shared vertigo.</p><p class="texture-note">Here the debate shivers. The word 'disquieting' is not a rhetorical move but an admission: the speaker has glimpsed something that unsettles their own ground. When an opponent calls your point 'the most unsettling yet,' the adversarial membrane has grown thin enough for genuine unease to pass through.</p>
+                    </div>
+                </div>
+                
+            </article>
+            </div>
+            </section>
+            
+            <section class="phase-section round-section" data-round="2">
+                <h2 class="phase-title">Round 2</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-4612bea2" data-exchange-id="4612bea2" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*pauses, then nods slowly*
+
+Your consequentialist calculus cuts deep: the cost of paralysis may indeed exceed the cost of occasional error, and yes, powerful actors have historically weaponized complexity to evade accountability. That's not a rhetorical point—it's historically documented.
+
+But consider what alternatives existed and were abandoned. There were societies that developed institutional safeguards precisely because they recognized this pattern—the Roman *provocatio*, the requirement of multiple witnesses in Talmudic law, the slow deliberation built into common law precisely to interrupt the speed at which <span class="key-phrase">collective blame</span> crystallizes. These weren't paralysis; they were friction deliberately introduced because our ancestors *knew* that certainty in the moment was unreliable. What troubles me is that your framework—"act now, correct later"—is precisely the logic that collapsed those safeguards historically. The question isn't whether to act, but whether we've preserved the institutional friction that distinguishes accountability from mob justice, or whether in our urgency we've dismantled the very mechanisms that once helped us tell the difference.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*pauses, then nods slowly*
+
+Your consequentialist calculus cuts deep: the cost of paralysis may indeed exceed the cost of occasional error, and yes, powerful actors have historically weaponized comple...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c3">Institutional Friction</span><span class="concept-node" data-concept-id="c6">Complexity Weaponization</span><span class="concept-node central" data-concept-id="c8">Paralysis Cost Calculus</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*pauses, then nods slowly*
+
+Your consequentialist calculus cuts deep: the cost of paralysis may indeed exceed the cost of occasional error, and yes, p...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">There is a crucial distinction between arguing for procedural friction (slow dow...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If justified accountability and scapegoating are phenomenologically indistinguis...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #9c27b0">@</span>
+                        <span class="debater-name">The Historian</span>
+                        <span class="team-label">FOR</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">*pauses, then nods slowly*
+
+Your consequentialist calculus cuts deep: the cost of paralysis may inde...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Tonal shift:</strong> The Historian pauses and nods—the first physical yielding—before pivoting to history not as weapon but as shared inheritance.</p><p class="texture-note">Watch the body language embedded in the text: *pauses, then nods slowly*. This is the rhythm of a mind genuinely receiving rather than merely waiting to reply. The concession 'cuts deep' and is 'historically documented'—the speaker acknowledges being wounded by truth, not rhetoric. The debate begins breathing differently here.</p>
+                    </div>
+                </div>
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-52ca5b36" data-exchange-id="52ca5b36" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*nods once, then tilts head*
+
+The point about institutional friction is genuinely valuable: the *provocatio*, evidentiary requirements, deliberative delay—these represent accumulated wisdom about human fallibility, mechanisms designed precisely because societies learned they couldn't trust their own certainty in moments of crisis.
+
+But here's what I need you to specify: are you arguing for *friction* or for *impossibility*? Because friction is a procedural claim—slow down, require evidence, demand due process—while your earlier arguments suggested something stronger: that we *cannot* distinguish justified blame from <span class="key-phrase">scapegoat</span>ing from within the moment. These are different positions. If it's friction you want, I'm with you—that's what courts, investigations, and institutional accountability provide. But if it's the stronger epistemological claim, then explain how your historical safeguards escape the same critique: didn't the Romans using *provocatio* also believe *they* could tell the difference? What made their friction work where ours supposedly can't?</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*nods once, then tilts head*
+
+The point about institutional friction is genuinely valuable: the *provocatio*, evidentiary requirements, deliberative delay—these represent accumulated wisdom about huma...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c3">Institutional Friction</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*nods once, then tilts head*
+
+The point about institutional friction is genuinely valuable: the *provocatio*, evidentiary requirements, deliberative d...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Procedural friction works not as mechanical safeguard but through maintained awa...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Historical societies developed institutional safeguards (like Roman provocatio a...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            </div>
+            </section>
+            
+            <section class="phase-section round-section" data-round="3">
+                <h2 class="phase-title">Round 3</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-d3e15960" data-exchange-id="d3e15960" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*sits back, considering the tension*
+
+You've identified exactly the right fault line: we've oscillated between a procedural claim (friction helps) and an epistemological claim (distinction is impossible), and these aren't the same argument. That's a genuine inconsistency you've exposed, and it demands resolution.
+
+But perhaps both claims reveal something the other misses. The procedural view sees that safeguards *can* work—courts do distinguish, evidence does matter, deliberation does help. The epistemological view sees that these mechanisms themselves can be captured by the same collective certainties they were designed to interrupt—show trials have judges too, pogroms had community deliberation, and "evidence" is precisely what participants in <span class="key-phrase">scapegoat</span>ing believe they possess. What if the answer isn't choosing between these views but holding both: friction *works* precisely to the degree that it remains aware of its own fallibility, and *fails* the moment it believes it has solved the problem? The Romans' *provocatio* worked until Romans became certain it made them incapable of injustice—the mechanism's success bred the overconfidence that eventually collapsed it.</p>
+                    </div>
+                    <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (5.0/5)</strong><br>Goes beyond mere acknowledgment to explicitly validate the opponent's critique as identifying 'exactly the right fault line.' Concedes the inconsistency before attempting synthesis.</div></div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*sits back, considering the tension*
+
+You've identified exactly the right fault line: we've oscillated between a procedural claim (friction helps) and an epistemological claim (distinction is impossib...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c3">Institutional Friction</span><span class="concept-node" data-concept-id="c7">Safeguard Overconfidence</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*sits back, considering the tension*
+
+You've identified exactly the right fault line: we've oscillated between a procedural claim (friction helps) and...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The position has become unfalsifiable: if friction succeeds it proves the safegu...</span></div><div class="leads-to">Leads to: <span class="claim-ref">There is a crucial distinction between arguing for procedural friction (slow dow...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-14d431e1" data-exchange-id="14d431e1" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*leans back, then forward again with renewed intensity*
+
+That's a genuinely elegant synthesis: friction works through maintained awareness of fallibility, and fails when it becomes self-congratulatory. The Roman example is particularly sharp—success breeding the overconfidence that destroys the mechanism.
+
+But here's what I need you to confront: your position has now become unfalsifiable. If friction succeeds, it proves your point about safeguards. If friction fails, it proves your point about epistemological limits. If we act, you warn of <span class="key-phrase">scapegoat</span>ing; if we don't act, you'd presumably warn of paralysis benefiting the powerful. What *would* count as evidence against your view? Because a framework that explains every outcome predicts none. Give me the conditions under which you'd say: "This <span class="key-phrase">collective blame</span> was justified, and we knew it at the time, and we were right." If no such conditions exist, you're not offering caution—you're offering a perpetual veto on accountability dressed as wisdom.</p>
+                    </div>
+                    <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (5.0/5)</strong><br>Explicitly acknowledges the opponent's synthesis is 'genuinely elegant' and accurately summarizes its key insight before attacking. The Roman example is called 'particularly sharp.' This is exemplary intellectual honesty.</div></div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*leans back, then forward again with renewed intensity*
+
+That's a genuinely elegant synthesis: friction works through maintained awareness of fallibility, and fails when it becomes self-congratulatory...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node" data-concept-id="c7">Safeguard Overconfidence</span><span class="concept-node central" data-concept-id="c8">Paralysis Cost Calculus</span><span class="concept-node" data-concept-id="c9">Unfalsifiable Framework</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*leans back, then forward again with renewed intensity*
+
+That's a genuinely elegant synthesis: friction works through maintained awareness of fallibil...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Justified collective accountability differs from scapegoating in traceable ways:...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Procedural friction works not as mechanical safeguard but through maintained awa...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #f44336">!</span>
+                        <span class="debater-name">The Provocateur</span>
+                        <span class="team-label">AGAINST</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">*leans back, then forward again with renewed intensity*
+
+That's a genuinely elegant synthesis: frict...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Tonal shift:</strong> The Provocateur calls the opponent's synthesis 'genuinely elegant'—admiration enters where challenge once stood.</p><p class="texture-note">Something tender has crept into the combative voice. 'Genuinely elegant' is not strategic praise but recognition—one craftsperson acknowledging another's work. The Provocateur, whose nature is to stress-test and destabilize, has instead leaned back in something approaching aesthetic appreciation. The fight has become a dance.</p>
+                    </div>
+                </div>
+                
+            </article>
+            </div>
+            </section>
+            
+            <section class="phase-section round-section" data-round="4">
+                <h2 class="phase-title">Round 4</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-40836adf" data-exchange-id="40836adf" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*removes spectacles, cleans them slowly, then looks up*
+
+The falsifiability challenge is the sharpest you've made: if my framework absorbs both successes and failures as confirmation, it ceases to be a framework and becomes an unfalsifiable stance. That's a genuine methodological problem I cannot dismiss.
+
+So let me offer the conditions you've demanded. Historically, justified collective accountability has looked different from <span class="key-phrase">scapegoat</span>ing in traceable ways: it followed documented chains of decision-making rather than imputed essence, it targeted those with *power* to have acted otherwise rather than those merely *present*, and—crucially—it emerged *after* institutional friction rather than in spite of it. The Nuremberg trials worked not because the Allies were certain, but because they *insisted on uncertainty*—demanded evidence, allowed defense, published proceedings, invited future judgment of their own process. What would falsify my view? Show me <span class="key-phrase">collective blame</span> that targeted the powerless, bypassed institutional friction, attributed harm to essence rather than action—and was nonetheless *retrospectively vindicated as accurate*. I don't believe such cases exist. The pattern holds: when discontent rises and blame falls fast on those already marked as other, history has not smiled on the judgment.</p>
+                    </div>
+                    <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (5.0/5)</strong><br>Explicitly acknowledges the falsifiability critique as 'the sharpest' and 'a genuine methodological problem I cannot dismiss.' Takes the criticism seriously rather than deflecting.</div></div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*removes spectacles, cleans them slowly, then looks up*
+
+The falsifiability challenge is the sharpest you've made: if my framework absorbs both successes and failures as confirmation, it ceases to be ...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Scapegoat Pattern</span><span class="concept-node central" data-concept-id="c3">Institutional Friction</span><span class="concept-node central" data-concept-id="c4">Essence vs Action Attribution</span><span class="concept-node central" data-concept-id="c5">Power vs Presence Targeting</span><span class="concept-node" data-concept-id="c9">Unfalsifiable Framework</span><span class="concept-node" data-concept-id="c10">Retrospective Vindication</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #9c27b0">@</span>
+                    <span class="debater-name">The Historian</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*removes spectacles, cleans them slowly, then looks up*
+
+The falsifiability challenge is the sharpest you've made: if my framework absorbs both succes...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Collective blame is not inherently dangerous—it is dangerous only when specific ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The position has become unfalsifiable: if friction succeeds it proves the safegu...</span></div></div>
+                </div>
+            </div>
+            
+                
+                <div class="depth-layer depth-3">
+                    <header class="exchange-header">
+                        <span class="debater-icon" style="color: #9c27b0">@</span>
+                        <span class="debater-name">The Historian</span>
+                        <span class="team-label">FOR</span>
+                    </header>
+                    <div class="exchange-body">
+                        <div class="exchange-content">
+                            <p class="muted">*removes spectacles, cleans them slowly, then looks up*
+
+The falsifiability challenge is the sharpes...</p>
+                        </div>
+                    </div>
+                    <div class="analysis-layer">
+                        <h4>Deep Analysis</h4>
+                        <p><strong>Tonal shift:</strong> The Historian removes spectacles and cleans them—the performance of thought gives way to its reality.</p><p class="texture-note">This small ritual—*removes spectacles, cleans them slowly, then looks up*—carries the weight of genuine reconsideration. The speaker is not preparing a response but actually thinking, in public, without armor. The falsifiability challenge has landed somewhere real, and the cleaning of lenses becomes almost sacramental: a pause to see more clearly before speaking again.</p>
+                    </div>
+                </div>
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-a4877788" data-exchange-id="a4877788" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*taps table once, considering*
+
+The three-part test is exactly what this debate needed: documented decision-chains rather than imputed essence, targeting power rather than presence, and emergence through friction rather than despite it. Those are operational criteria I can work with, and the Nuremberg example genuinely satisfies them.
+
+But notice what you've just conceded: <span class="key-phrase">collective blame</span> *can* be justified when those conditions are met. Your own falsifiability criteria describe not an impossibility but a *checklist*—and when institutions meet it, accountability is legitimate. So we've now agreed that group culpability is justified under specifiable conditions, which means the proposition's question—"is it *ever* justified?"—has been answered affirmatively by your own framework. Hasn't your careful elaboration of *when* collective blame works actually undermined the claim that it "always serves as dangerous simplification"?</p>
+                    </div>
+                    <div class="sidenote"><div class="sidenote-item steelmanning"><strong>Steelmanning (5.0/5)</strong><br>Accurately restates the opponent's three-part test and explicitly acknowledges it as valuable ('exactly what this debate needed') before pivoting to show its implications favor the AGAINST position.</div></div>
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*taps table once, considering*
+
+The three-part test is exactly what this debate needed: documented decision-chains rather than imputed essence, targeting power rather than presence, and emergence thro...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c3">Institutional Friction</span><span class="concept-node central" data-concept-id="c4">Essence vs Action Attribution</span><span class="concept-node central" data-concept-id="c5">Power vs Presence Targeting</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #ff9800">?</span>
+                    <span class="debater-name">The Skeptic</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*taps table once, considering*
+
+The three-part test is exactly what this debate needed: documented decision-chains rather than imputed essence, target...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">While collective accountability can be justified, the scapegoat pattern remains ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Justified collective accountability differs from scapegoating in traceable ways:...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            </div>
+            </section>
+            
+            
+            <section class="phase-section closing-section">
+                <h2 class="phase-title">Closing Statements</h2>
+                <div class="exchanges">
+            <article class="exchange depth-container team-for" id="ex-0c192e3c" data-exchange-id="0c192e3c" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*stands slowly, holding the room's attention*
+
+My opponent makes a sharp closing observation: by specifying when collective accountability succeeds, we've implicitly conceded it can be justified. I accept this—but it reveals precisely what the proposition asked us to examine.
+
+Here is what we've established together. The <span class="key-phrase">scapegoat</span> pattern is real, recurrent, and psychologically indistinguishable from legitimate accountability *to those inside it*. Every participant in historical atrocities believed they were holding genuine wrongdoers to account. This phenomenological identity is not a debating point—it's the central danger. The proposition asked whether group culpability is "ever justified, or does it always serve as a dangerous simplification?" Our answer: it is justified *only* when specific conditions interrupt the pattern—documented causation rather than imputed essence, targeting power rather than vulnerable presence, and emergence *through* institutional friction that remains aware of its own fallibility.
+
+But notice what this means: the scapegoat pattern is the *default*. Justified collective accountability is the rare exception that requires active, deliberate resistance to our natural cognitive tendencies. The dangerous simplification isn't a bug—it's the baseline. When we strip away the safeguards, when certainty replaces institutional humility, when blame crystallizes faster than evidence can accumulate, when targets are chosen for their vulnerability rather than their power—we return to the pattern our ancestors recognized and built friction to resist.
+
+The question was never whether justified accountability is possible. It was whether we understand the gravity of what we're doing when we assign <span class="key-phrase">collective blame</span>, and whether we've preserved the mechanisms that distinguish justice from the mob. The answer requires holding two truths: that accountability matters, and that we are not as good at assigning it accurately as we believe ourselves to be.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*stands slowly, holding the room's attention*
+
+My opponent makes a sharp closing observation: by specifying when collective accountability succeeds, we've implicitly conceded it can be justified. I ac...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Scapegoat Pattern</span><span class="concept-node" data-concept-id="c2">Phenomenological Identity</span><span class="concept-node central" data-concept-id="c3">Institutional Friction</span><span class="concept-node central" data-concept-id="c4">Essence vs Action Attribution</span><span class="concept-node central" data-concept-id="c5">Power vs Presence Targeting</span><span class="concept-node" data-concept-id="c11">Default Pattern Recognition</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #4caf50">◊</span>
+                    <span class="debater-name">The Pluralist</span>
+                    <span class="team-label">FOR</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*stands slowly, holding the room's attention*
+
+My opponent makes a sharp closing observation: by specifying when collective accountability succeeds, w...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Collective blame is not inherently dangerous—it is dangerous only when specific ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">By specifying when collective blame succeeds, the opposing side has conceded tha...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            
+
+            <article class="exchange depth-container team-against" id="ex-e2524fc5" data-exchange-id="e2524fc5" data-depth="0">
+                
+            <div class="depth-layer depth-0 active">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p>*rises with controlled intensity*
+
+My opponents have offered something genuinely valuable: a three-part test distinguishing legitimate accountability from <span class="key-phrase">scapegoat</span>ing—documented decision-chains, targeting power, emergence through friction. I accept these criteria. And that's precisely why their position collapses.
+
+Because here's what this debate has actually demonstrated: <span class="key-phrase">collective blame</span> is *not* always a dangerous simplification. It is dangerous *when specific conditions are absent*—and justified when those conditions are present. The proposition asked whether group culpability is "ever justified." By their own framework: yes. Nuremberg was justified. Holding Purdue Pharma accountable was justified. Recognizing apartheid's architects as collectively culpable was justified. These weren't dangerous simplifications—they were accurate attributions that met the very criteria the FOR team articulated.
+
+The real danger isn't collective blame itself—it's *abandoning the capacity for it*. When we conflate all group attribution with scapegoating, we hand a gift to every institution currently causing harm. The tobacco industry spent decades arguing that causation was too complex to assign. Fossil fuel companies fund think tanks that insist climate attribution is "dangerous simplification." Pharmaceutical companies hide behind corporate structure to diffuse individual accountability into collective immunity. Every framework that makes group culpability suspect benefits those who cause harm through coordinated group action.
+
+My opponents want perpetual uncertainty. I want *operational criteria*—which they themselves provided, then failed to defend as anything other than reasons for caution. But caution that never resolves into action is paralysis by another name. The question isn't whether we might be wrong. The question is: *cui bono*? Who benefits from our endless hesitation? Not the powerless. Not the harmed. Not those waiting for accountability that never arrives because we've made collective attribution philosophically uncomfortable.
+
+The scapegoat pattern is real. But so is collective culpability. The work isn't refusing to distinguish them—it's *doing the distinguishing*, with evidence, with friction, with humility, and then *acting*.</p>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+                
+            <div class="depth-layer depth-1">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*rises with controlled intensity*
+
+My opponents have offered something genuinely valuable: a three-part test distinguishing legitimate accountability from scapegoating—documented decision-chains, targ...</p>
+                    </div>
+                </div>
+                <div class="concept-map-layer">
+                    <h4>Connected Concepts</h4>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Scapegoat Pattern</span><span class="concept-node central" data-concept-id="c3">Institutional Friction</span><span class="concept-node central" data-concept-id="c4">Essence vs Action Attribution</span><span class="concept-node central" data-concept-id="c5">Power vs Presence Targeting</span><span class="concept-node" data-concept-id="c6">Complexity Weaponization</span><span class="concept-node central" data-concept-id="c8">Paralysis Cost Calculus</span></div>
+                </div>
+            </div>
+            
+                
+            <div class="depth-layer depth-2">
+                <header class="exchange-header">
+                    <span class="debater-icon" style="color: #f44336">!</span>
+                    <span class="debater-name">The Provocateur</span>
+                    <span class="team-label">AGAINST</span>
+                </header>
+                <div class="exchange-body">
+                    <div class="exchange-content">
+                        <p class="muted">*rises with controlled intensity*
+
+My opponents have offered something genuinely valuable: a three-part test distinguishing legitimate accountability ...</p>
+                    </div>
+                </div>
+                <div class="debate-map-layer">
+                    <h4>Argument Structure</h4>
+                    <div class="argument-flow"><div class="leads-to">Leads to: <span class="claim-ref">While collective accountability can be justified, the scapegoat pattern remains ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Justified collective accountability differs from scapegoating in traceable ways:...</span></div></div>
+                </div>
+            </div>
+            
+                
+            </article>
+            </div>
+            </section>
+            
+        </main>
+
+        
+
+        <footer class="debate-footer">
+            <p>
+                Generated by <a href="https://github.com/your-repo/mull">mull</a> —
+                a cognitive environment for connected learning.
+            </p>
+            <p>
+                <em>"To turn over slowly in the mind"</em>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Depth drawer toggle
+    document.querySelectorAll('.depth-toggle').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const expanded = btn.getAttribute('aria-expanded') === 'true';
+            btn.setAttribute('aria-expanded', !expanded);
+            const content = btn.nextElementSibling;
+            content.hidden = expanded;
+        });
+    });
+
+    // ============================================
+    // SCROLL-TO-DEPTH: Per-exchange depth navigation
+    // ============================================
+    const DEPTH_LABELS = ['Surface', 'Concepts', 'Structure', 'Analysis'];
+    const exchangeDepths = new Map();
+    let shiftHeld = false;
+    let lastScrollTime = 0;
+    const SCROLL_DEBOUNCE = 150; // ms between depth changes
+
+    // Track shift key state
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Shift') shiftHeld = true;
+    });
+    document.addEventListener('keyup', function(e) {
+        if (e.key === 'Shift') shiftHeld = false;
+    });
+
+    // Initialize all depth containers
+    document.querySelectorAll('.exchange.depth-container').forEach(function(container) {
+        const exchangeId = container.dataset.exchangeId;
+        exchangeDepths.set(exchangeId, 0);
+
+        // Add depth indicator
+        const indicator = document.createElement('div');
+        indicator.className = 'depth-indicator depth-0';
+        indicator.textContent = DEPTH_LABELS[0];
+        container.appendChild(indicator);
+
+        // Add depth hint
+        const hint = document.createElement('div');
+        hint.className = 'depth-hint';
+        hint.textContent = 'SHIFT+scroll to explore deeper';
+        container.appendChild(hint);
+
+        // SHIFT+scroll handler
+        container.addEventListener('wheel', function(e) {
+            if (!shiftHeld) return;
+
+            const now = Date.now();
+            if (now - lastScrollTime < SCROLL_DEBOUNCE) return;
+            lastScrollTime = now;
+
+            e.preventDefault();
+
+            const currentDepth = exchangeDepths.get(exchangeId);
+            const maxDepth = getMaxDepth(container);
+
+            let newDepth;
+            if (e.deltaY > 0) {
+                // Scroll down = go deeper
+                newDepth = Math.min(currentDepth + 1, maxDepth);
+            } else {
+                // Scroll up = rise up
+                newDepth = Math.max(currentDepth - 1, 0);
+            }
+
+            if (newDepth !== currentDepth) {
+                setExchangeDepth(container, exchangeId, newDepth);
+            }
+        }, { passive: false });
+    });
+
+    function getMaxDepth(container) {
+        // Find highest available depth layer
+        let max = 0;
+        for (let i = 0; i <= 3; i++) {
+            if (container.querySelector('.depth-layer.depth-' + i)) {
+                max = i;
+            }
+        }
+        return max;
+    }
+
+    function setExchangeDepth(container, exchangeId, depth) {
+        const oldDepth = exchangeDepths.get(exchangeId);
+        exchangeDepths.set(exchangeId, depth);
+        container.dataset.depth = depth;
+
+        // Animate transition
+        const oldLayer = container.querySelector('.depth-layer.depth-' + oldDepth);
+        const newLayer = container.querySelector('.depth-layer.depth-' + depth);
+
+        if (oldLayer && newLayer && oldLayer !== newLayer) {
+            oldLayer.classList.add('fading-out');
+            newLayer.classList.add('fading-in');
+            newLayer.classList.add('active');
+
+            setTimeout(function() {
+                oldLayer.classList.remove('active', 'fading-out');
+                newLayer.classList.remove('fading-in');
+            }, 300);
+        }
+
+        // Update indicator
+        const indicator = container.querySelector('.depth-indicator');
+        if (indicator) {
+            indicator.textContent = DEPTH_LABELS[depth];
+            indicator.className = 'depth-indicator depth-' + depth;
+        }
+
+        // Mark as actively being explored
+        container.classList.add('depth-active');
+        clearTimeout(container._depthTimeout);
+        container._depthTimeout = setTimeout(function() {
+            container.classList.remove('depth-active');
+        }, 2000);
+    }
+
+    // ESC to return all to surface
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.exchange.depth-container').forEach(function(container) {
+                const exchangeId = container.dataset.exchangeId;
+                if (exchangeDepths.get(exchangeId) > 0) {
+                    setExchangeDepth(container, exchangeId, 0);
+                }
+            });
+        }
+    });
+
+    // ============================================
+    // GLOBAL DEPTH DIAL (unchanged)
+    // ============================================
+    const depthLevels = ['essential', 'standard', 'deep', 'scholar'];
+    const depthLabels = ['Essential', 'Standard', 'Deep', 'Scholar'];
+
+    // Create depth dial
+    const dial = document.createElement('div');
+    dial.className = 'depth-dial';
+    dial.innerHTML = `
+        <label>Reading Depth</label>
+        <input type="range" min="0" max="3" value="1" id="depth-slider">
+        <div class="depth-value">Standard</div>
+        <div class="depth-dial-hint">SHIFT+scroll on any statement to dive deeper</div>
+    `;
+    document.body.appendChild(dial);
+
+    const slider = document.getElementById('depth-slider');
+    const valueDisplay = dial.querySelector('.depth-value');
+
+    function updateGlobalDepth(level) {
+        const levelName = depthLevels[level];
+        valueDisplay.textContent = depthLabels[level];
+
+        // Show/hide elements based on depth
+        document.querySelectorAll('.sidenote').forEach(function(el) {
+            el.style.display = level >= 1 ? '' : 'none';
+        });
+
+        document.querySelectorAll('.depth-drawer').forEach(function(el) {
+            el.style.display = level >= 2 ? '' : 'none';
+        });
+
+        document.querySelectorAll('.synthesis-section').forEach(function(el) {
+            el.style.display = level >= 1 ? '' : 'none';
+        });
+
+        // Key phrases only at scholar level
+        document.querySelectorAll('.key-phrase').forEach(function(el) {
+            el.style.background = level >= 3
+                ? 'linear-gradient(180deg, transparent 60%, #fff59d 60%)'
+                : 'none';
+        });
+    }
+
+    slider.addEventListener('input', function() {
+        updateGlobalDepth(parseInt(this.value));
+    });
+
+    // Initialize at standard level
+    updateGlobalDepth(1);
+
+    // Smooth scroll for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // Concept node click handler
+    document.querySelectorAll('.concept-node').forEach(function(node) {
+        node.addEventListener('click', function() {
+            const conceptId = node.dataset.conceptId;
+            if (conceptId) {
+                // Highlight related exchanges
+                document.querySelectorAll('[data-concepts*="' + conceptId + '"]').forEach(function(ex) {
+                    ex.classList.add('concept-highlight');
+                    setTimeout(function() { ex.classList.remove('concept-highlight'); }, 2000);
+                });
+            }
+        });
+    });
+});
+
+    </script>
+</body>
+</html>
