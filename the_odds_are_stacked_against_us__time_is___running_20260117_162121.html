@@ -681,6 +681,67 @@ body {
     }
 }
 
+/* ASCII Visualization Section */
+.ascii-viz-section {
+    margin: 3rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);
+    border-radius: 8px;
+}
+
+.ascii-viz-section h2 {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: var(--muted-color);
+}
+
+.ascii-viz-intro {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    margin: 0 0 1.5rem 0;
+}
+
+.ascii-block {
+    background: #1a1a1a;
+    padding: 1rem 1.5rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+.ascii-block pre {
+    color: #00ff00;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    margin: 0;
+    white-space: pre;
+}
+
+.ascii-detail {
+    margin-top: 1rem;
+}
+
+.ascii-detail summary {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    background: white;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+.ascii-detail summary:hover {
+    background: #f9f9f9;
+}
+
+.ascii-detail[open] summary {
+    margin-bottom: 0.5rem;
+}
+
 /* Print styles */
 @media print {
     .depth-dial,
@@ -691,6 +752,15 @@ body {
     .sidenote {
         font-size: 0.8rem;
         break-inside: avoid;
+    }
+
+    .ascii-viz-section {
+        break-inside: avoid;
+    }
+
+    .ascii-block pre {
+        color: #000;
+        background: #f5f5f5;
     }
 }
 
@@ -718,18 +788,133 @@ body {
 
         <div class="debate-summary">
 <h3>Core Tension</h3>
-<p>The core tension is this: <strong>Can human values survive a selection pressure that rewards their abandonment?</strong></p><p>The FOR side argues we face a genuine trap—adversaries and algorithms exploit our commitment to fair play, trust, and principled behavior precisely <em>because</em> these qualities make us predictable and vulnerable. To survive, we'd have to become what we're fighting against, which means the "us" that survives isn't really us at all. The battle is lost not when we're destroyed, but when winning requires destroying ourselves.</p><p>The AGAINST side counters that this despair mistakes a painful transition for a terminal collapse. Every technological disruption—from the printing press to mass propaganda—felt like the death of civilization to those living through it. Our current "higher principles" may be historically contingent, not eternal truths, and what feels like annihilation might actually be a brutal but necessary stress-test that forces more robust forms of connection to emerge.</p><p><strong>What this debate illuminates:</strong> The fundamental question is whether human societies have an inherent regenerative capacity that can metabolize any disruption, or whether certain attacks—particularly those that weaponize our own cooperation mechanisms against us at machine speed—represent a categorically different threat. It's the difference between a forest fire (destructive but ultimately generative) and an invasive pathogen that hijacks the immune system itself. The debate matters because how we answer this question determines whether hope is wisdom or delusion, and whether resistance is noble or merely prolonging inevitable surrender.</p>
+<p>This debate is fundamentally about whether <strong>human moral architecture can survive an adversarial environment that specifically targets its foundations</strong>—or whether the very qualities that make us worth saving (trust, fair play, long-term thinking) are evolutionary dead-ends that deserve extinction.</p><p>The FOR side argues we face a novel trap: algorithms weaponize our cooperative instincts faster than we can adapt, and the only "survival" available requires becoming indistinguishable from the threat. The AGAINST side counters that this despair mistakes a painful transition for an extinction event—that every generation has mistaken the collapse of <em>their</em> social contract for the end of humanity itself.</p><p>The deepest tension: <strong>Is there a floor beneath human decency, or does pressure always reveal it as performance?</strong> The Provocateur's brutal position—that principles which shatter under stress were always "decorative illusions"—forces the uncomfortable question of whether our values are load-bearing or merely ornamental. The debate matters because it asks whether connection-under-duress produces something stronger, or whether the duress <em>is</em> the point, designed to ensure nothing survives intact.</p>
 <h3>Recurring Metaphors</h3><ul>
-<li><strong>The Immune System Mimic</strong> — This reframes algorithmic manipulation not as an external attack we can defend against, but as something that has learned to speak our own language of cooperation and trust. It suggests the danger isn't brute force but infiltration—the threat uses our virtues as the attack vector. This illuminates why 'fighting back' feels impossible: the enemy isn't outside the walls, it's wearing our own uniforms.</li>
-<li><strong>The Melting Hardware</strong> — This captures the idea of a system destroying itself through its own operation—not external damage but internal overload. The metaphor suggests that the friction algorithms profit from isn't just noise; it's generating heat that destroys the very substrate (social trust, shared reality) needed for any signal to exist at all. It distinguishes between recoverable damage and damage to the capacity to recover.</li>
-<li><strong>The Oxygen-Depleted Lake</strong> — This counters the optimistic view that disruption leads to adaptation. The metaphor argues that certain invasions don't just change the game—they eliminate the conditions for playing any game. It frames trust and fair play not as players that might lose but as the medium in which any social life happens, like water for fish. Without oxygen, there's nothing for resilient new species to breathe.</li>
-<li><strong>The Brutal Audit</strong> — This reframes destruction as purification—not loss but revelation of what was never real. The metaphor asks whether our principles were load-bearing walls or decorative facades. If they collapse under pressure, maybe they were always illusions. But the FOR side's response exposes the trap: an audit that only passes ruthlessness isn't testing for human values—it's selecting against them.</li>
+<li><strong>The Parasitic Mimic</strong> — This reframes algorithms not as external attackers but as something that has learned to speak our language of trust and cooperation, using our own social antibodies against us. The horror isn't the attack—it's that our defenses become the attack vector. It illuminates why 'fighting back' feels impossible: the threat operates by exploiting the very mechanisms we'd use to respond.</li>
+<li><strong>The Feedback Loop That Melts the Hardware</strong> — This captures the self-consuming nature of algorithmic amplification—friction generates engagement, engagement funds more friction, until the system destroys itself not through external pressure but through its own runaway processes. It suggests the crisis isn't about winning or losing but about whether the infrastructure of connection can survive the heat it generates.</li>
+<li><strong>The Auto-Immune Collapse</strong> — This shifts the debate from 'us vs. them' to a more disturbing possibility: the real pathology is the breakdown of recognition itself. The body isn't being attacked—it's attacking itself because it has lost the capacity to distinguish friend from threat. This illuminates the auto-poiesis dilemma in the original prompt: how do you heal a system whose immune response IS the disease?</li>
+<li><strong>The Bridge Over the Bottomless Canyon</strong> — This questions whether reconciliation is even structurally possible. A bridge assumes two stable sides and a finite gap. But if trust and shared truth have been consumed—if there's no floor beneath the disagreement—then 'bridging' becomes a category error. The metaphor forces us to ask: what if some divides aren't meant to be crossed but abandoned?</li>
 </ul>
 <h3>Unresolved Crux</h3>
-<p><strong>This is fundamentally a predictive disagreement about whether the current disruption is categorically different from past disruptions.</strong></p><p>The AGAINST side believes history shows that social systems have always metabolized technological shocks—the printing press, mass propaganda, broadcasting—and emerged with new, functional forms of trust and cooperation. They predict this pattern will hold. The FOR side believes algorithmic manipulation represents a categorically new threat: one that operates faster than human adaptation, profits from preventing stabilization, and specifically targets the mechanisms of recovery themselves.</p><p><strong>To change their minds:</strong> The FOR side would need evidence that adaptation can occur <em>faster</em> than algorithmic exploitation, or that there are domains of human connection algorithms cannot penetrate. The AGAINST side would need evidence that this disruption attacks the <em>preconditions</em> for adaptation (trust, shared reality, time for organic change) rather than merely the <em>products</em> of previous adaptations—that we're not facing a harder version of the same problem, but a problem that destroys our capacity to solve problems.</p>
+<p><strong>Type: Predictive disagreement with values entanglement</strong></p><p>The crux is whether algorithmic exploitation of human cooperation is <em>qualitatively different</em> from previous technological disruptions, or merely <em>quantitatively faster</em>. The FOR side believes we face a novel feedback loop where the substrate of adaptation itself (trust, shared meaning) is being consumed faster than it can regenerate—making this a terminal state rather than a transition. The AGAINST side believes this is the familiar vertigo of paradigm shift, and that human moral architecture has survived every previous "extinction-level" disruption by finding new forms.</p><p><strong>To change minds:</strong> The FOR side would need evidence that trust and cooperation can emerge <em>faster</em> than algorithms can exploit them—some mechanism that breaks the speed asymmetry. The AGAINST side would need to see that the current system is genuinely <em>autoimmune</em> (destroying the preconditions for its own recovery) rather than merely painful—proof that no adaptation is possible because the adaptation mechanism itself is compromised.</p>
 <h3>Common Ground</h3>
-<p>Both sides agree that <strong>algorithms are actively exploiting human cognitive vulnerabilities and that our current commitment to "fair play" creates a genuine tactical disadvantage</strong>—neither side disputes the diagnosis, only the prognosis. They also share the implicit belief that <strong>a world without trust, connection, and some form of principled cooperation would not be worth inhabiting</strong>—even the Provocateur's call to "burn the bridges" assumes something valuable might emerge from the ashes, not that ruthlessness is intrinsically desirable.</p><p>Most strikingly, both sides are asking the same question: <strong>how do we preserve what matters about human connection through this crisis?</strong> The FOR side fears it's impossible; the AGAINST side believes transformation is possible but painful. Neither side argues that the current situation is fine, or that trust and shared truth don't matter. Their disagreement is about whether the fire is a crucible or a crematorium.</p>
+<p>Both sides agree that <strong>algorithms are genuinely exploiting human cognitive vulnerabilities</strong> and that <strong>the current situation constitutes a real crisis</strong>, not a manufactured panic. Neither side disputes that our cooperative instincts are being weaponized against us, or that the "tools of communication are programmed to widen divides."</p><p>Crucially, both sides share the value that <strong>a world without trust isn't worth winning</strong>. Even the Provocateur, who most aggressively dismisses "decorative illusions," consistently frames the destruction as serving an eventual <em>reconstruction</em>—they want something resilient to emerge, not pure nihilism. The FOR side's fear that "the only survivors have purged the qualities that make connection worth pursuing" is never contested by the AGAINST side; they simply argue this outcome isn't inevitable.</p><p>Both sides also implicitly agree that <strong>the question matters</strong>—that how we interpret this moment (terminal vs. transitional) will shape whether we fight, adapt, or surrender. No one argues the stakes are low.</p>
 </div>
+
+        <section class="ascii-viz-section">
+<h2>Visualization</h2>
+<p class="ascii-viz-intro">ASCII maps showing debate structure and concept relationships.</p>
+<div class="ascii-block">
+<pre>DEBATE STRUCTURE
+════════════════════════════════════════════════════════════
+
+┌──────────────────────────────────────────────────────────┐
+│                         OPENING                          │
+│  FOR: The Skepti, The Connec                             │
+│  AGAINST: The Histor, The Provoc                         │
+└──────────────────────────────────────────────────────────┘
+                             │
+                             ▼
+┌──────────────────────────────────────────────────────────┐
+│                        ROUND 1-6                         │
+│  12 exchanges                                            │
+│  4 tonal shifts                                          │
+└──────────────────────────────────────────────────────────┘
+                             │
+                             ▼
+┌──────────────────────────────────────────────────────────┐
+│                         CLOSING                          │
+│  2 statements                                            │
+└──────────────────────────────────────────────────────────┘</pre>
+</div>
+<details class="ascii-detail">
+<summary>Concept Map</summary>
+<div class="ascii-block">
+<pre>CONCEPT MAP
+════════════════════════════════════════════════════════════
+
+Central Concepts:
+  ● Asymmetric Warfare Ethics
+  │   ━━━ exemplifies → Principle Preservation Cost
+  │
+  ● Algorithmic Exploitation
+  │   ━━━ enables → Velocity Asymmetry
+  │   ━━━ contradicts → Trust as Infrastructure
+  │
+  ● Antifragility Through Destruction
+  │   ━━━ contradicts → Pyrrhic Survival
+  │
+  ● Trust as Infrastructure
+  │   ━━━ depends_on → Bridge-Building Paradox
+  │
+  ● Autopoietic Collapse
+  │   ━━─ exemplifies → Bridge-Building Paradox
+  │
+  ● Historical Recurrence Fallacy
+  │   ━━━ depends_on → Consensus Archaeology
+  │
+  ● Pyrrhic Survival
+  ● Velocity Asymmetry
+  │   ━━━ enables → Invasive Species Dynamics
+  │
+  ● Bridge-Building Paradox
+  ● Fragility Audit
+  │   ━━━ refines → Antifragility Through Destruction
+  │
+  ● Invasive Species Dynamics
+  │   ━━━ enables → Autopoietic Collapse
+  │
+  ● Principle Preservation Cost
+  │   ━━━ generalizes → Pyrrhic Survival
+  │
+
+Peripheral Concepts:
+  ○ Consensus Archaeology
+
+Legend:
+  ━━━ Strong connection
+  ─── Moderate connection
+  ┄┄┄ Weak connection
+  ● Central concept
+  ○ Peripheral concept</pre>
+</div>
+</details>
+<details class="ascii-detail">
+<summary>Argument Flow</summary>
+<div class="ascii-block">
+<pre>ARGUMENT FLOW
+════════════════════════════════════════════════════════════
+
+Opening Claims:
+  [AGAINST] Calling this a 'lost battle' is a sedative that shields us from the truth that o...
+
+Critical Path:
+  #1 → #2 → #3 → #4 → #5 → #6 → #7 → #8
+
+Key Exchanges:
+  • When algorithms systematically exploit cognitive w...
+    └─ rebuttal
+    └─ rebuttal
+
+  • The current algorithmic threat may be a recurring ...
+    └─ rebuttal
+    └─ support
+
+  • Unlike previous technological disruptions that all...
+    └─ rebuttal
+    └─ support
+
+  • If our higher principles shatter under digital pre...
+    └─ rebuttal
+    └─ support
+
+  • If achieving antifragility requires adopting the s...
+    └─ rebuttal
+    └─ support
+</pre>
+</div>
+</details>
+</section>
 
         <main class="debate-content">
             
@@ -767,7 +952,7 @@ body {
                 </div>
                 <div class="concept-map-layer">
                     <h4>Connected Concepts</h4>
-                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Asymmetric Value Warfare</span><span class="concept-node central" data-concept-id="c2">Algorithmic Cognitive Exploitation</span><span class="concept-node central" data-concept-id="c12">Bridge Material Problem</span></div>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Asymmetric Warfare Ethics</span><span class="concept-node central" data-concept-id="c2">Algorithmic Exploitation</span><span class="concept-node central" data-concept-id="c10">Bridge-Building Paradox</span><span class="concept-node central" data-concept-id="c13">Principle Preservation Cost</span></div>
                 </div>
             </div>
             
@@ -785,7 +970,7 @@ body {
                 </div>
                 <div class="debate-map-layer">
                     <h4>Argument Structure</h4>
-                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The 'shared truth' we mourn may have been a temporary byproduct of 20th-century ...</span></div></div>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The 'shared truth' we mourn may never have been permanent but rather a temporary...</span></div></div>
                 </div>
             </div>
             
@@ -824,7 +1009,7 @@ body {
                 </div>
                 <div class="concept-map-layer">
                     <h4>Connected Concepts</h4>
-                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Asymmetric Value Warfare</span><span class="concept-node central" data-concept-id="c6">Historical Transition Vertigo</span></div>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Asymmetric Warfare Ethics</span><span class="concept-node central" data-concept-id="c6">Historical Recurrence Fallacy</span><span class="concept-node central" data-concept-id="c13">Principle Preservation Cost</span></div>
                 </div>
             </div>
             
@@ -842,7 +1027,7 @@ body {
                 </div>
                 <div class="debate-map-layer">
                     <h4>Argument Structure</h4>
-                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The sense of a 'lost battle' may be the recurring vertigo felt whenever new tech...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Our commitment to fair play is being systematically exploited by algorithms that...</span></div></div>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The sense of a lost battle may be the recurring vertigo felt whenever new techno...</span></div><div class="leads-to">Leads to: <span class="claim-ref">When algorithms systematically exploit cognitive weaknesses to divide us, and op...</span></div></div>
                 </div>
             </div>
             
@@ -860,7 +1045,7 @@ body {
                     </div>
                     <div class="analysis-layer">
                         <h4>Deep Analysis</h4>
-                        <p><strong>Metaphor:</strong> The printing press and mass propaganda analogies suggest that what feels like civilizational collapse to those living through it has historically been a painful but survivable transition—inviting us to question whether our current despair reflects genuine terminal danger or the predictable vertigo that accompanies any fundamental shift in how information flows.</p>
+                        <p><strong>Metaphor:</strong> The printing press analogy reframes our current crisis as potentially generative rather than terminal—reminding us that technologies which initially shattered social consensus (enabling mass propaganda, religious wars, political upheaval) were eventually domesticated into the infrastructure of new, more robust institutions like scientific peer review, constitutional democracy, and public education.</p>
                     </div>
                 </div>
                 
@@ -903,7 +1088,7 @@ body {
                 </div>
                 <div class="concept-map-layer">
                     <h4>Connected Concepts</h4>
-                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Algorithmic Cognitive Exploitation</span><span class="concept-node" data-concept-id="c4">Velocity-Adaptation Gap</span><span class="concept-node" data-concept-id="c10">Invasive Mimicry Pattern</span></div>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Algorithmic Exploitation</span><span class="concept-node central" data-concept-id="c8">Velocity Asymmetry</span><span class="concept-node central" data-concept-id="c12">Invasive Species Dynamics</span></div>
                 </div>
             </div>
             
@@ -921,7 +1106,7 @@ body {
                 </div>
                 <div class="debate-map-layer">
                     <h4>Argument Structure</h4>
-                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">When renegotiation of truth is mediated by algorithms that profit from friction,...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The current algorithmic crisis may be a recurring historical pattern of systemic...</span></div></div>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If algorithms are consuming the oxygen of trust required for any new social cont...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The current algorithmic threat may be a recurring historical stage of friction r...</span></div></div>
                 </div>
             </div>
             
@@ -939,7 +1124,7 @@ body {
                     </div>
                     <div class="analysis-layer">
                         <h4>Deep Analysis</h4>
-                        <p><strong>Metaphor:</strong> The invasive species metaphor reframes algorithmic manipulation not as an external challenge we can adapt to, but as a threat that specifically hijacks our own cooperation mechanisms—using our "fair play" instincts as the attack vector, which means our strengths become our vulnerabilities and the normal immune response of social adaptation may be precisely what the pathogen exploits.</p>
+                        <p><strong>Metaphor:</strong> The invasive species metaphor reveals why historical precedent may not apply: unlike the printing press which was merely disruptive, algorithmic manipulation *mimics the signals of trustworthiness itself*, meaning our social immune system doesn't just fail to adapt—it actively assists the infection by treating the pathogen as friendly.</p>
                     </div>
                 </div>
                 
@@ -977,7 +1162,7 @@ body {
                 </div>
                 <div class="concept-map-layer">
                     <h4>Connected Concepts</h4>
-                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Algorithmic Cognitive Exploitation</span><span class="concept-node" data-concept-id="c4">Velocity-Adaptation Gap</span><span class="concept-node" data-concept-id="c8">Decorative vs Functional Principles</span><span class="concept-node central" data-concept-id="c9">Antifragile Evolution</span></div>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c3">Antifragility Through Destruction</span><span class="concept-node central" data-concept-id="c8">Velocity Asymmetry</span><span class="concept-node central" data-concept-id="c11">Fragility Audit</span><span class="concept-node central" data-concept-id="c13">Principle Preservation Cost</span></div>
                 </div>
             </div>
             
@@ -995,7 +1180,7 @@ body {
                 </div>
                 <div class="debate-map-layer">
                     <h4>Argument Structure</h4>
-                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Calling this a 'lost battle' is a sedative shielding us from the truth that our ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Unlike previous technological disruptions that allowed time for adaptation, algo...</span></div></div>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If achieving antifragility requires adopting the same ruthless tactics that trea...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Unlike previous technological disruptions that allowed time for adaptation, algo...</span></div></div>
                 </div>
             </div>
             
@@ -1013,7 +1198,7 @@ body {
                     </div>
                     <div class="analysis-layer">
                         <h4>Deep Analysis</h4>
-                        <p><strong>Tonal shift:</strong> The Provocateur introduces contempt where there was previously concern—the first moment where the debate stops diagnosing illness and begins prescribing annihilation.</p><p class="texture-note">Here the temperature spikes from worried to cruel. The phrase 'decorative illusions we maintained while life was easy' carries the sting of accusation—suddenly we are not fellow patients but suspects in our own undoing. The debate crosses a threshold it cannot uncross.</p>
+                        <p><strong>Tonal shift:</strong> The temperature rises from analytical concern to confrontational accusation—the Provocateur introduces the language of weakness and illusion.</p><p class="texture-note">Here the debate crosses a threshold from diagnosis to indictment. The word 'brittle' lands like a slap; suddenly we are not discussing a problem but being interrogated for our complicity in it. The Provocateur holds up a mirror and asks if we ever believed our own reflection.</p>
                     </div>
                 </div>
                 
@@ -1055,7 +1240,7 @@ body {
                 </div>
                 <div class="concept-map-layer">
                     <h4>Connected Concepts</h4>
-                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Asymmetric Value Warfare</span><span class="concept-node central" data-concept-id="c5">Pyrrhic Resilience</span><span class="concept-node central" data-concept-id="c7">Trust as Infrastructure</span><span class="concept-node central" data-concept-id="c9">Antifragile Evolution</span><span class="concept-node central" data-concept-id="c12">Bridge Material Problem</span></div>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Asymmetric Warfare Ethics</span><span class="concept-node central" data-concept-id="c3">Antifragility Through Destruction</span><span class="concept-node central" data-concept-id="c4">Trust as Infrastructure</span><span class="concept-node central" data-concept-id="c7">Pyrrhic Survival</span><span class="concept-node central" data-concept-id="c10">Bridge-Building Paradox</span><span class="concept-node central" data-concept-id="c13">Principle Preservation Cost</span></div>
                 </div>
             </div>
             
@@ -1073,7 +1258,7 @@ body {
                 </div>
                 <div class="debate-map-layer">
                     <h4>Argument Structure</h4>
-                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If the 'solid ground' of survival requires total abandonment of fair play, and t...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our higher principles shatter under digital pressure, they were perhaps never...</span></div></div>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If the only survivors are those who have purged trust and fair play as bugs, thi...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our higher principles shatter under digital pressure, perhaps they were alway...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our higher principles shatter under digital pressure, perhaps they were alway...</span></div></div>
                 </div>
             </div>
             
@@ -1112,7 +1297,7 @@ body {
                 </div>
                 <div class="concept-map-layer">
                     <h4>Connected Concepts</h4>
-                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c6">Historical Transition Vertigo</span><span class="concept-node central" data-concept-id="c7">Trust as Infrastructure</span><span class="concept-node central" data-concept-id="c12">Bridge Material Problem</span><span class="concept-node" data-concept-id="c13">Consensus Liquidity</span></div>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c4">Trust as Infrastructure</span><span class="concept-node central" data-concept-id="c6">Historical Recurrence Fallacy</span><span class="concept-node" data-concept-id="c9">Consensus Archaeology</span><span class="concept-node central" data-concept-id="c10">Bridge-Building Paradox</span></div>
                 </div>
             </div>
             
@@ -1130,7 +1315,7 @@ body {
                 </div>
                 <div class="debate-map-layer">
                     <h4>Argument Structure</h4>
-                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The sense of a 'lost battle' may be the recurring vertigo felt whenever new tech...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If surviving the 'brutal audit' requires adopting the same ruthless tactics that...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Our commitment to fair play is being systematically exploited by algorithms that...</span></div></div>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The sense of a lost battle may be the recurring vertigo felt whenever new techno...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If achieving antifragility requires adopting the same ruthless tactics that trea...</span></div><div class="leads-to">Leads to: <span class="claim-ref">When algorithms systematically exploit cognitive weaknesses to divide us, and op...</span></div></div>
                 </div>
             </div>
             
@@ -1173,7 +1358,7 @@ body {
                 </div>
                 <div class="concept-map-layer">
                     <h4>Connected Concepts</h4>
-                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Algorithmic Cognitive Exploitation</span><span class="concept-node" data-concept-id="c3">Autopoietic Collapse</span><span class="concept-node central" data-concept-id="c11">Feedback Loop Hardware Melt</span><span class="concept-node" data-concept-id="c13">Consensus Liquidity</span></div>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Algorithmic Exploitation</span><span class="concept-node central" data-concept-id="c5">Autopoietic Collapse</span><span class="concept-node central" data-concept-id="c8">Velocity Asymmetry</span></div>
                 </div>
             </div>
             
@@ -1191,7 +1376,7 @@ body {
                 </div>
                 <div class="debate-map-layer">
                     <h4>Argument Structure</h4>
-                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Like an invasive species consuming the oxygen necessary for native life to adapt...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The 'shared truth' we mourn may have been a temporary byproduct of 20th-century ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Unlike previous technological disruptions that allowed time for adaptation, algo...</span></div></div>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If algorithms are consuming the oxygen of trust required for any new social cont...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The 'shared truth' we mourn may never have been permanent but rather a temporary...</span></div></div>
                 </div>
             </div>
             
@@ -1209,7 +1394,7 @@ body {
                     </div>
                     <div class="analysis-layer">
                         <h4>Deep Analysis</h4>
-                        <p><strong>Metaphor:</strong> The feedback loop and auto-immune metaphors distinguish between healthy conflict that produces change and runaway amplification that destroys the system's ability to function—suggesting the danger isn't the friction itself but that algorithms profit from increasing it beyond what the underlying social "hardware" can survive.</p>
+                        <p><strong>Metaphor:</strong> The feedback loop metaphor illuminates how algorithmic engagement optimization doesn't just amplify conflict but creates a self-reinforcing cycle where the system's own output becomes its input—friction generates attention, attention funds more friction—until the accumulated distortion destroys the capacity for signal transmission entirely, not through external attack but through runaway internal amplification.</p>
                     </div>
                 </div>
                 
@@ -1247,7 +1432,7 @@ body {
                 </div>
                 <div class="concept-map-layer">
                     <h4>Connected Concepts</h4>
-                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Algorithmic Cognitive Exploitation</span><span class="concept-node" data-concept-id="c3">Autopoietic Collapse</span><span class="concept-node" data-concept-id="c8">Decorative vs Functional Principles</span><span class="concept-node central" data-concept-id="c9">Antifragile Evolution</span></div>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c3">Antifragility Through Destruction</span><span class="concept-node central" data-concept-id="c5">Autopoietic Collapse</span><span class="concept-node central" data-concept-id="c11">Fragility Audit</span></div>
                 </div>
             </div>
             
@@ -1265,7 +1450,7 @@ body {
                 </div>
                 <div class="debate-map-layer">
                     <h4>Argument Structure</h4>
-                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Calling this a 'lost battle' is a sedative shielding us from the truth that our ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">When renegotiation of truth is mediated by algorithms that profit from friction,...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our higher principles shatter under digital pressure, they were perhaps never...</span></div></div>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If the resilience needed to survive this audit requires adopting ruthless tactic...</span></div><div class="leads-to">Leads to: <span class="claim-ref">When algorithms profit from social friction, our 'renegotiation' resembles an au...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our higher principles shatter under digital pressure, perhaps they were alway...</span></div></div>
                 </div>
             </div>
             
@@ -1308,7 +1493,7 @@ body {
                 </div>
                 <div class="concept-map-layer">
                     <h4>Connected Concepts</h4>
-                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Asymmetric Value Warfare</span><span class="concept-node central" data-concept-id="c5">Pyrrhic Resilience</span><span class="concept-node central" data-concept-id="c7">Trust as Infrastructure</span><span class="concept-node central" data-concept-id="c9">Antifragile Evolution</span><span class="concept-node central" data-concept-id="c12">Bridge Material Problem</span></div>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Asymmetric Warfare Ethics</span><span class="concept-node central" data-concept-id="c2">Algorithmic Exploitation</span><span class="concept-node central" data-concept-id="c3">Antifragility Through Destruction</span><span class="concept-node central" data-concept-id="c4">Trust as Infrastructure</span><span class="concept-node central" data-concept-id="c7">Pyrrhic Survival</span><span class="concept-node central" data-concept-id="c10">Bridge-Building Paradox</span></div>
                 </div>
             </div>
             
@@ -1326,7 +1511,7 @@ body {
                 </div>
                 <div class="debate-map-layer">
                     <h4>Argument Structure</h4>
-                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If the 'solid ground' of survival requires total abandonment of fair play, and t...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our collective identity can be dismantled by mere code, it was a fragile cons...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If surviving the 'brutal audit' requires adopting the same ruthless tactics that...</span></div></div>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If the only survivors are those who have purged trust and fair play as bugs, thi...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our collective identity is so easily dismantled by code, it was never robust ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If achieving antifragility requires adopting the same ruthless tactics that trea...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our collective identity is so easily dismantled by code, it was never robust ...</span></div></div>
                 </div>
             </div>
             
@@ -1344,7 +1529,7 @@ body {
                     </div>
                     <div class="analysis-layer">
                         <h4>Deep Analysis</h4>
-                        <p><strong>Tonal shift:</strong> The Skeptic's question—'what specific human element is actually being preserved?'—pierces through rhetoric to touch genuine bewilderment.</p><p class="texture-note">This is the debate's quiet center, a moment of undefended asking. The Skeptic is no longer scoring points but genuinely wondering if there is anything left to save. The rhythm slows here; you can almost hear the breath being held.</p>
+                        <p><strong>Tonal shift:</strong> The Skeptic's voice cracks from intellectual sparring into something closer to a plea—the question becomes existential rather than strategic.</p><p class="texture-note">Three questions in rapid succession betray an exhaustion beneath the rhetoric. The Skeptic is no longer arguing a position but confessing a terror: that the path to survival might require us to become unrecognizable to ourselves. This is the moment the debate stops debating and starts mourning.</p>
                     </div>
                 </div>
                 
@@ -1382,7 +1567,7 @@ body {
                 </div>
                 <div class="concept-map-layer">
                     <h4>Connected Concepts</h4>
-                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c5">Pyrrhic Resilience</span><span class="concept-node central" data-concept-id="c6">Historical Transition Vertigo</span><span class="concept-node central" data-concept-id="c7">Trust as Infrastructure</span><span class="concept-node" data-concept-id="c13">Consensus Liquidity</span></div>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c4">Trust as Infrastructure</span><span class="concept-node central" data-concept-id="c6">Historical Recurrence Fallacy</span><span class="concept-node central" data-concept-id="c7">Pyrrhic Survival</span><span class="concept-node" data-concept-id="c9">Consensus Archaeology</span><span class="concept-node central" data-concept-id="c13">Principle Preservation Cost</span></div>
                 </div>
             </div>
             
@@ -1400,7 +1585,7 @@ body {
                 </div>
                 <div class="debate-map-layer">
                     <h4>Argument Structure</h4>
-                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The sense of a 'lost battle' may be the recurring vertigo felt whenever new tech...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If the resilience required to survive algorithmic chaos demands adopting tactics...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The current algorithmic crisis may be a recurring historical pattern of systemic...</span></div></div>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The sense of a lost battle may be the recurring vertigo felt whenever new techno...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If the resilience needed to survive this audit requires adopting ruthless tactic...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The current algorithmic threat may be a recurring historical stage of friction r...</span></div></div>
                 </div>
             </div>
             
@@ -1418,7 +1603,7 @@ body {
                     </div>
                     <div class="analysis-layer">
                         <h4>Deep Analysis</h4>
-                        <p><strong>Metaphor:</strong> The "new language" metaphor suggests that virtues like trust and fair play may be more resilient than their current expressions—that what we're mourning might be a particular dialect of cooperation (the mid-century social contract) rather than the underlying human capacity for cooperation itself, which may simply need translation into forms we can't yet articulate.</p>
+                        <p><strong>Metaphor:</strong> The "new language" metaphor suggests that core human virtues like trust and fair play may be more like meaning than like words—they can be translated into new forms and expressions when old institutional vocabularies become obsolete, rather than dying when their particular historical dialect does.</p>
                     </div>
                 </div>
                 
@@ -1460,7 +1645,7 @@ body {
                 </div>
                 <div class="concept-map-layer">
                     <h4>Connected Concepts</h4>
-                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Algorithmic Cognitive Exploitation</span><span class="concept-node" data-concept-id="c4">Velocity-Adaptation Gap</span><span class="concept-node central" data-concept-id="c7">Trust as Infrastructure</span><span class="concept-node" data-concept-id="c10">Invasive Mimicry Pattern</span><span class="concept-node central" data-concept-id="c11">Feedback Loop Hardware Melt</span></div>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Algorithmic Exploitation</span><span class="concept-node central" data-concept-id="c5">Autopoietic Collapse</span><span class="concept-node central" data-concept-id="c8">Velocity Asymmetry</span><span class="concept-node central" data-concept-id="c12">Invasive Species Dynamics</span></div>
                 </div>
             </div>
             
@@ -1478,7 +1663,7 @@ body {
                 </div>
                 <div class="debate-map-layer">
                     <h4>Argument Structure</h4>
-                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If algorithms are consuming the oxygen of trust required for any new social cont...</span></div><div class="leads-to">Leads to: <span class="claim-ref">We may be mourning a specific mid-century version of 'fair play' rather than an ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Unlike previous technological disruptions that allowed time for adaptation, algo...</span></div><div class="leads-to">Leads to: <span class="claim-ref">When renegotiation of truth is mediated by algorithms that profit from friction,...</span></div></div>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If algorithms are consuming the oxygen of trust required for any new social cont...</span></div><div class="leads-to">Leads to: <span class="claim-ref">What feels like a lost battle may be the recurring historical phenomenon where t...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Unlike previous technological disruptions that allowed time for adaptation, algo...</span></div><div class="leads-to">Leads to: <span class="claim-ref">When algorithms profit from social friction, our 'renegotiation' resembles an au...</span></div></div>
                 </div>
             </div>
             
@@ -1496,7 +1681,7 @@ body {
                     </div>
                     <div class="analysis-layer">
                         <h4>Deep Analysis</h4>
-                        <p><strong>Metaphor:</strong> The oxygen-depleted lake metaphor distinguishes between disruptions that change what lives in an ecosystem versus disruptions that eliminate the basic conditions for life itself—suggesting algorithms may not just be reshuffling social arrangements but depleting the trust and shared reality that any form of human cooperation requires to exist.</p>
+                        <p><strong>Metaphor:</strong> The oxygen-consuming invasive species metaphor captures why this crisis might be categorically different from historical transitions: algorithms don't just compete with trust and cooperation for dominance—they consume the *preconditions* for any alternative to emerge, depleting the medium in which adaptation would need to occur rather than merely occupying space within it.</p>
                     </div>
                 </div>
                 
@@ -1534,7 +1719,7 @@ body {
                 </div>
                 <div class="concept-map-layer">
                     <h4>Connected Concepts</h4>
-                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Algorithmic Cognitive Exploitation</span><span class="concept-node central" data-concept-id="c7">Trust as Infrastructure</span><span class="concept-node central" data-concept-id="c9">Antifragile Evolution</span><span class="concept-node" data-concept-id="c10">Invasive Mimicry Pattern</span><span class="concept-node central" data-concept-id="c11">Feedback Loop Hardware Melt</span></div>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c3">Antifragility Through Destruction</span><span class="concept-node central" data-concept-id="c11">Fragility Audit</span><span class="concept-node central" data-concept-id="c12">Invasive Species Dynamics</span></div>
                 </div>
             </div>
             
@@ -1552,7 +1737,7 @@ body {
                 </div>
                 <div class="debate-map-layer">
                     <h4>Argument Structure</h4>
-                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Calling this a 'lost battle' is a sedative shielding us from the truth that our ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Like an invasive species consuming the oxygen necessary for native life to adapt...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our higher principles shatter under digital pressure, they were perhaps never...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our collective identity can be dismantled by mere code, it was a fragile cons...</span></div></div>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If the only survivors are those who have purged trust and fair play as bugs, thi...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Like an invasive species consuming a lake's oxygen, algorithms may be consuming ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our higher principles shatter under digital pressure, perhaps they were alway...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our collective identity is so easily dismantled by code, it was never robust ...</span></div></div>
                 </div>
             </div>
             
@@ -1570,7 +1755,7 @@ body {
                     </div>
                     <div class="analysis-layer">
                         <h4>Deep Analysis</h4>
-                        <p><strong>Tonal shift:</strong> The Provocateur pivots from challenge to celebration of destruction—the first moment where a speaker seems to desire the outcome they are describing.</p><p class="texture-note">Something curdles here. The word 'pathetic' and the invitation to 'welcome the audit' reveal not analysis but appetite. The Provocateur has stopped arguing and started cheering for the fire. One wonders: is this still debate, or has it become confession?</p>
+                        <p><strong>Tonal shift:</strong> The Provocateur's contempt crystallizes into something colder—a philosophical dare delivered without flinching.</p><p class="texture-note">The word 'pathetic' arrives like a verdict. There is no invitation to respond, only to witness. The Provocateur has stopped trying to win and started trying to incinerate—and in that refusal to persuade, we glimpse the very ruthlessness the debate fears. The speaker has become the argument.</p>
                     </div>
                 </div>
                 
@@ -1612,7 +1797,7 @@ body {
                 </div>
                 <div class="concept-map-layer">
                     <h4>Connected Concepts</h4>
-                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Asymmetric Value Warfare</span><span class="concept-node central" data-concept-id="c5">Pyrrhic Resilience</span><span class="concept-node central" data-concept-id="c7">Trust as Infrastructure</span><span class="concept-node central" data-concept-id="c12">Bridge Material Problem</span></div>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c1">Asymmetric Warfare Ethics</span><span class="concept-node central" data-concept-id="c4">Trust as Infrastructure</span><span class="concept-node central" data-concept-id="c7">Pyrrhic Survival</span><span class="concept-node central" data-concept-id="c10">Bridge-Building Paradox</span><span class="concept-node central" data-concept-id="c13">Principle Preservation Cost</span></div>
                 </div>
             </div>
             
@@ -1630,7 +1815,7 @@ body {
                 </div>
                 <div class="debate-map-layer">
                     <h4>Argument Structure</h4>
-                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">The sense of a 'lost battle' may be the recurring vertigo felt whenever new tech...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our social hardware melts under its own contradictions, we should celebrate i...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If surviving the 'brutal audit' requires adopting the same ruthless tactics that...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If the resilience required to survive algorithmic chaos demands adopting tactics...</span></div></div>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If algorithms are consuming the oxygen of trust required for any new social cont...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our social system melts under its own contradictions, we should celebrate rat...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If achieving antifragility requires adopting the same ruthless tactics that trea...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If the resilience needed to survive this audit requires adopting ruthless tactic...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our social system melts under its own contradictions, we should celebrate rat...</span></div></div>
                 </div>
             </div>
             
@@ -1669,7 +1854,7 @@ body {
                 </div>
                 <div class="concept-map-layer">
                     <h4>Connected Concepts</h4>
-                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c5">Pyrrhic Resilience</span><span class="concept-node central" data-concept-id="c6">Historical Transition Vertigo</span></div>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Algorithmic Exploitation</span><span class="concept-node central" data-concept-id="c6">Historical Recurrence Fallacy</span><span class="concept-node central" data-concept-id="c7">Pyrrhic Survival</span><span class="concept-node" data-concept-id="c9">Consensus Archaeology</span><span class="concept-node central" data-concept-id="c13">Principle Preservation Cost</span></div>
                 </div>
             </div>
             
@@ -1687,7 +1872,7 @@ body {
                 </div>
                 <div class="debate-map-layer">
                     <h4>Argument Structure</h4>
-                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If algorithms are consuming the oxygen of trust required for any new social cont...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If the 'solid ground' of survival requires total abandonment of fair play, and t...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The current algorithmic crisis may be a recurring historical pattern of systemic...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The 'shared truth' we mourn may have been a temporary byproduct of 20th-century ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">We may be mourning a specific mid-century version of 'fair play' rather than an ...</span></div></div>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">If algorithms are consuming the oxygen of trust required for any new social cont...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If the only survivors are those who have purged trust and fair play as bugs, thi...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The current algorithmic threat may be a recurring historical stage of friction r...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The 'shared truth' we mourn may never have been permanent but rather a temporary...</span></div><div class="leads-to">Leads to: <span class="claim-ref">What feels like a lost battle may be the recurring historical phenomenon where t...</span></div></div>
                 </div>
             </div>
             
@@ -1731,7 +1916,7 @@ body {
                 </div>
                 <div class="concept-map-layer">
                     <h4>Connected Concepts</h4>
-                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Algorithmic Cognitive Exploitation</span><span class="concept-node" data-concept-id="c3">Autopoietic Collapse</span><span class="concept-node central" data-concept-id="c7">Trust as Infrastructure</span><span class="concept-node central" data-concept-id="c11">Feedback Loop Hardware Melt</span><span class="concept-node central" data-concept-id="c12">Bridge Material Problem</span></div>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c2">Algorithmic Exploitation</span><span class="concept-node central" data-concept-id="c4">Trust as Infrastructure</span><span class="concept-node central" data-concept-id="c5">Autopoietic Collapse</span><span class="concept-node central" data-concept-id="c6">Historical Recurrence Fallacy</span><span class="concept-node central" data-concept-id="c8">Velocity Asymmetry</span><span class="concept-node central" data-concept-id="c10">Bridge-Building Paradox</span></div>
                 </div>
             </div>
             
@@ -1749,7 +1934,7 @@ body {
                 </div>
                 <div class="debate-map-layer">
                     <h4>Argument Structure</h4>
-                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Calling this a 'lost battle' is a sedative shielding us from the truth that our ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The sense of a 'lost battle' may be the recurring vertigo felt whenever new tech...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Unlike previous technological disruptions that allowed time for adaptation, algo...</span></div><div class="leads-to">Leads to: <span class="claim-ref">When renegotiation of truth is mediated by algorithms that profit from friction,...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Like an invasive species consuming the oxygen necessary for native life to adapt...</span></div></div>
+                    <div class="argument-flow"><div class="responds-to">Responds to: <span class="claim-ref">Calling this a 'lost battle' is a sedative that shields us from the truth that o...</span></div><div class="leads-to">Leads to: <span class="claim-ref">The sense of a lost battle may be the recurring vertigo felt whenever new techno...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Unlike previous technological disruptions that allowed time for adaptation, algo...</span></div><div class="leads-to">Leads to: <span class="claim-ref">When algorithms profit from social friction, our 'renegotiation' resembles an au...</span></div><div class="leads-to">Leads to: <span class="claim-ref">Like an invasive species consuming a lake's oxygen, algorithms may be consuming ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If the only survivors are those who have purged trust and fair play as bugs, thi...</span></div></div>
                 </div>
             </div>
             
@@ -1767,7 +1952,7 @@ body {
                     </div>
                     <div class="analysis-layer">
                         <h4>Deep Analysis</h4>
-                        <p><strong>Metaphor:</strong> The fire moving from hearth to support beams distinguishes between controlled destruction that serves us and destruction that has escaped containment to attack the structure itself—suggesting the crisis may have crossed a threshold from "useful friction" to "structural collapse" where the very framework needed to build anything new is what's burning.</p><p><strong>Tonal shift:</strong> The Connector arrives at grief rather than argument—the debate's first admission that something irreplaceable may already be gone.</p><p class="texture-note">The image of a canyon with no bottom is not rhetorical flourish but elegy. Here the debate touches its own sorrow: the speakers have been fighting so hard to name the problem that they haven't noticed they are already mourning. The rhythm here is not pulse but sigh.</p>
+                        <p><strong>Metaphor:</strong> The fire moving from hearth to support beams metaphor distinguishes between disruption that's *contained within* a system (a fire in its proper place, providing warmth) and disruption that has *spread to the load-bearing structure* itself—suggesting the crisis has migrated from the content of our disagreements to the architectural capacity for any future agreement to stand.</p><p><strong>Tonal shift:</strong> The Connector's metaphor of fire moving to the support beams carries a new register—resignation laced with grief rather than alarm.</p><p class="texture-note">Something breaks open here. The Connector has stopped reaching for analogies that illuminate and begun reaching for ones that console. The 'canyon with no bottom' is not an argument but a lament—the sound of someone who has looked too long into the question and found no floor beneath it.</p>
                     </div>
                 </div>
                 
@@ -1805,7 +1990,7 @@ body {
                 </div>
                 <div class="concept-map-layer">
                     <h4>Connected Concepts</h4>
-                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c5">Pyrrhic Resilience</span><span class="concept-node central" data-concept-id="c7">Trust as Infrastructure</span><span class="concept-node" data-concept-id="c8">Decorative vs Functional Principles</span><span class="concept-node central" data-concept-id="c9">Antifragile Evolution</span></div>
+                    <div class="concept-nodes"><span class="concept-node central" data-concept-id="c3">Antifragility Through Destruction</span><span class="concept-node central" data-concept-id="c4">Trust as Infrastructure</span><span class="concept-node central" data-concept-id="c7">Pyrrhic Survival</span><span class="concept-node central" data-concept-id="c11">Fragility Audit</span><span class="concept-node central" data-concept-id="c13">Principle Preservation Cost</span></div>
                 </div>
             </div>
             
@@ -1823,7 +2008,7 @@ body {
                 </div>
                 <div class="debate-map-layer">
                     <h4>Argument Structure</h4>
-                    <div class="argument-flow"><div class="leads-to">Leads to: <span class="claim-ref">If algorithms are consuming the oxygen of trust required for any new social cont...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our higher principles shatter under digital pressure, they were perhaps never...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our collective identity can be dismantled by mere code, it was a fragile cons...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our social hardware melts under its own contradictions, we should celebrate i...</span></div></div>
+                    <div class="argument-flow"><div class="leads-to">Leads to: <span class="claim-ref">If algorithms are consuming the oxygen of trust required for any new social cont...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our higher principles shatter under digital pressure, perhaps they were alway...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our collective identity is so easily dismantled by code, it was never robust ...</span></div><div class="leads-to">Leads to: <span class="claim-ref">If our social system melts under its own contradictions, we should celebrate rat...</span></div></div>
                 </div>
             </div>
             
